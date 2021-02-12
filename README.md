@@ -94,3 +94,19 @@ I've created a simple test script in main, and outputed the image. It looks like
 ![](./docs/pixel_operations.pam.png)
 
 Which is great! Its multiplying and adding pixel values. 
+
+## Clipboard operations 
+
+As part of the mspaint operations (going from left-to-right on the UI), the first ones are copy and paste. 
+
+* paste_to_image
+* copy_from_image
+
+These are pretty boring to implement, they just are bitwise copy and bitwise select operations. 
+
+Outputted images can be found here:
+
+![Subsection selected](./docs/copied.pam.png)
+
+![image with smaller images pasted into](./docs/pasted_to.pam.png)
+

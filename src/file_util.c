@@ -27,12 +27,11 @@ void write_pam(const char *path, const Image *image) {
           image->width, image->height, DEPTH, MAXVAL, TUPLTYPE);
 
   // write the image blob to the file
-  for (int j = 0; j < image->height; ++j) {
-    for (int i = 0; i < image->width; ++i) {
+  uint8_t color[4];
+  for (int j = 0; j < image->height; j++) {
+    for (int i = 0; i < image->width; i++) {
 
       // static is to hackily re-use the allocated color array
-      static uint8_t color[3];
-
       color[RED_INDEX] = image->pixels[i + j * image->width].red;
       color[GREEN_INDEX] = image->pixels[i + j * image->width].green;
       color[BLUE_INDEX] = image->pixels[i + j * image->width].blue;

@@ -12,7 +12,7 @@ typedef struct {
   uint8_t alpha;
 } Pixel;
 
-void print_pixel(Pixel *pixel);
+void print_pixel(const Pixel *pixel);
 
 /*
  * Some basic color constants.
@@ -63,9 +63,25 @@ Image *make_filled_image(const uint16_t width, const uint16_t height,
 Image *copy_image(const Image *src);
 
 /*
- * Fills an image with a rectangle of a certain color.
- * It starts at the start_width/start_height and fills to the end of the
- * image (so filling the bottom right corner with the new color)
+ * Bitwise paste pixels from the "from" image to the "to" image, starting from
+ * the x and y offsets.
+ *
+ * If copying from the from image would go out of bounds of the "to" image,
+ * those pixels are not copied.
  */
-void fill_section(Image *image, const uint16_t start_width,
-                  const uint16_t start_height, const Pixel *fill_color);
+void paste_to_image(const Image *from, Image *to, const uint16_t x_offset,
+                    const uint16_t y_offset);
+
+/*
+ * Copies a section of an image. Will return null if x_stop < x_start ||
+ *  y_stop < y_start
+ *
+ * Returns a copy of an image, starting from (x_start, y_start) and
+ * ending at (x_stop, y_stop).
+ *
+ * This can be used to truncate an image - copy the section you want to keep and
+ * then free the previous image
+ */
+Image *copy_from_image(Image *src, const uint16_t x_start,
+                       const uint16_t y_start, const uint16_t x_stop,
+                       const uint16_t y_stop);

@@ -41,7 +41,7 @@ format:
 fresh: clean format all test
 
 # does a clean build, makes the executable, runs it and then generates the png files
-release: clean format all run images
+everything: clean format all run images
 
 ## FIXME: This should use the capabilities of make to track if the file has been modified
 images:

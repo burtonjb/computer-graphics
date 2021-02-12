@@ -8,19 +8,19 @@
  */
 int main(int argc, char *argv[]) {
 
-  Pixel base_color = {10, 10, 10, 255};
+  Pixel base_color = {0, 128, 255, 255};
   Image *image = make_filled_image(100, 100, &base_color);
+  Image *small_image = make_filled_image(50, 50, &PIXEL_RED);
+  paste_to_image(small_image, image, 0, 0);
+  paste_to_image(small_image, image, 75, 75);
+  Image *out = copy_from_image(image, 50, 50, 100, 100);
 
-  pixel_multi(&base_color, 10);
-  fill_section(image, 50, 0, &base_color);
-
-  Pixel to_add = {100, 0, 0, 255};
-  pixel_add(&base_color, &to_add);
-  fill_section(image, 50, 50, &base_color);
-
-  write_pam("images/pixel_operations.pam", image);
+  write_pam("images/pasted_to.pam", image);
+  write_pam("images/copied.pam", out);
 
   free(image);
+  free(small_image);
+  free(out);
 
   return EXIT_SUCCESS;
 }
