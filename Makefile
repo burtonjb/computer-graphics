@@ -14,7 +14,7 @@ OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 HEADERS = $(wildcard $(SRC_DIR)/*.h)
 
 CPPFLAGS += -Iinclude
-CFLAGS += -Wall -std=c11
+CFLAGS += -Wall -std=c11 -g
 LDFLAGS += -Llib
 LDLIBS += -lm
 

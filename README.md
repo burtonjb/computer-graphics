@@ -2,6 +2,8 @@
 
 This is a project/documentation about my findings for 2d graphics. 
 
+I'm doing this because I think C is cool, and I think 2d graphics is interesting - there's a lot of linear algebra.
+
 ## Color and pixels
 
 The color model that most computers work with (sort-of, I'm actually not super knowledgable in this) is an additive color model, with the base colors being red, green, and blue. 
@@ -33,5 +35,30 @@ There's a converter util to convert these files to png files called pamtopng whi
 
 I didn't go with some of the more standard file formats (bmp, png) as the header is kind of complicated and they're kind of tricky to write.
 
+## Pixel struct
 
+I'm using a simple struct to represent a pixel. Its a more object-oriented approach (which I'm more familiar with) and you can do stuff like pixel.red / pixel->red instead of pixel\[RED\]. 
+The downside of doing it this way is that it it makes it harder to do vectorized optimizations to the algorithms. I'm not super worried about this because I'm already doing a ton of unoptimized stuff - e.g. the PAM file format I'm using is pretty inefficient. 
 
+## Image
+
+I've defined an image struct, which has a width, height and then an array of pixels to store the actual image definition.
+
+I've updated the definition of the write_pam_file API to take in a path and an image, as the image has enough information for it to be serialized (and also I've updated some of the naming).
+
+I've also created 3 functions. 2 of them are util functions and 1 is mostly a test function
+* make_filled_image - creates an image filled with a single color
+* copy_image - creates a copy of an image. This is really useful as a lot of my functions will be destructive (basically any function that doesn't take in a const can and probably will mutate the input paramters)
+* fill_section - fills a section of an image. This is for testing that the coordinate system is correct. 
+
+The code in [main.c](./src/main.c) outputs two images:
+* The original image
+
+  ![](./docs/hello_world.pam.png).
+
+  You can see that its 3/4 red with the bottom-right corner being blue. This is great, as it means that the coordinate system is working
+* The copy of the image before it was modified 
+  
+  ![](./docs/copy.pam.png). 
+  
+  Its not modified. This is also great, this means that the copy function is working. Now if images are magically getting changed, its because I didn't make a copy before doing a mutating operation on it. 

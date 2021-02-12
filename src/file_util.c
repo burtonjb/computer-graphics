@@ -1,4 +1,4 @@
-#include "pam.h"
+#include "file_util.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -18,25 +18,25 @@ const uint8_t GREEN_INDEX = 1;
 const uint8_t BLUE_INDEX = 2;
 const uint8_t ALPHA_INDEX = 3;
 
-void write_pam(char *path, int width, int height) {
+void write_pam(const char *path, const Image *image) {
   FILE *fp = fopen(path, "wb");
 
   // Write the header to the PAM file
   fprintf(fp,
           "P7\nWIDTH %d\nHEIGHT %d\nDEPTH %d\nMAXVAL %d\nTUPLTYPE %s\nENDHDR\n",
-          width, height, DEPTH, MAXVAL, TUPLTYPE);
+          image->width, image->height, DEPTH, MAXVAL, TUPLTYPE);
 
   // write the image blob to the file
-  for (int j = 0; j < height; ++j) {
-    for (int i = 0; i < width; ++i) {
+  for (int j = 0; j < image->height; ++j) {
+    for (int i = 0; i < image->width; ++i) {
 
       // static is to hackily re-use the allocated color array
       static uint8_t color[3];
 
-      color[RED_INDEX] = i % (MAXVAL + 1);     /* red */
-      color[GREEN_INDEX] = j % (MAXVAL + 1);   /* green */
-      color[BLUE_INDEX] = 0 % (MAXVAL + 1);    /* blue */
-      color[ALPHA_INDEX] = 255 % (MAXVAL + 1); /* alpha */
+      color[RED_INDEX] = image->pixels[i + j * image->width].red;
+      color[GREEN_INDEX] = image->pixels[i + j * image->width].green;
+      color[BLUE_INDEX] = image->pixels[i + j * image->width].blue;
+      color[ALPHA_INDEX] = image->pixels[i + j * image->width].alpha;
 
       fwrite(color, 1, 4, fp);
     }

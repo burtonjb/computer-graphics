@@ -6,8 +6,6 @@ bin/
 .vscode/
 
 *.ppm
-*.bmp
 *.pam
-*.png
 
 images/
