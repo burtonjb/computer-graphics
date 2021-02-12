@@ -4,3 +4,10 @@ bin/
 *.o
 *.swp
 .vscode/
+
+*.ppm
+*.bmp
+*.pam
+*.png
+
+images/

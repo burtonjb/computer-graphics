@@ -7,6 +7,7 @@ SRC_DIR = src
 TST_DIR = tst
 OBJ_DIR = bin/obj
 OUTPUT_DIR = bin
+IMAGES_DIR = images
 
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -17,7 +18,7 @@ CFLAGS += -Wall -std=c11
 LDFLAGS += -Llib
 LDLIBS += -lm
 
-.PHONY: all clean format fresh
+.PHONY: all clean format fresh images run
 
 all: $(EXE)
 
@@ -30,12 +31,26 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 clean:
 	$(RM) $(OBJ)
 	$(RM) $(OUTPUT_DIR)/$(EXE)
+	$(RM) $(IMAGES_DIR)/*.pam
+	$(RM) $(IMAGES_DIR)/*.png
 
 format:
 	clang-format -i $(SRC_DIR)/*.c $(SRC_DIR)/*.h
 	clang-format -i $(TST_DIR)/*.c
 
 fresh: clean format all test
+
+# does a clean build, makes the executable, runs it and then generates the png files
+release: clean format all run images
+
+## FIXME: This should use the capabilities of make to track if the file has been modified
+images:
+	for pam in images/*.pam ; do \
+		pamtopng "$$pam" > "$$pam.png" ; \
+	done
+
+run: 
+	./bin/graphics
 
 # TODO: clean up this target eventually
 test:
