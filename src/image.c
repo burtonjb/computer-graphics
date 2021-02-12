@@ -1,7 +1,38 @@
 #include "image.h"
+#include "math.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+void print_pixel(Pixel *pixel) {
+  printf("(red: %d, green: %d, blue: %d, alpha: %d)\n", pixel->red,
+         pixel->green, pixel->blue, pixel->alpha);
+}
+
+void pixel_multi(Pixel *pixel, const uint8_t k) {
+  pixel->red = clamp_multi(pixel->red, k);
+  pixel->green = clamp_multi(pixel->green, k);
+  pixel->blue = clamp_multi(pixel->blue, k);
+}
+
+void pixel_div(Pixel *pixel, const uint8_t k) {
+  pixel->red = clamp_div(pixel->red, k);
+  pixel->green = clamp_div(pixel->green, k);
+  pixel->blue = clamp_div(pixel->blue, k);
+}
+
+void pixel_add(Pixel *pixel, const Pixel *other) {
+  pixel->red = clamp_add(pixel->red, other->red);
+  pixel->green = clamp_add(pixel->green, other->green);
+  pixel->blue = clamp_add(pixel->blue, other->blue);
+}
+
+void pixel_sub(Pixel *pixel, const Pixel *other) {
+  pixel->red = clamp_sub(pixel->red, other->red);
+  pixel->green = clamp_sub(pixel->green, other->green);
+  pixel->blue = clamp_sub(pixel->blue, other->blue);
+}
 
 Image *make_filled_image(const uint16_t width, const uint16_t height,
                          const Pixel *fill_color) {
@@ -18,7 +49,8 @@ Image *make_filled_image(const uint16_t width, const uint16_t height,
 }
 
 Image *copy_image(const Image *src) {
-  // I think this implementation is kind of bad. The memcpy should be in an unrolled loop, instead of in a double loop, but I can always fix this later
+  // I think this implementation is kind of bad. The memcpy should be in an
+  // unrolled loop, instead of in a double loop, but I can always fix this later
   Image *out =
       malloc(2 * sizeof(uint16_t) + (src->width * src->height * sizeof(Pixel)));
 

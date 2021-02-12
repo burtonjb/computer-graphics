@@ -8,20 +8,19 @@
  */
 int main(int argc, char *argv[]) {
 
-  Image *image = make_filled_image(100, 100, &PIXEL_RED);
-  Image *image_copy = copy_image(image);
+  Pixel base_color = {10, 10, 10, 255};
+  Image *image = make_filled_image(100, 100, &base_color);
 
-  fill_section(image, 50, 50,
-               &PIXEL_BLUE); // fills the bottom left corner of the image
-                             // with blue pixels
+  pixel_multi(&base_color, 10);
+  fill_section(image, 50, 0, &base_color);
 
-  write_pam("images/hello_world.pam", image);
-  write_pam("images/copy.pam", image_copy);
+  Pixel to_add = {100, 0, 0, 255};
+  pixel_add(&base_color, &to_add);
+  fill_section(image, 50, 50, &base_color);
 
-  // while not 100% needed (the os will 'eventually' clean on exit) valgrind will not like it
-  // if I leave these lying around
+  write_pam("images/pixel_operations.pam", image);
+
   free(image);
-  free(image_copy);
 
   return EXIT_SUCCESS;
 }

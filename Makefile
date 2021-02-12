@@ -54,4 +54,4 @@ run:
 
 # TODO: clean up this target eventually
 test:
-	echo "TODO"
+	gcc -std=c11 tst/test_math.c src/math.c -o bin/tst/math && ./bin/tst/math

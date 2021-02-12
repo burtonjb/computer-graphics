@@ -47,18 +47,50 @@ I've defined an image struct, which has a width, height and then an array of pix
 I've updated the definition of the write_pam_file API to take in a path and an image, as the image has enough information for it to be serialized (and also I've updated some of the naming).
 
 I've also created 3 functions. 2 of them are util functions and 1 is mostly a test function
-* make_filled_image - creates an image filled with a single color
-* copy_image - creates a copy of an image. This is really useful as a lot of my functions will be destructive (basically any function that doesn't take in a const can and probably will mutate the input paramters)
-* fill_section - fills a section of an image. This is for testing that the coordinate system is correct. 
+* `make_filled_image` - creates an image filled with a single color
+* `copy_image` - creates a copy of an image. This is really useful as a lot of my functions will be destructive (basically any function that doesn't take in a const can and probably will mutate the input paramters)
+* `fill_section` - fills a section of an image. This is for testing that the coordinate system is correct. 
 
 The code in [main.c](./src/main.c) outputs two images:
 * The original image
 
-  ![](./docs/hello_world.pam.png).
+  ![](./docs/hello_world.pam.png)
 
   You can see that its 3/4 red with the bottom-right corner being blue. This is great, as it means that the coordinate system is working
 * The copy of the image before it was modified 
   
-  ![](./docs/copy.pam.png). 
+  ![](./docs/copy.pam.png)
   
   Its not modified. This is also great, this means that the copy function is working. Now if images are magically getting changed, its because I didn't make a copy before doing a mutating operation on it. 
+
+## Color operations
+
+Pixels can be thought of as 3-Vectors (the linear algebra vector) in color space, with red, green and blue being the orthogonal basis vectors.
+
+The two basic vector operations are:
+* add two vectors (and I'll need to do special work for subtraction since I'm using unsigned values)
+* multiply the vector by a constant (and more work needs to be done to support division, since I'm using non-floating point numbers).
+
+### Sidenote - overflow and underflow
+
+One thing that I need to keep in mind is over and underflow. 
+
+I'm using unsiged 8-bit ints for representing my colors and due to how math works on computers, adding two numbers that would be greater than 2^8 - 1 would result in the operation "overflowing" and wrapping around. See the below example.
+
+```
+x = 150; //10010110
+y = 150; //10010110
+
+Adding these together would get:
+100101100, but the most significant bit gets chopped off as you can only keep 8, so you end up with 00101100 [44]
+```
+
+I think in image processing you usually clamp at the max/min values, so this overflow behavior is not desired. Instead I need to define special math functions that check for over and underflows and prevent this, instead just returning the max or the minimum. 
+
+I've created fun custom functions for this (which are probably quite ineffecient) in [math.c](./src/math.c). I've also written a bunch of test cases for these in [test_math.c](./tst/test_math.c) which I belive is quite important, because it would be really hard to debug bugs with addition or subtraction.
+
+I've created a simple test script in main, and outputed the image. It looks like:
+
+![](./docs/pixel_operations.pam.png)
+
+Which is great! Its multiplying and adding pixel values. 
