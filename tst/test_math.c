@@ -1,4 +1,4 @@
-#include "../src/math.h"
+#include "../src/custom_math.h"
 #include <assert.h>
 #include <stdio.h>
 

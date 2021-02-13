@@ -1,4 +1,4 @@
-#include "math.h"
+#include "custom_math.h"
 
 uint8_t max(uint8_t a, uint8_t b) { return a > b ? a : b; }
 

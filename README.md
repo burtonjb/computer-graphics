@@ -110,3 +110,28 @@ Outputted images can be found here:
 
 ![image with smaller images pasted into](./docs/pasted_to.pam.png)
 
+# Linear algebra
+
+## Matrix operations on pixels
+
+Pixels can be thought of as 3 or 4 vectors (depending on whether you want to keep the alpha value). This means that you can use linear algebra and matrix multiplication to do various operations.
+
+Some of them are as follows:
+
+|Use case | Matrix | Description |
+|--|--|--|
+|Do nothing | [1 0 0]</br>[0 1 0]</br>[0 0 0] | Use the identity matrix to do nothing |
+|Get the value of a specific channel| [1 0 0]</br>[0 0 0]</br>[0 0 0] | Just gets the red channel |
+|Greyscale conversion | [1 1 1]</br>[1 1 1]</br>[1 1 1] | Sums up the RGB channels and then distributes the values to each channel (you also need to divide by 3) |
+|Reverse colors | [0 0 1]</br>[0 1 0]</br>[1 0 0] | Reverses the R and B color values |
+
+Output colors can be found below:
+
+![original color](./docs/original_color.pam.png) ![grey scaled](./docs/grey_scale.pam.png) ![red and green extracted](./docs/extracted_red_green.pam.png)
+
+## Matrix operations on images
+
+### Affine Transforms
+
+### Convolutions
+
