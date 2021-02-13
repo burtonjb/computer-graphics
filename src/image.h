@@ -49,3 +49,25 @@ void paste_to_image(const Image *from, Image *to, const uint16_t x_offset,
 Image *copy_from_image(Image *src, const uint16_t x_start,
                        const uint16_t y_start, const uint16_t x_stop,
                        const uint16_t y_stop);
+
+/*
+ * Transforms an image (in place) by mutating all pixels by function that takes
+ * in a constant
+ */
+void transform_pixels_constant(Image *image,
+                               const void (*op)(Pixel *, const uint8_t),
+                               const uint8_t k);
+
+/*
+ * Transforms an image (in place) by mutation all pixels by a function that
+ * takes in another pixel
+ */
+void transform_pixels_other(Image *image,
+                            const void (*op)(Pixel *, const Pixel *),
+                            const Pixel *other);
+
+/*
+ * Transforms an image (in place) by mutating all pixels in the image by a a
+ * matrix
+ */
+void transform_pixels_matrix(Image *image, const Matrix3 *A);

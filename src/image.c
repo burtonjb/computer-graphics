@@ -97,3 +97,34 @@ Image *copy_from_image(Image *src, const uint16_t x_start,
   }
   return out;
 }
+
+void transform_pixels_constant(Image *image,
+                               const void (*op)(Pixel *, const uint8_t),
+                               const uint8_t k) {
+  for (int i = 0; i < image->width; i++) {
+    for (int j = 0; j < image->height; j++) {
+      Pixel *pixel = &(image->pixels[i + j * image->width]);
+      op(pixel, k);
+    }
+  }
+}
+
+void transform_pixels_other(Image *image,
+                            const void (*op)(Pixel *, const Pixel *pixel),
+                            const Pixel *other) {
+  for (int i = 0; i < image->width; i++) {
+    for (int j = 0; j < image->height; j++) {
+      Pixel *pixel = &(image->pixels[i + j * image->width]);
+      op(pixel, other);
+    }
+  }
+}
+
+void transform_pixels_matrix(Image *image, const Matrix3 *A) {
+  for (int i = 0; i < image->width; i++) {
+    for (int j = 0; j < image->height; j++) {
+      Pixel *pixel = &(image->pixels[i + j * image->width]);
+      pixel_transform(pixel, A);
+    }
+  }
+}

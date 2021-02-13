@@ -131,6 +131,8 @@ Output colors can be found below:
 
 ## Matrix operations on images
 
+I also want to be able to support pixel operations on images. This can be done pretty easily in C by passing a function pointer.
+
 ### Affine Transforms
 
 ### Convolutions
