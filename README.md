@@ -135,5 +135,33 @@ I also want to be able to support pixel operations on images. This can be done p
 
 ### Affine Transforms
 
-### Convolutions
+Affine transformations are matrix operations on an image, but they act on the pixel locations instead of the pixel color values. 
 
+Below are the following main types of affine transforms
+
+| Type | Matrix | Description | Image |
+|--|--|--|--|
+|Identity | [1 0 0]<br/>[0 1 0]<br/>[0 0 1]<br/> | Returns the same | ![untransformed](./docs/untransformed.pam.png) |
+| Translation | [1 0 Vx]<br/>[1 0 Vy]</br>[0 0 1] | Translates each pixels over by (Vx, Vy) | ![original](./docs/translated.pam.png)|
+| Reflection | [-1 0 0]<br/>[0 1 0]<br/>[0 0 1] | Reflects the image over the X axis | -- |
+| Scale | [2 0 0]<br/>[0 1 0]<br/>[0 0 1] | Doubles the image on the X axis | ![scaled up](./docs/scaled_up.pam.png) ![scaled down](./docs/scaled_down.pam.png)|
+| Rotate | [cos(x) -sin(x) 0]<br/>[sin(x) cos(x) 0]<br/>[0 0 1]<br/> x=PI/4| rotates the image by x | ![rotated](./docs/rotated.pam.png)|
+| Shear | [1 x 0]<br/>[y 1 0]<br/>[0 0 1] | Shears each point | ![shear](./docs/sheared.pam.png)|
+
+If you want to apply multiple transforms, then you can multiply the matrixes together. The operation is `T1 * T2 * v`, which can be performed as both `(T1 * (T2 * v))` or `((T1 * T2) * v)`.
+
+There seems to be one issue - mapping from the original location to the destination location seems to create a lot of empty space when scaling up (or rotating by a non-90 degree increment or sometimes by shearing). I want to try inverting the matrix and then converting from dest to source location. 
+
+### Kernels in Image Processing
+
+
+
+# TODOs
+* For the affine transformations I want to try going from new location to old location. Right now I have old location to new location, so I need to invert the matrix.
+* antialiasing
+* interpolation
+* different color models (hsv)
+* alpha blending and layers
+* vector graphics and basic shapes (line, square circle, triangle, polygon)
+* vector graphics - functions and curves
+* gradients (linear and radial)

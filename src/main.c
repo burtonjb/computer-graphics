@@ -1,5 +1,7 @@
+#include <math.h>
 #include <stdlib.h>
 
+#include "custom_math.h"
 #include "file_util.h"
 #include "image.h"
 
@@ -7,28 +9,41 @@
  * Entry point to the application. Called on program start.
  */
 int main(int argc, char *argv[]) {
-  const Matrix3 extract_red_matrix = {{1, 0, 0}, {0, 0, 0}, {0, 0, 0}};
-  const Matrix3 grey_scale_matrix = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+  Pixel background_color = {0, 0, 0, 0};
+  Pixel foreground_color = {255, 0, 0, 255};
 
-  Pixel base_color = {128, 128, 255, 255};
+  Image *image = make_filled_image(100, 100, &background_color);
+  Image *fg = make_filled_image(10, 20, &foreground_color);
+  paste_to_image(fg, image, 10, 10);
 
-  Image *image = make_filled_image(100, 100, &base_color);
-  Image *grey = copy_image(image);
-  Image *red_channel = copy_image(image);
+  Image *translated = affine_transform(
+      image, &((Matrix3_d){{1, 0, 20}, {0, 1, 20}, {0, 0, 1}}));
+  Image *scaled_up =
+      affine_transform(image, &((Matrix3_d){{3, 0, 0}, {0, 3, 0}, {0, 0, 1}}));
+  Image *scaled_down = affine_transform(
+      image, &((Matrix3_d){{0.5, 0, 0}, {0, 0.5, 0}, {0, 0, 1}}));
+  const double angle = M_PI / 4;
+  Image *rotated =
+      affine_transform(image, &((Matrix3_d){{cos(angle), -1 * sin(angle), 0},
+                                            {sin(angle), cos(angle), 0},
+                                            {0, 0, 1}}));
+  Image *sheared =
+      affine_transform(image, &((Matrix3_d){{1, 1, 0}, {0, 1, 0}, {0, 0, 1}}));
 
-  transform_pixels_constant(grey, pixel_div, 3);
-  transform_pixels_matrix(grey, &grey_scale_matrix);
-
-  transform_pixels_matrix(red_channel, &extract_red_matrix);
-  transform_pixels_other(red_channel, pixel_add, &((Pixel){100, 0, 0}));
-
-  write_pam("images/original_color.pam", image);
-  write_pam("images/grey_scale.pam", grey);
-  write_pam("images/red.pam", red_channel);
+  write_pam("images/untransformed.pam", image);
+  write_pam("images/translated.pam", translated);
+  write_pam("images/scaled_up.pam", scaled_up);
+  write_pam("images/scaled_down.pam", scaled_down);
+  write_pam("images/rotated.pam", rotated);
+  write_pam("images/sheared.pam", sheared);
 
   free(image);
-  free(grey);
-  free(red_channel);
+  free(fg);
+  free(translated);
+  free(scaled_up);
+  free(scaled_down);
+  free(rotated);
+  free(sheared);
 
   return EXIT_SUCCESS;
 }

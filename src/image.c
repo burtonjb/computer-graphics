@@ -1,6 +1,7 @@
 #include "image.h"
 #include "custom_math.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -127,4 +128,44 @@ void transform_pixels_matrix(Image *image, const Matrix3 *A) {
       pixel_transform(pixel, A);
     }
   }
+}
+
+Image *affine_transform(const Image *image, const Matrix3_d *A) {
+
+  Image *out = make_filled_image(
+      image->width, image->height,
+      &((Pixel){0, 0, 0,
+                0})); // make an output image of all 0s (including alpha)
+
+  for (int i = 0; i < image->width; i++) {
+    for (int j = 0; j < image->height; j++) {
+
+      Vector3_d untransformed_position_d = {
+          i, j, 1}; // affine transforms require the position to be (x, y, 1)
+
+      Vector3_d transformed_position_d = {0, 0, 1};
+
+      matrix_multiply_d(A, &untransformed_position_d, &transformed_position_d);
+
+      // clip transformed pixels that would not end up in the picture
+      if (transformed_position_d[0] >= out->width ||
+          transformed_position_d[1] >= out->height ||
+          transformed_position_d[0] < 0 || transformed_position_d[1] < 0) {
+        continue;
+      }
+
+      Vector3 untransformed_position;
+      to_int_vector(&untransformed_position_d, &untransformed_position);
+      Vector3 transformed_position;
+      to_int_vector(&transformed_position_d, &transformed_position);
+
+      // copy from the untransformed location to the transformed pixel location
+      memcpy(&(out->pixels[transformed_position[0] +
+                           (transformed_position[1] * out->width)]),
+             &(image->pixels[untransformed_position[0] +
+                             (untransformed_position[1] * image->width)]),
+             sizeof(Pixel));
+    }
+  }
+  return out;
 }

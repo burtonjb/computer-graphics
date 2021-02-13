@@ -71,3 +71,5 @@ void transform_pixels_other(Image *image,
  * matrix
  */
 void transform_pixels_matrix(Image *image, const Matrix3 *A);
+
+Image *affine_transform(const Image *image, const Matrix3_d *A);
