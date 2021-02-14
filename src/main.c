@@ -9,55 +9,31 @@
  * Entry point to the application. Called on program start.
  */
 int main(int argc, char *argv[]) {
-  Pixel background_color = {0, 0, 0, 255};
+  Pixel background_color = {0, 0, 0, 128};
 
-  Image *image = make_filled_image(100, 100, &background_color);
-  Image *fg = make_filled_image(50, 50, &PIXEL_RED);
-  Image *fg2 = make_filled_image(50, 50, &PIXEL_GREEN);
-  Image *fg3 = make_filled_image(50, 50, &PIXEL_BLUE);
-  paste_to_image(fg, image, 0, 0);
-  paste_to_image(fg2, image, 50, 50);
-  paste_to_image(fg3, image, 0, 50);
+  Image *red_i = make_filled_image(100, 100, &background_color);
+  Image *red = make_filled_image(40, 40, &(Pixel){128, 0, 0, 128});
+  paste_to_image(red, red_i, 10, 10);
 
-  // identity transform the image (do nothing)
-  Image *identity =
-      kernel_transform(image, &((Matrix3_d){{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}));
+  Image *green_i = make_filled_image(100, 100, &background_color);
+  Image *green = make_filled_image(40, 40, &(Pixel){0, 128, 0, 128});
+  paste_to_image(green, green_i, 30, 30);
 
-  // // box blur the image
-  Image *box_blur =
-      kernel_transform(image, &((Matrix3_d){{1.0 / 9, 1.0 / 9, 1.0 / 9},
-                                            {1.0 / 9, 1.0 / 9, 1.0 / 9},
-                                            {1.0 / 9, 1.0 / 9, 1.0 / 9}}));
+  Image *out = alpha_blend(red_i, green_i);
+  Image *out2 = alpha_blend(green_i, red_i);
 
-  // gaussian blur the image
-  Image *gauss_blur =
-      kernel_transform(image, &((Matrix3_d){{1.0 / 16, 2.0 / 16, 1.0 / 16},
-                                            {2.0 / 16, 4.0 / 16, 2.0 / 16},
-                                            {1.0 / 16, 2.0 / 16, 1.0 / 16}}));
+  write_pam("images/preblend_red.pam", red_i);
+  write_pam("images/preblend_green.pam", green_i);
 
-  // Sharpen an image
-  Image *sharpen = kernel_transform(
-      box_blur, &((Matrix3_d){{0, -1, 0}, {-1, 5, -1}, {0, -1, 0}}));
+  write_pam("images/blend_green_onto_red.pam", out);
+  write_pam("images/blend_red_onto_green.pam", out2);
 
-  // edge detection on the image
-  // kind of only works on greyscale images
-  Image *edge_before = make_filled_image(100, 100, &(Pixel){0, 0, 0, 255});
-  for (int i = 0; i < 10; i++) {
-    Image *new =
-        make_filled_image(100, 10, &(Pixel){i * 25, i * 25, i * 25, 255});
-    paste_to_image(new, edge_before, 0, i * 10);
-    free(new);
-  }
-  write_pam("images/before_edge_detection.pam", edge_before);
-
-  Image *edge_after = kernel_transform(
-      edge_before, &((Matrix3_d){{0, -1, 0}, {-1, 4, -1}, {0, -1, 0}}));
-  write_pam("images/after_edge_detection.pam", edge_after);
-
-  write_pam("images/identity.pam", identity);
-  write_pam("images/box_blur.pam", box_blur);
-  write_pam("images/gauss_blur.pam", gauss_blur);
-  write_pam("images/sharpen.pam", sharpen);
+  free(red_i);
+  free(red);
+  free(green_i);
+  free(green);
+  free(out);
+  free(out2);
 
   return EXIT_SUCCESS;
 }

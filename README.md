@@ -173,8 +173,23 @@ The edge detection algorithm highlights only sections where there is a transitio
 
 There is a slight implementation defect in the kernel transforms where I didn't account for the edges, but they can be removed after the fact, by selecting (1,1) to (width-1, height-1). Other ways to fix it would be to either mirror or wrap the pixels in the image.
 
+## Alpha Blending
+
+Alpha blending is the process of combining translucent foreground and background images which produces a new image. 
+
+This is done by taking the foreground images transparency "alpha value" and combining it with its RGB values and then combining those values with the background images RGB & alpha values. 
+
+The formula for this computation is in the alpha_blend method in [image.c](./src/image.c).
+
+|Description|Image|
+|--|--|
+|Unblended red image| ![unblended red](./docs/preblend_red.pam.png)|
+|Unblended green image| ![unblended green](./docs/preblend_green.pam.png)|
+|blended green onto red | ![alpha green onto red](./docs/blend_green_onto_red.pam.png) |
+|blended red onto green | ![alpha red onto green](./docs/blend_red_onto_green.pam.png) |
+
+
 # TODOs
-* alpha blending and layers
 * different color models (hsv)
 * vector graphics and basic shapes (line, square circle, triangle, polygon)
 * vector graphics - functions and curves
@@ -191,6 +206,6 @@ There is a slight implementation defect in the kernel transforms where I didn't 
 
 # Learnings
 * Using uint8_t for the base matrix/vector is not great. Spent a lot of time debugging issues with that. I'm really missing generics now...
-* Not having tests/good tests is now coming back and bugging me - I wanted to refactor the copy_from_image code (I think there's a bug in it), but I don't want to break it and/or write a small test for it now. 
+* ~~Not having tests/good tests is now coming back and bugging me - I wanted to refactor the copy_from_image code (I think there's a bug in it), but I don't want to break it and/or write a small test for it now.~~ This is fixed now, and adding the tests was pretty quick and easy. They're not exhaustive, but they're good enough when the purpose of the project is more to learn about 2D graphics techniques.
 * As hack as it is, using valgrind to find the stacktrace for where the core dump is coming from is really useful (I should be using `gdb` for this, but its not that important right now).
 * Take breaks. Debugging C gets really hard if you're tired. 

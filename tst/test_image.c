@@ -168,6 +168,24 @@ void test_kernel_transform() {
   free(t);
 }
 
+void test_alpha_blend() {
+  Image *red = make_filled_image(1, 1, &(Pixel){128, 3, 0, 128});
+  Image *blue = make_filled_image(1, 1, &(Pixel){0, 7, 128, 128});
+
+  Image *red_blue = alpha_blend(red, blue);
+  Image *blue_red = alpha_blend(blue, red);
+
+  assert(red_blue->pixels[0].red == 43);
+  assert(red_blue->pixels[0].green == 6);
+  assert(red_blue->pixels[0].blue == 85);
+  assert(red_blue->pixels[0].alpha == 192);
+
+  assert(blue_red->pixels[0].red == 85);
+  assert(blue_red->pixels[0].green == 4);
+  assert(blue_red->pixels[0].blue == 43);
+  assert(blue_red->pixels[0].alpha == 192);
+}
+
 int main(int argc, char *argv[]) {
   test_filled_image();
   test_copy_image();
@@ -176,5 +194,6 @@ int main(int argc, char *argv[]) {
   test_pixel_transforms();
   test_affine_transform();
   test_kernel_transform();
+  test_alpha_blend();
   return 0;
 }

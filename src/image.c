@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define d_to_uint8_t(arg) (uint8_t)(round(clamp_d(0, 255, arg)))
+
 Image *make_filled_image(const uint16_t width, const uint16_t height,
                          const Pixel *fill_color) {
   Image *out = malloc(2 * sizeof(uint16_t) + (width * height * sizeof(Pixel)));
@@ -199,13 +201,70 @@ Image *kernel_transform(const Image *image, const Matrix3_d *kernel) {
         }
       }
 
-#define d_to_uint8_t(arg) (uint8_t)(round(clamp_d(0, 255, arg)))
       Pixel new = {d_to_uint8_t(acc[0]), d_to_uint8_t(acc[1]),
                    d_to_uint8_t(acc[2]),
                    image->pixels[i + j * image->width].alpha};
-#undef d_to_uint8_t
       out->pixels[i + j * image->width] = new;
     }
   }
   return out;
 }
+
+Image *alpha_blend(const Image *dest, const Image *src) {
+
+  // FIXME: allow blending the src image at a location - similar to
+  // paste_to_image function
+  if (dest->width != src->width || dest->height != src->height) {
+    return NULL;
+  }
+
+  Image *out = copy_image(dest);
+
+  // in alpha blending, values are [0, 1], but I've been using [0, 255] for
+  // stuff, so need to convert
+  const int SCALING_FACTOR = 255;
+
+  /* formula is:
+   * out_alpha = src_alpha + dest_alpha (1 - src_alpha)
+   * out_RGB = (src_RGB * src_alpha + dest_RGB*dest_alpha * (1 - src_alpha)) /
+   * out_alpha where alpha, RGB values are in [0, 1]
+   */
+  for (int i = 0; i < dest->width; i++) {
+    for (int j = 0; j < dest->height; j++) {
+      uint16_t loc = i + j * out->width;
+      // just do all the math as doubles because debugging uint8 issues is
+      // annoying
+
+      double src_alpha = ((double)(src->pixels[loc].alpha)) / SCALING_FACTOR;
+      double dest_alpha = ((double)(dest->pixels[loc].alpha)) / SCALING_FACTOR;
+      double out_alpha = src_alpha + dest_alpha * (1 - src_alpha);
+
+      double src_red = ((double)src->pixels[loc].red) / SCALING_FACTOR;
+      double dest_red = ((double)dest->pixels[loc].red) / SCALING_FACTOR;
+      double out_red =
+          ((src_red * src_alpha + dest_red * dest_alpha * (1 - src_alpha))) /
+          out_alpha;
+
+      double src_green = ((double)src->pixels[loc].green) / SCALING_FACTOR;
+      double dest_green = ((double)dest->pixels[loc].green) / SCALING_FACTOR;
+      double out_green = ((src_green * src_alpha +
+                           dest_green * dest_alpha * (1 - src_alpha))) /
+                         out_alpha;
+
+      double src_blue = ((double)src->pixels[loc].blue) / SCALING_FACTOR;
+      double dest_blue = ((double)dest->pixels[loc].blue) / SCALING_FACTOR;
+      double out_blue =
+          ((src_blue * src_alpha + dest_blue * dest_alpha * (1 - src_alpha))) /
+          out_alpha;
+
+      out->pixels[loc] = (Pixel){d_to_uint8_t(out_red * SCALING_FACTOR),
+                                 d_to_uint8_t(out_green * SCALING_FACTOR),
+                                 d_to_uint8_t(out_blue * SCALING_FACTOR),
+                                 d_to_uint8_t(out_alpha * SCALING_FACTOR)};
+    }
+  }
+
+  return out;
+}
+
+#undef d_to_uint8_t

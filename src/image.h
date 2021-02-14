@@ -85,3 +85,12 @@ Image *affine_transform(const Image *image, const Matrix3_d *A);
  * Does a kernel transform to an image
  */
 Image *kernel_transform(const Image *image, const Matrix3_d *A);
+
+/*
+ * Alpha blends two images together, returning the result.
+ *
+ * It will return null if the input dimensions of the images don't match.
+ * You'll probably need to do pre-processing with paste_to_image to get
+ * everything to line up properly.
+ */
+Image *alpha_blend(const Image *dest, const Image *src);
