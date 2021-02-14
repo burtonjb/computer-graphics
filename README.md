@@ -143,10 +143,10 @@ Below are the following main types of affine transforms
 |--|--|--|--|
 |Identity | [1 0 0]<br/>[0 1 0]<br/>[0 0 1]<br/> | Returns the same | ![untransformed](./docs/untransformed.pam.png) |
 | Translation | [1 0 Vx]<br/>[1 0 Vy]</br>[0 0 1] | Translates each pixels over by (Vx, Vy) | ![original](./docs/translated.pam.png)|
-| Reflection | [-1 0 0]<br/>[0 1 0]<br/>[0 0 1] | Reflects the image over the X axis | -- |
+| Reflection | [-1 0 0]<br/>[0 1 0]<br/>[0 0 1] | Reflects the image over the X axis | ![flipped](./docs/flipped.pam.png) |
 | Scale | [2 0 0]<br/>[0 1 0]<br/>[0 0 1] | Doubles the image on the X axis | ![scaled up](./docs/scaled_up.pam.png) ![scaled down](./docs/scaled_down.pam.png)|
 | Rotate | [cos(x) -sin(x) 0]<br/>[sin(x) cos(x) 0]<br/>[0 0 1]<br/> x=PI/4| rotates the image by x | ![rotated](./docs/rotated.pam.png)|
-| Shear | [1 x 0]<br/>[y 1 0]<br/>[0 0 1] | Shears each point | ![shear](./docs/sheared.pam.png)|
+| Shear | [1 x 0]<br/>[0 1 0]<br/>[0 0 1] OR <br/> [1 0 0]<br/>[y 1 0]<br/>[0 0 1] | Shears each point. You need to use matrix multiplication to shear on two axis with one matrix  | ![shear](./docs/sheared.pam.png)|
 
 If you want to apply multiple transforms, then you can multiply the matrixes together. The operation is `T1 * T2 * v`, which can be performed as both `(T1 * (T2 * v))` or `((T1 * T2) * v)`.
 
@@ -157,6 +157,7 @@ There seems to be one issue - mapping from the original location to the destinat
 
 
 # TODOs
+* rotation in affine transformations is still buggy.
 * For the affine transformations I want to try going from new location to old location. Right now I have old location to new location, so I need to invert the matrix.
 * antialiasing
 * interpolation
@@ -165,3 +166,4 @@ There seems to be one issue - mapping from the original location to the destinat
 * vector graphics and basic shapes (line, square circle, triangle, polygon)
 * vector graphics - functions and curves
 * gradients (linear and radial)
+* store images as jpgs

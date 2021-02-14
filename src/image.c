@@ -1,6 +1,7 @@
 #include "image.h"
 #include "custom_math.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -147,17 +148,23 @@ Image *affine_transform(const Image *image, const Matrix3_d *A) {
 
       matrix_multiply_d(A, &untransformed_position_d, &transformed_position_d);
 
+#define d_to_uint16_t(arg) (uint16_t)(round(arg))
+      // FIXME: Vector3 is uint8_t, but I've set it up so that images use
+      // uint16_t for indexing
+      uint16_t transformed_position[2] = {
+          d_to_uint16_t(transformed_position_d[0]),
+          d_to_uint16_t(transformed_position_d[1])};
+      uint16_t untransformed_position[2] = {
+          d_to_uint16_t(untransformed_position_d[0]),
+          d_to_uint16_t(untransformed_position_d[1])};
+#undef d_to_uint16_t
+
       // clip transformed pixels that would not end up in the picture
-      if (transformed_position_d[0] >= out->width ||
-          transformed_position_d[1] >= out->height ||
-          transformed_position_d[0] < 0 || transformed_position_d[1] < 0) {
+      if (transformed_position[0] >= out->width ||
+          transformed_position[1] >= out->height ||
+          transformed_position[0] < 0 || transformed_position[1] < 0) {
         continue;
       }
-
-      Vector3 untransformed_position;
-      to_int_vector(&untransformed_position_d, &untransformed_position);
-      Vector3 transformed_position;
-      to_int_vector(&transformed_position_d, &transformed_position);
 
       // copy from the untransformed location to the transformed pixel location
       memcpy(&(out->pixels[transformed_position[0] +

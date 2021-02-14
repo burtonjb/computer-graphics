@@ -20,9 +20,3 @@ void matrix_multiply_d(const Matrix3_d *A, const Vector3_d *v, Vector3_d *out) {
                 ((*A)[i][2] * (*v)[2]);
   }
 }
-
-void to_int_vector(const Vector3_d *in, Vector3 *out) {
-  (*out)[0] = (uint8_t)round((*in)[0]);
-  (*out)[1] = (uint8_t)round((*in)[1]);
-  (*out)[2] = (uint8_t)round((*in)[2]);
-}
