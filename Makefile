@@ -18,7 +18,7 @@ CFLAGS += -Wall -std=c11 -g
 LDFLAGS += -Llib
 LDLIBS += -lm
 
-.PHONY: all clean format fresh images run
+.PHONY: all clean format fresh images run everything
 
 all: $(EXE)
 
@@ -40,8 +40,8 @@ format:
 
 fresh: clean format all test
 
-# does a clean build, makes the executable, runs it and then generates the png files
-everything: clean format all run images
+# does a clean build, runs the tests, makes the executable, runs it and then generates the png files
+everything: clean format all test run images
 
 ## FIXME: This should use the capabilities of make to track if the file has been modified
 images:

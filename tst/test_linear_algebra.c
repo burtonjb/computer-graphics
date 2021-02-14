@@ -5,6 +5,8 @@
 #include <math.h>
 #include <stdio.h>
 
+#define EPSILON 0.001
+
 void test_45_degree_rotation() {
   const double angle = M_PI / 4;
   Vector3_d v = {1, 1, 1};
@@ -12,7 +14,8 @@ void test_45_degree_rotation() {
   Matrix3_d A = {
       {cos(angle), -sin(angle), 0}, {sin(angle), cos(angle), 0}, {0, 0, 1}};
   matrix_vector_multiply_d(&A, &v, &out);
-  printf("%f, %f\n", out[0], out[1]);
+  assert((0 - out[0]) < EPSILON);
+  assert((1.414214 - out[1]) < EPSILON);
 }
 
 void test_30_degree_rotation() {
@@ -22,7 +25,8 @@ void test_30_degree_rotation() {
   Matrix3_d A = {
       {cos(angle), -sin(angle), 0}, {sin(angle), cos(angle), 0}, {0, 0, 1}};
   matrix_vector_multiply_d(&A, &v, &out);
-  printf("%f, %f\n", out[0], out[1]);
+  assert((-3.660254 - out[0]) < EPSILON);
+  assert((13.660254 - out[1] < EPSILON));
 }
 
 void translate_rotate_matrix() {
@@ -39,10 +43,10 @@ void translate_rotate_matrix() {
 
   matrix_multiply_d(&translate, &rotate, &out);
 
-  print_matrix(&out);
-
   matrix_vector_multiply_d(&out, &v, &v_out);
-  printf("%f, %f\n", v_out[0], v_out[1]);
+
+  assert((6.339746 - v_out[0]) < EPSILON);
+  assert((23.660254 - v_out[1] < EPSILON));
 }
 
 /*

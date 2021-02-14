@@ -183,6 +183,8 @@ There is a slight implementation defect in the kernel transforms where I didn't 
 * interpolation
 * gradients (linear and radial)
 * store images as jpgs
+* clean up readme
+* clean up git history
 
 # Bugs/Issues
 * kernel processing is slightly bad (it just ignores the pixels on the edge)
