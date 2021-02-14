@@ -5,8 +5,8 @@
 /*
  * Vectors and matrices for uint8_t data (pixel data)
  */
-typedef uint8_t Vector3[3];
-typedef uint8_t Matrix3[3][3];
+typedef uint8_t Vector3_uint8[3];
+typedef uint8_t Matrix3_uint8[3][3];
 
 /*
  * Vectors and matrics for double data (positional data, rotational data)
@@ -24,7 +24,8 @@ typedef double Matrix3_d[3][3];
  * (which makes sense) and implemeting it this way allows you to use both heap
  * and stack allocation.
  */
-void matrix_multiply(const Matrix3 *A, const Vector3 *v, Vector3 *out);
+void matrix_vector_multiply_uint8(const Matrix3_uint8 *A,
+                                  const Vector3_uint8 *v, Vector3_uint8 *out);
 
 /*
  * Mutliplies matrix A by vector v, modifying out with the result.
@@ -32,14 +33,14 @@ void matrix_multiply(const Matrix3 *A, const Vector3 *v, Vector3 *out);
  * Does this for types backed by doubles. C technically has generics now, but I
  * haven't tried them
  */
-void matrix_multiply_d(const Matrix3_d *A, const Vector3_d *v, Vector3_d *out);
+void matrix_vector_multiply_d(const Matrix3_d *A, const Vector3_d *v,
+                              Vector3_d *out);
 
 /*
  * Mutliplies two matrices together, creating a new matrix and returning it in
  * the out position.
  */
-void create_new_matrix_d(const Matrix3_d *A, const Matrix3_d *B,
-                         Matrix3_d *out);
+void matrix_multiply_d(const Matrix3_d *A, const Matrix3_d *B, Matrix3_d *out);
 
 /*
  * Prints a matrix to the console

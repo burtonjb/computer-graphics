@@ -70,7 +70,7 @@ void transform_pixels_other(Image *image,
  * Transforms an image (in place) by mutating all pixels in the image by a a
  * matrix
  */
-void transform_pixels_matrix(Image *image, const Matrix3 *A);
+void transform_pixels_matrix(Image *image, const Matrix3_uint8 *A);
 
 /*
  * Transforms an image with an affine transform, returning the transformed image

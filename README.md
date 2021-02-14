@@ -162,7 +162,7 @@ Below are the following kernel transforms I've tested
 |--|--|--|
 |Identity|[0 0 0]<br/>[0 1 0]<br/>[0 0 0]| ![Identity](./docs/identity.pam.png) |
 |Box blur | [1 1 1]<br/>1/9 * [1 1 1]<br/>[1 1 1] | ![box blue](./docs/box_blur.pam.png) |
-|Gauss blur | [1 1 1]<br/>1/16 * [1 1 1]<br/>[1 1 1] | ![gauss blur](./docs/box_blur.pam.png) |
+|Gauss blur | [1 2 1]<br/>1/16 * [2 4 2]<br/>[1 2 1] | ![gauss blur](./docs/box_blur.pam.png) |
 |Sharpen | [0 -1 0]<br/>[-1 5 -1]<br/>[0 -1 0]<br/> | ![Sharpen box blur](./docs/sharpen.pam.png) |
 
 Edge detection can also be performed, though I used a greyscale image for this:
@@ -173,15 +173,23 @@ The edge detection algorithm highlights only sections where there is a transitio
 
 There is a slight implementation defect in the kernel transforms where I didn't account for the edges, but they can be removed after the fact, by selecting (1,1) to (width-1, height-1). Other ways to fix it would be to either mirror or wrap the pixels in the image.
 
-
 # TODOs
-* Names in linear_algebra are slightly bad
-* For the affine transformations I want to try going from new location to old location. Right now I have old location to new location, so I need to invert the matrix.
-* antialiasing
-* interpolation
-* different color models (hsv)
+* tests
 * alpha blending and layers
+* different color models (hsv)
 * vector graphics and basic shapes (line, square circle, triangle, polygon)
 * vector graphics - functions and curves
+* antialiasing
+* interpolation
 * gradients (linear and radial)
 * store images as jpgs
+
+# Bugs/Issues
+* kernel processing is slightly bad (it just ignores the pixels on the edge)
+* For the affine transformations I want to try going from new location to old location. Right now I have old location to new location, so I need to invert the matrix.
+
+# Learnings
+* Using uint8_t for the base matrix/vector is not great. Spent a lot of time debugging issues with that. I'm really missing generics now...
+* Not having tests/good tests is now coming back and bugging me - I wanted to refactor the copy_from_image code (I think there's a bug in it), but I don't want to break it and/or write a small test for it now. 
+* As hack as it is, using valgrind to find the stacktrace for where the core dump is coming from is really useful (I should be using `gdb` for this, but its not that important right now).
+* Take breaks. Debugging C gets really hard if you're tired. 

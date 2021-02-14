@@ -122,7 +122,7 @@ void transform_pixels_other(Image *image,
   }
 }
 
-void transform_pixels_matrix(Image *image, const Matrix3 *A) {
+void transform_pixels_matrix(Image *image, const Matrix3_uint8 *A) {
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
       Pixel *pixel = &(image->pixels[i + j * image->width]);
@@ -146,7 +146,8 @@ Image *affine_transform(const Image *image, const Matrix3_d *A) {
 
       Vector3_d transformed_position_d = {0, 0, 1};
 
-      matrix_multiply_d(A, &untransformed_position_d, &transformed_position_d);
+      matrix_vector_multiply_d(A, &untransformed_position_d,
+                               &transformed_position_d);
 
 // Hacky macro to convert from double to position (uint16_t)
 #define d_to_uint16_t(arg) (uint16_t)(round(arg))

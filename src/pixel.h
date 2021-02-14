@@ -46,4 +46,4 @@ void pixel_sub(Pixel *pixel, const Pixel *other);
 /*
  * Transforms a pixel pixel with the transformation matrix (in place)
  */
-void pixel_transform(Pixel *pixel, const Matrix3 *A);
+void pixel_transform(Pixel *pixel, const Matrix3_uint8 *A);

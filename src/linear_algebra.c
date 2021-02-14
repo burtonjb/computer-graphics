@@ -4,7 +4,8 @@
 #include <math.h>
 #include <stdio.h>
 
-void matrix_multiply(const Matrix3 *A, const Vector3 *v, Vector3 *out) {
+void matrix_vector_multiply_uint8(const Matrix3_uint8 *A,
+                                  const Vector3_uint8 *v, Vector3_uint8 *out) {
   for (int i = 0; i < 3; i++) {
     // does out[i] = A[i][j]v[j] for all j, but clamps the values as this is
     // going to be used for pixel operations
@@ -14,7 +15,8 @@ void matrix_multiply(const Matrix3 *A, const Vector3 *v, Vector3 *out) {
   }
 }
 
-void matrix_multiply_d(const Matrix3_d *A, const Vector3_d *v, Vector3_d *out) {
+void matrix_vector_multiply_d(const Matrix3_d *A, const Vector3_d *v,
+                              Vector3_d *out) {
   for (int i = 0; i < 3; i++) {
     // does out[i] = A[i][j]v[j] for all j
     (*out)[i] = ((*A)[i][0] * (*v)[0]) + ((*A)[i][1] * (*v)[1]) +
@@ -22,8 +24,7 @@ void matrix_multiply_d(const Matrix3_d *A, const Vector3_d *v, Vector3_d *out) {
   }
 }
 
-void create_new_matrix_d(const Matrix3_d *A, const Matrix3_d *B,
-                         Matrix3_d *out) {
+void matrix_multiply_d(const Matrix3_d *A, const Matrix3_d *B, Matrix3_d *out) {
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
       (*out)[i][j] = 0;
