@@ -1,5 +1,15 @@
 #include "custom_math.h"
 
+double clamp_d(double min, double max, double d) {
+  if (d < min) {
+    return min;
+  } else if (d > max) {
+    return max;
+  } else {
+    return d;
+  }
+}
+
 uint8_t max(uint8_t a, uint8_t b) { return a > b ? a : b; }
 
 uint8_t min(uint8_t a, uint8_t b) { return a < b ? a : b; }

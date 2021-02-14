@@ -6,6 +6,9 @@
 
 #include <stdint.h>
 
+// clamps a value between min, max
+double clamp_d(double min, double max, double d);
+
 uint8_t max(uint8_t a, uint8_t b);
 uint8_t min(uint8_t a, uint8_t b);
 

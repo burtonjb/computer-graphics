@@ -65,7 +65,7 @@ void paste_to_image(const Image *from, Image *to, const uint16_t x_offset,
   }
 }
 
-Image *copy_from_image(Image *src, const uint16_t x_start,
+Image *copy_from_image(const Image *src, const uint16_t x_start,
                        const uint16_t y_start, const uint16_t x_stop,
                        const uint16_t y_stop) {
 
@@ -171,6 +171,39 @@ Image *affine_transform(const Image *image, const Matrix3_d *A) {
              &(image->pixels[untransformed_position[0] +
                              (untransformed_position[1] * image->width)]),
              sizeof(Pixel));
+    }
+  }
+  return out;
+}
+
+Image *kernel_transform(const Image *image, const Matrix3_d *kernel) {
+  Image *out = copy_image(image);
+  for (int i = 1; i < image->width - 1; i++) {
+    for (int j = 1; j < image->height - 1; j++) {
+      double acc[3] = {0, 0, 0};
+
+      // the kernel indexes are from 0 - 3, but the image would use
+      // location -1, current, +1 so need to shift by a little
+      for (int k = 0; k < 3; k++) {
+        for (int n = 0; n < 3; n++) {
+          Pixel p = image->pixels[i + k - 1 + (j + n - 1) * image->width];
+
+          double new[3] = {(double)p.red * (*kernel)[k][n],
+                           (double)p.green * (*kernel)[k][n],
+                           (double)p.blue * (*kernel)[k][n]};
+
+          acc[0] += new[0];
+          acc[1] += new[1];
+          acc[2] += new[2];
+        }
+      }
+
+#define d_to_uint8_t(arg) (uint8_t)(round(clamp_d(0, 255, arg)))
+      Pixel new = {d_to_uint8_t(acc[0]), d_to_uint8_t(acc[1]),
+                   d_to_uint8_t(acc[2]),
+                   image->pixels[i + j * image->width].alpha};
+#undef d_to_uint8_t
+      out->pixels[i + j * image->width] = new;
     }
   }
   return out;

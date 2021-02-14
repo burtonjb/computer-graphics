@@ -46,7 +46,8 @@ void translate_rotate_matrix() {
 }
 
 /*
- * Name lies slightly. Doesn't actually assert anything, mostly just used as scratch area to test some math.
+ * Name lies slightly. Doesn't actually assert anything, mostly just used as
+ * scratch area to test some math.
  */
 int main(int argc, char *argv[]) {
   test_45_degree_rotation();

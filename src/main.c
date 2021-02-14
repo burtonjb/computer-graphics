@@ -9,53 +9,55 @@
  * Entry point to the application. Called on program start.
  */
 int main(int argc, char *argv[]) {
-  Pixel background_color = {0, 0, 0, 0};
-  Pixel foreground_color = {255, 0, 0, 255};
+  Pixel background_color = {0, 0, 0, 255};
 
   Image *image = make_filled_image(100, 100, &background_color);
-  Image *fg = make_filled_image(10, 20, &foreground_color);
-  Image *fg2 = make_filled_image(10, 5, &PIXEL_GREEN);
-  paste_to_image(fg, image, 10, 10);
-  paste_to_image(fg2, image, 10, 25);
+  Image *fg = make_filled_image(50, 50, &PIXEL_RED);
+  Image *fg2 = make_filled_image(50, 50, &PIXEL_GREEN);
+  Image *fg3 = make_filled_image(50, 50, &PIXEL_BLUE);
+  paste_to_image(fg, image, 0, 0);
+  paste_to_image(fg2, image, 50, 50);
+  paste_to_image(fg3, image, 0, 50);
 
-  Image *translated = affine_transform(
-      image, &((Matrix3_d){{1, 0, 20}, {0, 1, 20}, {0, 0, 1}}));
+  // identity transform the image (do nothing)
+  Image *identity =
+      kernel_transform(image, &((Matrix3_d){{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}));
 
-  // I need to do some translation to to have the image end up on the screen
-  Image *flipped = affine_transform(
-      image, &((Matrix3_d){{1, 0, 20}, {0, -1, 50}, {0, 0, 1}}));
-  Image *scaled_up =
-      affine_transform(image, &((Matrix3_d){{3, 0, 0}, {0, 3, 0}, {0, 0, 1}}));
-  Image *scaled_down = affine_transform(
-      image, &((Matrix3_d){{0.5, 0, 0}, {0, 0.5, 0}, {0, 0, 1}}));
+  // // box blur the image
+  Image *box_blur =
+      kernel_transform(image, &((Matrix3_d){{1.0 / 9, 1.0 / 9, 1.0 / 9},
+                                            {1.0 / 9, 1.0 / 9, 1.0 / 9},
+                                            {1.0 / 9, 1.0 / 9, 1.0 / 9}}));
 
-  const double angle = M_PI / 6;
-  // rotates the image. The image gets rotated "weirdly" because the axes are strange - 0,0 is the top left for images instead of the center for normal math
-  // Rotation also needs some translation, otherwise the image gets rotated off the image
-  Image *rotated =
-      affine_transform(image, &((Matrix3_d){{cos(angle), -sin(angle), 20},
-                                            {sin(angle), cos(angle), 20},
-                                            {0, 0, 1}}));
-  Image *sheared =
-      affine_transform(image, &((Matrix3_d){{1, 1, 0}, {0, 1, 0}, {0, 0, 1}}));
+  // gaussian blur the image
+  Image *gauss_blur =
+      kernel_transform(image, &((Matrix3_d){{1.0 / 16, 2.0 / 16, 1.0 / 16},
+                                            {2.0 / 16, 4.0 / 16, 2.0 / 16},
+                                            {1.0 / 16, 2.0 / 16, 1.0 / 16}}));
 
-  write_pam("images/untransformed.pam", image);
-  write_pam("images/flipped.pam", flipped);
-  write_pam("images/translated.pam", translated);
-  write_pam("images/scaled_up.pam", scaled_up);
-  write_pam("images/scaled_down.pam", scaled_down);
-  write_pam("images/rotated.pam", rotated);
-  write_pam("images/sheared.pam", sheared);
+  // Sharpen an image
+  Image *sharpen = kernel_transform(
+      box_blur, &((Matrix3_d){{0, -1, 0}, {-1, 5, -1}, {0, -1, 0}}));
 
-  free(image);
-  free(fg);
-  free(fg2);
-  free(flipped);
-  free(translated);
-  free(scaled_up);
-  free(scaled_down);
-  free(rotated);
-  free(sheared);
+  // edge detection on the image
+  // kind of only works on greyscale images
+  Image *edge_before = make_filled_image(100, 100, &(Pixel){0, 0, 0, 255});
+  for (int i = 0; i < 10; i++) {
+    Image *new =
+        make_filled_image(100, 10, &(Pixel){i * 25, i * 25, i * 25, 255});
+    paste_to_image(new, edge_before, 0, i * 10);
+    free(new);
+  }
+  write_pam("images/before_edge_detection.pam", edge_before);
+
+  Image *edge_after = kernel_transform(
+      edge_before, &((Matrix3_d){{0, -1, 0}, {-1, 4, -1}, {0, -1, 0}}));
+  write_pam("images/after_edge_detection.pam", edge_after);
+
+  write_pam("images/identity.pam", identity);
+  write_pam("images/box_blur.pam", box_blur);
+  write_pam("images/gauss_blur.pam", gauss_blur);
+  write_pam("images/sharpen.pam", sharpen);
 
   return EXIT_SUCCESS;
 }

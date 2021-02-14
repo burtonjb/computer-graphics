@@ -46,7 +46,7 @@ void paste_to_image(const Image *from, Image *to, const uint16_t x_offset,
  * This can be used to truncate an image - copy the section you want to keep and
  * then free the previous image
  */
-Image *copy_from_image(Image *src, const uint16_t x_start,
+Image *copy_from_image(const Image *src, const uint16_t x_start,
                        const uint16_t y_start, const uint16_t x_stop,
                        const uint16_t y_stop);
 
@@ -72,4 +72,16 @@ void transform_pixels_other(Image *image,
  */
 void transform_pixels_matrix(Image *image, const Matrix3 *A);
 
+/*
+ * Transforms an image with an affine transform, returning the transformed image
+ * as a copy.
+ *
+ * (I would have liked to do this in-place, but its kind of tricky, so I return
+ * a new image instead).
+ */
 Image *affine_transform(const Image *image, const Matrix3_d *A);
+
+/*
+ * Does a kernel transform to an image
+ */
+Image *kernel_transform(const Image *image, const Matrix3_d *A);

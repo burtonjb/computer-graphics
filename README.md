@@ -154,9 +154,28 @@ There seems to be one issue - mapping from the original location to the destinat
 
 ### Kernels in Image Processing
 
+Kernels can be used in image processing to do blurring, sharpening, embossing, and edge detection. This is accomplished by doing a convolution between an image and a kernel.
+
+Below are the following kernel transforms I've tested
+
+|Operation|Kernel|Image|
+|--|--|--|
+|Identity|[0 0 0]<br/>[0 1 0]<br/>[0 0 0]| ![Identity](./docs/identity.pam.png) |
+|Box blur | [1 1 1]<br/>1/9 * [1 1 1]<br/>[1 1 1] | ![box blue](./docs/box_blur.pam.png) |
+|Gauss blur | [1 1 1]<br/>1/16 * [1 1 1]<br/>[1 1 1] | ![gauss blur](./docs/box_blur.pam.png) |
+|Sharpen | [0 -1 0]<br/>[-1 5 -1]<br/>[0 -1 0]<br/> | ![Sharpen box blur](./docs/sharpen.pam.png) |
+
+Edge detection can also be performed, though I used a greyscale image for this:
+
+![before](./docs/before_edge_detection.pam.png) ![after](./docs/after_edge_detection.pam.png)
+
+The edge detection algorithm highlights only sections where there is a transition from one color to the next.
+
+There is a slight implementation defect in the kernel transforms where I didn't account for the edges, but they can be removed after the fact, by selecting (1,1) to (width-1, height-1). Other ways to fix it would be to either mirror or wrap the pixels in the image.
 
 
 # TODOs
+* Names in linear_algebra are slightly bad
 * For the affine transformations I want to try going from new location to old location. Right now I have old location to new location, so I need to invert the matrix.
 * antialiasing
 * interpolation
