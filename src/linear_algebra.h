@@ -33,3 +33,15 @@ void matrix_multiply(const Matrix3 *A, const Vector3 *v, Vector3 *out);
  * haven't tried them
  */
 void matrix_multiply_d(const Matrix3_d *A, const Vector3_d *v, Vector3_d *out);
+
+/*
+ * Mutliplies two matrices together, creating a new matrix and returning it in
+ * the out position.
+ */
+void create_new_matrix_d(const Matrix3_d *A, const Matrix3_d *B,
+                         Matrix3_d *out);
+
+/*
+ * Prints a matrix to the console
+ */
+void print_matrix(const Matrix3_d *A);

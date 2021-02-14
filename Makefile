@@ -54,4 +54,5 @@ run:
 
 # TODO: clean up this target eventually
 test:
-	gcc -std=c11 tst/test_math.c src/math.c -o bin/tst/math && ./bin/tst/math
+	gcc -std=c11 tst/test_math.c src/custom_math.c -o bin/tst/custom_math -lm && ./bin/tst/custom_math
+	gcc -std=c11 tst/test_linear_algebra.c src/custom_math.c src/linear_algebra.c -o bin/tst/linear_algebra -lm && ./bin/tst/linear_algebra

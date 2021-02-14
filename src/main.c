@@ -28,10 +28,13 @@ int main(int argc, char *argv[]) {
       affine_transform(image, &((Matrix3_d){{3, 0, 0}, {0, 3, 0}, {0, 0, 1}}));
   Image *scaled_down = affine_transform(
       image, &((Matrix3_d){{0.5, 0, 0}, {0, 0.5, 0}, {0, 0, 1}}));
-  const double angle = M_PI / 4;
+
+  const double angle = M_PI / 6;
+  // rotates the image. The image gets rotated "weirdly" because the axes are strange - 0,0 is the top left for images instead of the center for normal math
+  // Rotation also needs some translation, otherwise the image gets rotated off the image
   Image *rotated =
-      affine_transform(image, &((Matrix3_d){{cos(angle), -1 * sin(angle), 0},
-                                            {sin(angle), cos(angle), 0},
+      affine_transform(image, &((Matrix3_d){{cos(angle), -sin(angle), 20},
+                                            {sin(angle), cos(angle), 20},
                                             {0, 0, 1}}));
   Image *sheared =
       affine_transform(image, &((Matrix3_d){{1, 1, 0}, {0, 1, 0}, {0, 0, 1}}));

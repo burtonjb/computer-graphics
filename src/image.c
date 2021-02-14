@@ -148,9 +148,8 @@ Image *affine_transform(const Image *image, const Matrix3_d *A) {
 
       matrix_multiply_d(A, &untransformed_position_d, &transformed_position_d);
 
+// Hacky macro to convert from double to position (uint16_t)
 #define d_to_uint16_t(arg) (uint16_t)(round(arg))
-      // FIXME: Vector3 is uint8_t, but I've set it up so that images use
-      // uint16_t for indexing
       uint16_t transformed_position[2] = {
           d_to_uint16_t(transformed_position_d[0]),
           d_to_uint16_t(transformed_position_d[1])};

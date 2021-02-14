@@ -157,7 +157,6 @@ There seems to be one issue - mapping from the original location to the destinat
 
 
 # TODOs
-* rotation in affine transformations is still buggy.
 * For the affine transformations I want to try going from new location to old location. Right now I have old location to new location, so I need to invert the matrix.
 * antialiasing
 * interpolation
