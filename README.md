@@ -174,7 +174,6 @@ The edge detection algorithm highlights only sections where there is a transitio
 There is a slight implementation defect in the kernel transforms where I didn't account for the edges, but they can be removed after the fact, by selecting (1,1) to (width-1, height-1). Other ways to fix it would be to either mirror or wrap the pixels in the image.
 
 # TODOs
-* tests
 * alpha blending and layers
 * different color models (hsv)
 * vector graphics and basic shapes (line, square circle, triangle, polygon)
