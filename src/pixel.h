@@ -47,3 +47,10 @@ void pixel_sub(Pixel *pixel, const Pixel *other);
  * Transforms a pixel pixel with the transformation matrix (in place)
  */
 void pixel_transform(Pixel *pixel, const Matrix3_uint8 *A);
+
+/*
+ * Creates a pixel object from a hsv representation.
+ * hue must be in [0, 360]. Saturation and Value must be in [0, 1]. Returns NULL
+ * for invalid input
+ */
+Pixel *from_hsv(double hue, double saturation, double value, uint8_t alpha);

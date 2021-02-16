@@ -190,7 +190,6 @@ The formula for this computation is in the alpha_blend method in [image.c](./src
 
 
 # TODOs
-* different color models (hsv)
 * vector graphics and basic shapes (line, square circle, triangle, polygon)
 * vector graphics - functions and curves
 * antialiasing
@@ -203,6 +202,7 @@ The formula for this computation is in the alpha_blend method in [image.c](./src
 # Bugs/Issues
 * kernel processing is slightly bad (it just ignores the pixels on the edge)
 * For the affine transformations I want to try going from new location to old location. Right now I have old location to new location, so I need to invert the matrix.
+* finish hsv to rgb test
 
 # Learnings
 * Using uint8_t for the base matrix/vector is not great. Spent a lot of time debugging issues with that. I'm really missing generics now...

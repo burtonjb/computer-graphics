@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define d_to_uint8_t(arg) (uint8_t)(round(clamp_d(0, 255, arg)))
-
 Image *make_filled_image(const uint16_t width, const uint16_t height,
                          const Pixel *fill_color) {
   Image *out = malloc(2 * sizeof(uint16_t) + (width * height * sizeof(Pixel)));
@@ -266,5 +264,3 @@ Image *alpha_blend(const Image *dest, const Image *src) {
 
   return out;
 }
-
-#undef d_to_uint8_t

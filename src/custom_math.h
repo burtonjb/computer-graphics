@@ -4,6 +4,9 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+// I actually do want the build fail if this is also defined elsewhere
+#define d_to_uint8_t(arg) (uint8_t)(round(clamp_d(0, 255, arg)))
+
 #include <stdint.h>
 
 // clamps a value between min, max
