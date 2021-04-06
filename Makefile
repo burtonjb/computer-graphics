@@ -58,3 +58,4 @@ test:
 	gcc -std=c11 tst/test_linear_algebra.c src/custom_math.c src/linear_algebra.c -o bin/tst/linear_algebra -lm && ./bin/tst/linear_algebra
 	gcc -std=c11 tst/test_image.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c -o bin/tst/image -lm && ./bin/tst/image
 	gcc -std=c11 tst/test_pixel.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c -o bin/tst/pixel -lm && ./bin/tst/pixel
+	gcc -std=c11 tst/test_shape.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c -o bin/tst/pixel -lm && ./bin/tst/pixel

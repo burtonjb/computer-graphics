@@ -4,36 +4,28 @@
 #include "custom_math.h"
 #include "file_util.h"
 #include "image.h"
+#include "shape.h"
 
 /*
  * Entry point to the application. Called on program start.
  */
 int main(int argc, char *argv[]) {
-  Pixel background_color = {0, 0, 0, 128};
+  Image *image = make_filled_image(50, 50, &PIXEL_GREEN);
+  Line line = {0, 0, 25, 25};
+  Line line2 = {25, 30, 0, 5};
+  Line line3 = {0, 0, 0, 25};
+  Line line4 = {25, 25, 25, 35};
+  Line line5 = {0, 0, 25, 0};
 
-  Image *red_i = make_filled_image(100, 100, &background_color);
-  Image *red = make_filled_image(40, 40, &(Pixel){128, 0, 0, 128});
-  paste_to_image(red, red_i, 10, 10);
+  rasterize_line_simple(image, &line, &PIXEL_BLUE);
+  rasterize_line_simple(image, &line2, &PIXEL_RED);
+  rasterize_line_simple(image, &line3, &PIXEL_WHITE);
+  rasterize_line_simple(image, &line4, &PIXEL_BLACK);
+  rasterize_line_simple(image, &line5,
+                        &(Pixel){255, 255, 0, 255}); // hex for yellow
 
-  Image *green_i = make_filled_image(100, 100, &background_color);
-  Image *green = make_filled_image(40, 40, &(Pixel){0, 128, 0, 128});
-  paste_to_image(green, green_i, 30, 30);
+  write_pam("images/line_simple.pam", image);
 
-  Image *out = alpha_blend(red_i, green_i);
-  Image *out2 = alpha_blend(green_i, red_i);
-
-  write_pam("images/preblend_red.pam", red_i);
-  write_pam("images/preblend_green.pam", green_i);
-
-  write_pam("images/blend_green_onto_red.pam", out);
-  write_pam("images/blend_red_onto_green.pam", out2);
-
-  free(red_i);
-  free(red);
-  free(green_i);
-  free(green);
-  free(out);
-  free(out2);
-
+  free(image);
   return EXIT_SUCCESS;
 }

@@ -22,6 +22,9 @@ void print_pixel(const Pixel *pixel);
 static const Pixel PIXEL_RED = {255, 0, 0, 255};
 static const Pixel PIXEL_GREEN = {0, 255, 0, 255};
 static const Pixel PIXEL_BLUE = {0, 0, 255, 255};
+static const Pixel PIXEL_BLACK = {0, 0, 0, 255};
+static const Pixel PIXEL_WHITE = {255, 255, 255, 255};
+static const Pixel PIXEL_CLEAR = {0, 0, 0, 0};
 
 /*
  * Mutates the pixel, multiplying each color by k. Doesn't modify alpha

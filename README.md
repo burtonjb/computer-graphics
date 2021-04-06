@@ -188,6 +188,24 @@ The formula for this computation is in the alpha_blend method in [image.c](./src
 |blended green onto red | ![alpha green onto red](./docs/blend_green_onto_red.pam.png) |
 |blended red onto green | ![alpha red onto green](./docs/blend_red_onto_green.pam.png) |
 
+## Vector graphics and rasterization
+
+Vector graphics are a different way of representing images. I've currently been representing images as a 2D array of pixels (called raster graphics). Its easy and flexible, but requires a lot of memory, and doesn't always provide the easiest API to work with if you want to draw shapes.
+
+Another way of representing images is with a collection of shapes, called vector graphics. These primarily have the advantage of being scalable to any size with no aliasing. They may also take less storage space if the image is made out of simple shapes. The downside of vector graphics is that most digital image capture technology does not capture vector images (i.e. a digital camera captures an array of 2D pixels).
+
+The basic shapes that should be supported are:
+* lines
+* circles
+
+and there is a process - called `rasterization` that converts from the vector (shape) format to the raster (pixel-map) format in which I'll be looking into multiple methods to do this conversion.
+
+
+
+#### Reference links
+* https://www.cosc.brocku.ca/Offerings/3P98/course/lectures/2d/
+* https://magcius.github.io/xplain/article/rast1.html
+
 
 # TODOs
 * vector graphics and basic shapes (line, square circle, triangle, polygon)
@@ -195,6 +213,7 @@ The formula for this computation is in the alpha_blend method in [image.c](./src
 * antialiasing
 * interpolation
 * gradients (linear and radial)
+* lua bindings
 * store images as jpgs
 * clean up readme
 * clean up git history
