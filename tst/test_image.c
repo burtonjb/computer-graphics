@@ -186,6 +186,27 @@ void test_alpha_blend() {
   assert(blue_red->pixels[0].alpha == 192);
 }
 
+void test_write_pixel() {
+  Image *image = make_filled_image(10, 10, &(Pixel){0, 0, 0, 255});
+  Pixel p = {255, 255, 255, 0};
+  write_pixel_to_image(image, 5, 5, &p);
+  for (int i = 0; i < 10; i++) {
+    for (int j = 0; j < 10; j++) {
+      if (i == 5 && j == 5) {
+        assert(image->pixels[i + j * 10].red == 255);
+        assert(image->pixels[i + j * 10].green == 255);
+        assert(image->pixels[i + j * 10].blue == 255);
+        assert(image->pixels[i + j * 10].alpha == 0);
+      } else {
+        assert(image->pixels[i + j * 10].red == 0);
+        assert(image->pixels[i + j * 10].green == 0);
+        assert(image->pixels[i + j * 10].blue == 0);
+        assert(image->pixels[i + j * 10].alpha == 255);
+      }
+    }
+  }
+}
+
 int main(int argc, char *argv[]) {
   test_filled_image();
   test_copy_image();
@@ -195,5 +216,6 @@ int main(int argc, char *argv[]) {
   test_affine_transform();
   test_kernel_transform();
   test_alpha_blend();
+  test_write_pixel();
   return 0;
 }

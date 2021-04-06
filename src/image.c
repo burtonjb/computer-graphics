@@ -20,6 +20,14 @@ Image *make_filled_image(const uint16_t width, const uint16_t height,
   return out;
 }
 
+void write_pixel_to_image(Image *image, const uint16_t x, const uint16_t y,
+                          const Pixel *pixel) {
+  if (x > image->width || y > image->height)
+    return; // no-op if the write is out of bounds. Ideally I would return an
+            // error or something, but lazy
+  image->pixels[x + y * image->width] = (*pixel);
+}
+
 Image *copy_image(const Image *src) {
   // I think this implementation is kind of bad. The memcpy should be in an
   // unrolled loop, instead of in a double loop, but I can always fix this later
@@ -100,8 +108,7 @@ Image *copy_from_image(const Image *src, const uint16_t x_start,
   return out;
 }
 
-void transform_pixels_constant(Image *image,
-                               const void (*op)(Pixel *, const uint8_t),
+void transform_pixels_constant(Image *image, void (*op)(const Pixel *, uint8_t),
                                const uint8_t k) {
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
@@ -112,7 +119,7 @@ void transform_pixels_constant(Image *image,
 }
 
 void transform_pixels_other(Image *image,
-                            const void (*op)(Pixel *, const Pixel *pixel),
+                            void (*op)(const Pixel *, const Pixel *pixel),
                             const Pixel *other) {
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
@@ -161,8 +168,7 @@ Image *affine_transform(const Image *image, const Matrix3_d *A) {
 
       // clip transformed pixels that would not end up in the picture
       if (transformed_position[0] >= out->width ||
-          transformed_position[1] >= out->height ||
-          transformed_position[0] < 0 || transformed_position[1] < 0) {
+          transformed_position[1] >= out->height) {
         continue;
       }
 
