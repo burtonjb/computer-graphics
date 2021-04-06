@@ -2,8 +2,10 @@
     so just clean and remake when a header file changes
 
 EXE = graphics
+BINDINGS = image_lib.so
 
 SRC_DIR = src
+BINDINGS_DIR = bindings
 TST_DIR = tst
 OBJ_DIR = bin/obj
 OUTPUT_DIR = bin
@@ -11,14 +13,16 @@ IMAGES_DIR = images
 
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+SOURCE_BINDINGS = $(wildcard $(BINDINGS_DIR)/*.c)
+OBJ_BINDINGS = $(SRC:$(SOURCE_BINDINGS)/%.c=$(OBJ_DIR)/%.o)
 HEADERS = $(wildcard $(SRC_DIR)/*.h)
 
-CPPFLAGS += -Iinclude
-CFLAGS += -Wall -std=c11 -g
-LDFLAGS += -Llib
+CPPFLAGS += -Iinclude -fPIC
+CFLAGS += -Wall -Wextra -std=c11 -g
+LDFLAGS += -Llib -fPIC
 LDLIBS += -lm
 
-.PHONY: all clean format fresh images run everything
+.PHONY: all clean format fresh images run everything bindings
 
 all: $(EXE)
 
@@ -28,20 +32,28 @@ $(EXE): $(OBJ)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
+bindings: all
+	# eventually fix this, move it to a dependency above
+	$(CC) -I /usr/include/lua5.2 $(CPPFLAGS) $(CFLAGS) -c $(SOURCE_BINDINGS) -llua5.2 -o $(OBJ_DIR)/lua_bindings.o
+	$(CC) $(LDFLAGS) $(OBJ) bin/obj/lua_bindings.o $(LDLIBS) -shared -o $(OUTPUT_DIR)/$(BINDINGS)
+
 clean:
 	$(RM) $(OBJ)
+	$(RM) $(OBJ_DIR)/*
 	$(RM) $(OUTPUT_DIR)/$(EXE)
 	$(RM) $(IMAGES_DIR)/*.pam
 	$(RM) $(IMAGES_DIR)/*.png
+	$(RM) $(OUTPUT_DIR)/$(BINDINGS)
 
 format:
 	clang-format -i $(SRC_DIR)/*.c $(SRC_DIR)/*.h
+	clang-format -i $(BINDINGS_DIR)/*.c
 	clang-format -i $(TST_DIR)/*.c
 
 fresh: clean format all test
 
 # does a clean build, runs the tests, makes the executable, runs it and then generates the png files
-everything: clean format all test run images
+everything: clean format all test run bindings images
 
 ## FIXME: This should use the capabilities of make to track if the file has been modified
 images:

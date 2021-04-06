@@ -207,6 +207,12 @@ and there is a process - called `rasterization` that converts from the vector (s
 * https://magcius.github.io/xplain/article/rast1.html
 
 
+## Lua bindings
+TODO
+
+* good start - https://chsasank.github.io/lua-c-wrapping.html
+* official docs - http://lua-users.org/wiki/BindingCodeToLua
+
 # TODOs
 * vector graphics and basic shapes (line, square circle, triangle, polygon)
 * vector graphics - functions and curves
