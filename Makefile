@@ -7,18 +7,18 @@ BINDINGS = image_lib.so
 SRC_DIR = src
 BINDINGS_DIR = bindings
 TST_DIR = tst
+SWIG_GEN_OUTPUT_DIR = bin/swig_output
 OBJ_DIR = bin/obj
 OUTPUT_DIR = bin
 IMAGES_DIR = images
 
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-SOURCE_BINDINGS = $(wildcard $(BINDINGS_DIR)/*.c)
 OBJ_BINDINGS = $(SRC:$(SOURCE_BINDINGS)/%.c=$(OBJ_DIR)/%.o)
 HEADERS = $(wildcard $(SRC_DIR)/*.h)
 
 CPPFLAGS += -Iinclude -fPIC
-CFLAGS += -Wall -Wextra -std=c11 -g
+CFLAGS += -Wall -Wextra -std=c11 -g  # note that the g flag means that it compiles with debug symbols
 LDFLAGS += -Llib -fPIC
 LDLIBS += -lm
 
@@ -33,13 +33,16 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 bindings: all
-	# eventually fix this, move it to a dependency above
-	$(CC) -I /usr/include/lua5.2 $(CPPFLAGS) $(CFLAGS) -c $(SOURCE_BINDINGS) -llua5.2 -o $(OBJ_DIR)/lua_bindings.o
+	# eventually fix this, move it to a dependency above'
+	# I'm using swig 4.0.2
+	swig -lua -o bin/swig_output/lua_bindings.c bindings/swig.i
+	$(CC) -I /usr/include/lua5.2 $(CPPFLAGS) $(CFLAGS) -c bin/swig_output/lua_bindings.c -llua5.2 -o $(OBJ_DIR)/lua_bindings.o
 	$(CC) $(LDFLAGS) $(OBJ) bin/obj/lua_bindings.o $(LDLIBS) -shared -o $(OUTPUT_DIR)/$(BINDINGS)
 
 clean:
 	$(RM) $(OBJ)
 	$(RM) $(OBJ_DIR)/*
+	$(RM) $(SWIG_GEN_OUTPUT_DIR)/*.c
 	$(RM) $(OUTPUT_DIR)/$(EXE)
 	$(RM) $(IMAGES_DIR)/*.pam
 	$(RM) $(IMAGES_DIR)/*.png
@@ -47,7 +50,6 @@ clean:
 
 format:
 	clang-format -i $(SRC_DIR)/*.c $(SRC_DIR)/*.h
-	clang-format -i $(BINDINGS_DIR)/*.c
 	clang-format -i $(TST_DIR)/*.c
 
 fresh: clean format all test
