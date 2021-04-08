@@ -27,12 +27,6 @@ Image *make_filled_image(const uint16_t width, const uint16_t height,
 Image *copy_image(const Image *src);
 
 /*
- * writes a pixel to the image at position (x, y)
- */
-void write_pixel_to_image(Image *image, const uint16_t x, const uint16_t y,
-                          const Pixel *pixel);
-
-/*
  * Bitwise paste pixels from the "from" image to the "to" image, starting from
  * the x and y offsets.
  *
@@ -57,18 +51,23 @@ Image *copy_from_image(const Image *src, const uint16_t x_start,
                        const uint16_t y_stop);
 
 /*
+ * writes a pixel to the image at position (x, y)
+ */
+void write_pixel_to_image(Image *image, const uint16_t x, const uint16_t y,
+                          const Pixel *pixel);
+
+/*
  * Transforms an image (in place) by mutating all pixels by function that takes
  * in a constant
  */
-void transform_pixels_constant(Image *image, void (*op)(const Pixel *, uint8_t),
+void transform_pixels_constant(Image *image, void (*op)(Pixel *, const uint8_t),
                                const uint8_t k);
 
 /*
  * Transforms an image (in place) by mutation all pixels by a function that
  * takes in another pixel
  */
-void transform_pixels_other(Image *image,
-                            void (*op)(const Pixel *, const Pixel *),
+void transform_pixels_other(Image *image, void (*op)(Pixel *, const Pixel *),
                             const Pixel *other);
 
 /*

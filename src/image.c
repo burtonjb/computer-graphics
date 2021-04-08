@@ -108,7 +108,7 @@ Image *copy_from_image(const Image *src, const uint16_t x_start,
   return out;
 }
 
-void transform_pixels_constant(Image *image, void (*op)(const Pixel *, uint8_t),
+void transform_pixels_constant(Image *image, void (*op)(Pixel *, const uint8_t),
                                const uint8_t k) {
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
@@ -119,7 +119,7 @@ void transform_pixels_constant(Image *image, void (*op)(const Pixel *, uint8_t),
 }
 
 void transform_pixels_other(Image *image,
-                            void (*op)(const Pixel *, const Pixel *pixel),
+                            void (*op)(Pixel *, const Pixel *pixel),
                             const Pixel *other) {
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
