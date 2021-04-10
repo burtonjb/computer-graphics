@@ -1,7 +1,7 @@
--- this needs to be run from the ./bin folder as lua doesn't really handle modules all that well. It needs to load 'image_lib' from the root of the working dir
--- I've created a shell script - run_lua_scripts.sh in the root folder for running all scripts if needed
 lib = require('image_lib')
 utils = require('utils')
+
+-- lua file to demonstrate the basics of creating images with the image library
 
 image_size = 100
 

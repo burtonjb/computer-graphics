@@ -1,6 +1,8 @@
 lib = require('image_lib')
 utils = require('utils')
 
+-- file to demonstrate some of the slightly more advanced functionality of the image library
+
 image_size = 100
 
 image = lib.make_filled_image(image_size, image_size, utils.create_pixel(255, 0, 0, 255))
