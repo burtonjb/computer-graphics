@@ -92,6 +92,8 @@ Image *affine_transform(const Image *image, const Matrix3_double *A);
 
 /*
  * Does a kernel transform to an image
+ * 
+ * It returns a copy of the image after the transform
  */
 Image *kernel_transform(const Image *image, const Matrix3_double *A);
 
