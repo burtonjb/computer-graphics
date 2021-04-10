@@ -35,9 +35,9 @@ void pixel_sub(Pixel *pixel, const Pixel *other) {
   pixel->blue = clamp_sub(pixel->blue, other->blue);
 }
 
-void pixel_transform(Pixel *pixel, const Matrix3_uint8 *A) {
-  Vector3_uint8 v = {pixel->red, pixel->green, pixel->blue};
-  Vector3_uint8 new = {0, 0, 0};
+void pixel_transform(Pixel *pixel, const Matrix3_uint8_t *A) {
+  Vector3_uint8_t v = {pixel->red, pixel->green, pixel->blue};
+  Vector3_uint8_t new = {0, 0, 0};
   matrix_vector_multiply_uint8(A, &v, &new);
   pixel->red = new[0];
   pixel->green = new[1];

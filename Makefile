@@ -11,6 +11,7 @@ SWIG_GEN_OUTPUT_DIR = bin/swig_output
 OBJ_DIR = bin/obj
 OUTPUT_DIR = bin
 IMAGES_DIR = images
+LUA_DIR = lua
 
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

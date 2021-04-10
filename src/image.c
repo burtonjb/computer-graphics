@@ -28,6 +28,13 @@ void write_pixel_to_image(Image *image, const uint16_t x, const uint16_t y,
   image->pixels[x + y * image->width] = (*pixel);
 }
 
+Pixel *get_pixel_from_image(Image *image, const uint16_t x, const uint16_t y) {
+  if (x > image->width || y > image->height) {
+    return NULL;
+  }
+  return &(image->pixels[x + y * image->width]);
+}
+
 Image *copy_image(const Image *src) {
   // I think this implementation is kind of bad. The memcpy should be in an
   // unrolled loop, instead of in a double loop, but I can always fix this later
@@ -129,7 +136,7 @@ void transform_pixels_other(Image *image,
   }
 }
 
-void transform_pixels_matrix(Image *image, const Matrix3_uint8 *A) {
+void transform_pixels_matrix(Image *image, const Matrix3_uint8_t *A) {
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
       Pixel *pixel = &(image->pixels[i + j * image->width]);
@@ -138,7 +145,7 @@ void transform_pixels_matrix(Image *image, const Matrix3_uint8 *A) {
   }
 }
 
-Image *affine_transform(const Image *image, const Matrix3_d *A) {
+Image *affine_transform(const Image *image, const Matrix3_double *A) {
 
   Image *out = make_filled_image(
       image->width, image->height,
@@ -148,10 +155,10 @@ Image *affine_transform(const Image *image, const Matrix3_d *A) {
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
 
-      Vector3_d untransformed_position_d = {
+      Vector3_double untransformed_position_d = {
           i, j, 1}; // affine transforms require the position to be (x, y, 1)
 
-      Vector3_d transformed_position_d = {0, 0, 1};
+      Vector3_double transformed_position_d = {0, 0, 1};
 
       matrix_vector_multiply_d(A, &untransformed_position_d,
                                &transformed_position_d);
@@ -183,7 +190,7 @@ Image *affine_transform(const Image *image, const Matrix3_d *A) {
   return out;
 }
 
-Image *kernel_transform(const Image *image, const Matrix3_d *kernel) {
+Image *kernel_transform(const Image *image, const Matrix3_double *kernel) {
   Image *out = copy_image(image);
   for (int i = 1; i < image->width - 1; i++) {
     for (int j = 1; j < image->height - 1; j++) {

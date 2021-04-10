@@ -1,8 +1,9 @@
 rm images/*.pam
 rm images/*.png
 
-cd bin
+cp './lua/utils.lua' 'bin/'
 
+cd bin
 for s in ../lua/*.lua ; do \
   echo $s; \
   lua $s; \

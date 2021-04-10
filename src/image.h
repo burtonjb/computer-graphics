@@ -22,6 +22,17 @@ Image *make_filled_image(const uint16_t width, const uint16_t height,
                          const Pixel *fill_color);
 
 /*
+ * writes a pixel to the image at position (x, y)
+ */
+void write_pixel_to_image(Image *image, const uint16_t x, const uint16_t y,
+                          const Pixel *pixel);
+
+/*
+ * Returns a reference to a pixel at position (x, y) in an image
+ */
+Pixel *get_pixel_from_image(Image *image, const uint16_t x, const uint16_t y);
+
+/*
  * Creates a copy of an image.
  */
 Image *copy_image(const Image *src);
@@ -51,12 +62,6 @@ Image *copy_from_image(const Image *src, const uint16_t x_start,
                        const uint16_t y_stop);
 
 /*
- * writes a pixel to the image at position (x, y)
- */
-void write_pixel_to_image(Image *image, const uint16_t x, const uint16_t y,
-                          const Pixel *pixel);
-
-/*
  * Transforms an image (in place) by mutating all pixels by function that takes
  * in a constant
  */
@@ -74,7 +79,7 @@ void transform_pixels_other(Image *image, void (*op)(Pixel *, const Pixel *),
  * Transforms an image (in place) by mutating all pixels in the image by a a
  * matrix
  */
-void transform_pixels_matrix(Image *image, const Matrix3_uint8 *A);
+void transform_pixels_matrix(Image *image, const Matrix3_uint8_t *A);
 
 /*
  * Transforms an image with an affine transform, returning the transformed image
@@ -83,12 +88,12 @@ void transform_pixels_matrix(Image *image, const Matrix3_uint8 *A);
  * (I would have liked to do this in-place, but its kind of tricky, so I return
  * a new image instead).
  */
-Image *affine_transform(const Image *image, const Matrix3_d *A);
+Image *affine_transform(const Image *image, const Matrix3_double *A);
 
 /*
  * Does a kernel transform to an image
  */
-Image *kernel_transform(const Image *image, const Matrix3_d *A);
+Image *kernel_transform(const Image *image, const Matrix3_double *A);
 
 /*
  * Alpha blends two images together, returning the result.

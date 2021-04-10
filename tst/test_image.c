@@ -105,7 +105,7 @@ void test_pixel_transforms() {
   assert(add->pixels[0].green == 255);
   assert(add->pixels[0].blue == 0);
 
-  Matrix3_uint8 A = {{0, 0, 1}, {0, 1, 0}, {1, 0, 0}};
+  Matrix3_uint8_t A = {{0, 0, 1}, {0, 1, 0}, {1, 0, 0}};
   transform_pixels_matrix(matrix, &A);
   assert(matrix->pixels[0].red == 0);
   assert(matrix->pixels[0].green == 0);
@@ -124,7 +124,8 @@ void test_affine_transform() {
 
   assert(to_test->pixels[3 + 3 * 10].green == 255);
 
-  Matrix3_d A = {{1, 0, 2}, {0, 1, 1}, {0, 0, 1}}; // matrix to translate (2, 1)
+  Matrix3_double A = {
+      {1, 0, 2}, {0, 1, 1}, {0, 0, 1}}; // matrix to translate (2, 1)
 
   Image *t = affine_transform(to_test, &A);
 
@@ -141,7 +142,7 @@ void test_kernel_transform() {
   Image *new = make_filled_image(1, 1, &PIXEL_GREEN);
   paste_to_image(new, to_test, 3, 3);
 
-  Matrix3_d A = {
+  Matrix3_double A = {
       {0, 0, 0},
       {0, 1, 0},
       {0, 0, 0}}; // Identity kernel, just check that it doesn't segfault
