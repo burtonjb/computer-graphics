@@ -120,7 +120,7 @@ Some of them are as follows:
 
 |Use case | Matrix | Description |
 |--|--|--|
-|Do nothing | [1 0 0]</br>[0 1 0]</br>[0 0 0] | Use the identity matrix to do nothing |
+|Do nothing | [1 0 0]</br>[0 1 0]</br>[0 0 1] | Use the identity matrix to do nothing |
 |Get the value of a specific channel| [1 0 0]</br>[0 0 0]</br>[0 0 0] | Just gets the red channel |
 |Greyscale conversion | [1 1 1]</br>[1 1 1]</br>[1 1 1] | Sums up the RGB channels and then distributes the values to each channel (you also need to divide by 3) |
 |Reverse colors | [0 0 1]</br>[0 1 0]</br>[1 0 0] | Reverses the R and B color values |
