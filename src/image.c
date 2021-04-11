@@ -136,11 +136,12 @@ void transform_pixels_other(Image *image,
   }
 }
 
-void transform_pixels_matrix(Image *image, const Matrix3_uint8_t *A) {
+void transform_pixels_matrix(Image *image, const Matrix3_uint8_t *A,
+                             const uint8_t divisor) {
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
       Pixel *pixel = &(image->pixels[i + j * image->width]);
-      pixel_transform(pixel, A);
+      pixel_transform(pixel, A, divisor);
     }
   }
 }

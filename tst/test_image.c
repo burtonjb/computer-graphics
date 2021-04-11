@@ -106,7 +106,7 @@ void test_pixel_transforms() {
   assert(add->pixels[0].blue == 0);
 
   Matrix3_uint8_t A = {{0, 0, 1}, {0, 1, 0}, {1, 0, 0}};
-  transform_pixels_matrix(matrix, &A);
+  transform_pixels_matrix(matrix, &A, 1);
   assert(matrix->pixels[0].red == 0);
   assert(matrix->pixels[0].green == 0);
   assert(matrix->pixels[0].blue == 255);

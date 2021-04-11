@@ -214,6 +214,7 @@ TODO
 * official docs - http://lua-users.org/wiki/BindingCodeToLua
 
 # TODOs
+* Update readme
 * vector graphics and basic shapes (line, square circle, triangle, polygon)
 * vector graphics - functions and curves
 * antialiasing

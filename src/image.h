@@ -77,9 +77,11 @@ void transform_pixels_other(Image *image, void (*op)(Pixel *, const Pixel *),
 
 /*
  * Transforms an image (in place) by mutating all pixels in the image by a a
- * matrix
+ * matrix. Pass in a divisor, because I used uint8_t as the datatype for the
+ * matrix, so it doesn't support fractional values.
  */
-void transform_pixels_matrix(Image *image, const Matrix3_uint8_t *A);
+void transform_pixels_matrix(Image *image, const Matrix3_uint8_t *A,
+                             const uint8_t divisor);
 
 /*
  * Transforms an image with an affine transform, returning the transformed image

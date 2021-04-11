@@ -49,7 +49,8 @@ void pixel_sub(Pixel *pixel, const Pixel *other);
 /*
  * Transforms a pixel pixel with the transformation matrix (in place)
  */
-void pixel_transform(Pixel *pixel, const Matrix3_uint8_t *A);
+void pixel_transform(Pixel *pixel, const Matrix3_uint8_t *A,
+                     const uint8_t divisor);
 
 /*
  * Creates a pixel object from a hsv representation.
