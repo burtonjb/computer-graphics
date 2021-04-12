@@ -1,7 +1,7 @@
 lib = require('image_lib')
 utils = require('utils')
 
--- file to demonstrate various affine transformations
+-- file to demonstrate alpha blendings
 
 function create_image(pixel, x, y)
   local image = lib.make_filled_image(100, 100, utils.create_pixel(0, 0, 0, 0))

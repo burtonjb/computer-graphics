@@ -22,6 +22,13 @@ Image *make_filled_image(const uint16_t width, const uint16_t height,
                          const Pixel *fill_color);
 
 /*
+ * Checks if the value of two images is equal.
+ *
+ * Returns 1 if the images are equal, 0 if they aren't
+ */
+int are_images_equal(const Image *i1, const Image *i2);
+
+/*
  * writes a pixel to the image at position (x, y)
  */
 void write_pixel_to_image(Image *image, const uint16_t x, const uint16_t y,
@@ -30,7 +37,8 @@ void write_pixel_to_image(Image *image, const uint16_t x, const uint16_t y,
 /*
  * Returns a reference to a pixel at position (x, y) in an image
  */
-Pixel *get_pixel_from_image(Image *image, const uint16_t x, const uint16_t y);
+Pixel *get_pixel_from_image(const Image *image, const uint16_t x,
+                            const uint16_t y);
 
 /*
  * Creates a copy of an image.

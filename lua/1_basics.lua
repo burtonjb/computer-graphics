@@ -23,3 +23,8 @@ lib.print_pixel(pp)
 print("")
 
 lib.write_pam("../images/write_pixel.pam", x)
+
+-- demonstrate reading from a pam file
+read_after_write = lib.read_pam("../images/write_pixel.pam")
+
+print(lib.are_images_equal(x, read_after_write) == 1);

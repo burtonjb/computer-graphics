@@ -28,7 +28,8 @@ void write_pixel_to_image(Image *image, const uint16_t x, const uint16_t y,
   image->pixels[x + y * image->width] = (*pixel);
 }
 
-Pixel *get_pixel_from_image(Image *image, const uint16_t x, const uint16_t y) {
+Pixel *get_pixel_from_image(const Image *image, const uint16_t x,
+                            const uint16_t y) {
   if (x > image->width || y > image->height) {
     return NULL;
   }
@@ -78,6 +79,27 @@ void paste_to_image(const Image *from, Image *to, const uint16_t x_offset,
              &(from->pixels[x_from + y_from * from->width]), sizeof(Pixel));
     }
   }
+}
+
+int are_images_equal(const Image *i1, const Image *i2) {
+  if (i1->width != i2->width) {
+    return 0;
+  }
+  if (i1->height != i2->height) {
+    return 0;
+  }
+
+  for (uint16_t i = 0; i < i1->width; i++) {
+    for (uint16_t j = 0; j < i1->height; j++) {
+      Pixel *p1 = get_pixel_from_image(i1, i, j);
+      Pixel *p2 = get_pixel_from_image(i2, i, j);
+      if (p1->red != p2->red || p1->green != p2->green ||
+          p1->blue != p2->blue || p1->alpha != p2->alpha) {
+        return 0;
+      }
+    }
+  }
+  return 1;
 }
 
 Image *copy_from_image(const Image *src, const uint16_t x_start,
