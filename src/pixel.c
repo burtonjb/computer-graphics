@@ -7,8 +7,8 @@
 #include <string.h>
 
 void print_pixel(const Pixel *pixel) {
-  printf("(red: %d, green: %d, blue: %d, alpha: %d)", pixel->red, pixel->green,
-         pixel->blue, pixel->alpha);
+  printf("(r:%d,g:%d,b:%d,a:%d)", pixel->red, pixel->green, pixel->blue,
+         pixel->alpha);
 }
 
 void pixel_multi(Pixel *pixel, const uint8_t k) {
@@ -44,6 +44,18 @@ void pixel_transform(Pixel *pixel, const Matrix3_uint8_t *A,
   pixel->red = new[0];
   pixel->green = new[1];
   pixel->blue = new[2];
+}
+
+int are_pixels_equal(const Pixel *p1, const Pixel *p2) {
+  if (p1->red != p2->red)
+    return FALSE;
+  if (p1->green != p2->green)
+    return FALSE;
+  if (p1->blue != p2->blue)
+    return FALSE;
+  if (p1->alpha != p2->alpha)
+    return FALSE;
+  return TRUE;
 }
 
 // return pointer so I can return null in bad input cases.

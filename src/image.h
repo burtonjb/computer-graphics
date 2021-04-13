@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+#include "common.h"
 #include "linear_algebra.h"
 #include "pixel.h"
 

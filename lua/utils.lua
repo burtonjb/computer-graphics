@@ -12,6 +12,15 @@ function utils.create_pixel(r, g, b, a)
     return pixel
 end
 
+function utils.create_line(x0, y0, x1, y1)
+    local line = lib.Line()
+    line.x0 = x0
+    line.y0 = y0
+    line.x1 = x1
+    line.y1 = y1
+    return line
+end
+
 function utils.matrix()
     local out = {}
     for i = 1, 3 do
@@ -23,17 +32,17 @@ function utils.matrix()
     return out
 end
 
-function utils.matrix_multiply(m1, m2) 
+function utils.matrix_multiply(m1, m2)
     local out = utils.matrix()
-	for i = 1,3 do
-		for j = 1,3 do
+    for i = 1, 3 do
+        for j = 1, 3 do
             local num = 0
-			for k = 1,3 do
+            for k = 1, 3 do
                 num = num + m1[i][k] * m2[k][j]
             end
             out[i][j] = num
-		end
-	end
+        end
+    end
     return out
 end
 

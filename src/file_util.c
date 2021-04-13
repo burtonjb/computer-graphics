@@ -48,13 +48,12 @@ void write_pam(const char *path, const Image *image) {
   fclose(fp);
 }
 
-#define FIND_STRING_START_INDEX(varname, haystack, needle)                     \
+#define FIND_STRING_START(varname, haystack, needle)                           \
   char *s_##varname = strstr(haystack, needle);                                \
   if (s_##varname == NULL) {                                                   \
     printf("Failed to find %s in %s", needle, haystack);                       \
     return NULL;                                                               \
-  }                                                                            \
-  size_t varname = s_##varname - haystack;
+  }
 
 Image *read_pam(const char *path) {
   FILE *fp = fopen(path, "rb");
@@ -72,13 +71,14 @@ Image *read_pam(const char *path) {
   int image_height = 0;
   char _[BUFFER_SIZE]; // seems pretty dangerous
 
-  FIND_STRING_START_INDEX(end_header_start, buffer, "ENDHDR\n")
+  FIND_STRING_START(end_header_start, buffer, "ENDHDR\n")
+  size_t end_header_start = s_end_header_start - buffer;
   int header_end_location = end_header_start + strlen("ENDHDR\n");
 
-  FIND_STRING_START_INDEX(image_width_start, buffer, "WIDTH ")
+  FIND_STRING_START(image_width_start, buffer, "WIDTH ")
   sscanf(s_image_width_start, "%s %d\n", _, &image_width);
 
-  FIND_STRING_START_INDEX(image_height_start, buffer, "HEIGHT ")
+  FIND_STRING_START(image_height_start, buffer, "HEIGHT ")
   sscanf(s_image_height_start, "%s %d\n", _, &image_height);
 
   // search from the begining of the file until the end of the header
@@ -95,7 +95,6 @@ Image *read_pam(const char *path) {
   // values to store values read from the file
   uint8_t color[4];
   Pixel p;
-  int counter = 0;
 
   while (fp != NULL) {
     int size = fread(color, sizeof(color), 1, fp);

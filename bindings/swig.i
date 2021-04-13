@@ -11,7 +11,6 @@
 %include <typemaps.i>
 %include <stdint.i>
 
-%include "../src/custom_math.h"
 %include "../src/linear_algebra.h"
 %include "../src/file_util.h"
 %include "../src/pixel.h"

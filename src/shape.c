@@ -22,7 +22,7 @@ void rasterize_line_simple(Image *image, const Line *line, const Pixel *pixel) {
   double dx = line->x1 - line->x0;
   double slope = dy / dx;
 
-  if (slope <= 1) {
+  if (slope <= 1 && slope >= -1) {
     uint16_t y = line->y0;
     uint16_t x_start = line->x0;
     uint16_t x_end = line->x1;
@@ -30,6 +30,10 @@ void rasterize_line_simple(Image *image, const Line *line, const Pixel *pixel) {
     if (x_start > x_end) { // if x_start, x_end are reversed, swap them
       swap(&x_start, &x_end);
       y = line->y1;
+    }
+
+    if (dx == 0) {
+      slope = 0; // hacks to handle if its a straight line up/down
     }
 
     for (int i = x_start; i >= 0 && i < x_end && i < image->width; i++) {

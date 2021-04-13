@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+#include "common.h"
 #include "linear_algebra.h"
 
 /*
@@ -51,6 +52,11 @@ void pixel_sub(Pixel *pixel, const Pixel *other);
  */
 void pixel_transform(Pixel *pixel, const Matrix3_uint8_t *A,
                      const uint8_t divisor);
+
+/*
+ * Check that two pixels are equal. Return 1 if they are, 0 if they aren't
+ */
+int are_pixels_equal(const Pixel *p1, const Pixel *p2);
 
 /*
  * Creates a pixel object from a hsv representation.

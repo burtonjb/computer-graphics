@@ -93,13 +93,12 @@ int are_images_equal(const Image *i1, const Image *i2) {
     for (uint16_t j = 0; j < i1->height; j++) {
       Pixel *p1 = get_pixel_from_image(i1, i, j);
       Pixel *p2 = get_pixel_from_image(i2, i, j);
-      if (p1->red != p2->red || p1->green != p2->green ||
-          p1->blue != p2->blue || p1->alpha != p2->alpha) {
-        return 0;
+      if (!are_pixels_equal(p1, p2)) {
+        return FALSE;
       }
     }
   }
-  return 1;
+  return TRUE;
 }
 
 Image *copy_from_image(const Image *src, const uint16_t x_start,
