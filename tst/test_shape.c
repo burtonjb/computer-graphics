@@ -144,6 +144,7 @@ int main(int argc, char *argv[]) {
   test_vertical_line();
   test_horizontal_backwards_line();
   test_diagonal_backwards_line();
-  test_vertical_backwards_line(); // this is broken
+  test_vertical_backwards_line();
+  test_point();
   return 0;
 }

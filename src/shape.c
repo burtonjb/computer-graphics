@@ -36,7 +36,7 @@ void rasterize_line_simple(Image *image, const Line *line, const Pixel *pixel) {
       slope = 0; // hacks to handle if its a straight line up/down
     }
 
-    for (int i = x_start; i >= 0 && i < x_end && i < image->width; i++) {
+    for (int i = x_start; i >= 0 && i <= x_end && i < image->width; i++) {
       image->pixels[i + y * image->width] = *pixel;
       y = y + round(slope);
       if (y > image->height)
@@ -57,7 +57,7 @@ void rasterize_line_simple(Image *image, const Line *line, const Pixel *pixel) {
       slope = 0; // hacks to handle if its a straight line up/down
     }
 
-    for (int i = y_start; i >= 0 && i < y_end && i < image->height; i++) {
+    for (int i = y_start; i >= 0 && i <= y_end && i < image->height; i++) {
 
       image->pixels[x + i * image->width] = *pixel;
       x = x + round(slope);
