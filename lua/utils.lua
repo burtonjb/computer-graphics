@@ -21,6 +21,14 @@ function utils.create_line(x0, y0, x1, y1)
     return line
 end
 
+function utils.create_circle(x, y, r) 
+    local circle = lib.Circle()
+    circle.x = x
+    circle.y = y
+    circle.radius = r
+    return circle
+end
+
 function utils.matrix()
     local out = {}
     for i = 1, 3 do
