@@ -8,7 +8,7 @@ math = require('math')
 image = utils.create_another_test_image(1)
 
 identity = utils.matrix()
-lib.write_pam('../images/affine_start.pam', image)
+lib.write_pam('../images/4_affine_start.pam', image)
 
 
 -- identity (no-op) transform
@@ -18,7 +18,7 @@ identity[2][2] = 1
 identity[3][3] = 1
 m = utils.to_matrix_d(identity)
 x = lib.affine_transform(image, m)
-lib.write_pam("../images/affine_identity_transform.pam", x)
+lib.write_pam("../images/4_affine_identity_transform.pam", x)
 
 
 -- translation - shift a little on both the x and y axis
@@ -28,7 +28,7 @@ shift[2][1] = 0; shift[2][2] = 1; shift[2][3] = 10;
 shift[3][1] = 0; shift[3][2] = 0; shift[3][3] = 1;
 m = utils.to_matrix_d(shift)
 x = lib.affine_transform(utils.create_another_test_image(1), m)
-lib.write_pam("../images/affine_translation.pam", x)
+lib.write_pam("../images/4_affine_translation.pam", x)
 
 
 -- reflection - flip over the y-axis
@@ -46,7 +46,7 @@ multi_xform = utils.matrix_multiply(reflect, shift) -- the shift is required to 
 
 m = utils.to_matrix_d(multi_xform)
 x = lib.affine_transform(image, m)
-lib.write_pam("../images/affine_reflection.pam", x)
+lib.write_pam("../images/4_affine_reflection.pam", x)
 
 
 -- rotation 90 degrees
@@ -58,7 +58,7 @@ rotate_90[3][3] = 1
 
 m = utils.to_matrix_d(rotate_90)
 x = lib.affine_transform(image, m)
-lib.write_pam("../images/affine_90_degree_reflection.pam", x)
+lib.write_pam("../images/4_affine_90_degree_reflection.pam", x)
 
 
 -- rotation 45 degrees
@@ -70,7 +70,7 @@ rotate_45[3][3] = 1
 
 m = utils.to_matrix_d(rotate_45)
 x = lib.affine_transform(image, m)
-lib.write_pam("../images/affine_45_degree_reflection.pam", x)
+lib.write_pam("../images/4_affine_45_degree_reflection.pam", x)
 
 
 -- scale image - shrink by 50% on y axis
@@ -80,7 +80,7 @@ scale[3][3] = 1
 
 m = utils.to_matrix_d(scale)
 x = lib.affine_transform(image, m)
-lib.write_pam("../images/affine_scale_y_.5.pam", x)
+lib.write_pam("../images/4_affine_scale_y_.5.pam", x)
 
 
 -- scale image - increase size by 50% on both x and y axis
@@ -90,7 +90,7 @@ scale[3][3] = 1
 
 m = utils.to_matrix_d(scale)
 x = lib.affine_transform(image, m)
-lib.write_pam("../images/affine_scale_1.5x_and_y.pam", x)
+lib.write_pam("../images/4_affine_scale_1.5x_and_y.pam", x)
 
 
 -- shear - shear on x axis
@@ -101,7 +101,7 @@ shear_x[3][3] = 1
 
 m = utils.to_matrix_d(shear_x)
 x = lib.affine_transform(image, m)
-lib.write_pam("../images/affine_shear_x.pam", x)
+lib.write_pam("../images/4_affine_shear_x.pam", x)
 
 -- shear - shear on y axis
 shear_y = utils.matrix()
@@ -111,9 +111,9 @@ shear_y[3][3] = 1
 
 m = utils.to_matrix_d(shear_y)
 x = lib.affine_transform(image, m)
-lib.write_pam("../images/affine_shear_y.pam", x)
+lib.write_pam("../images/4_affine_shear_y.pam", x)
 
 -- shear x and y
 m = utils.to_matrix_d(utils.matrix_multiply(shear_x, shear_y))
 x = lib.affine_transform(image, m)
-lib.write_pam("../images/affine_shear_x_and_y.pam", x)
+lib.write_pam("../images/4_affine_shear_x_and_y.pam", x)

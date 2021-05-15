@@ -2,9 +2,9 @@
  * File used to define some additional bindings to be used by swig. Mostly just
  * used to typematch for function pointers for now
  */
+#pragma once
 
 #include "../src/pixel.h"
-
 /*
  * This macro is to automatically generate the pixel fptr operations.
  * method name is fptr_METHOD_NAME

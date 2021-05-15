@@ -200,6 +200,8 @@ The basic shapes that should be supported are:
 
 and there is a process - called `rasterization` that converts from the vector (shape) format to the raster (pixel-map) format in which I'll be looking into multiple methods to do this conversion.
 
+## Polygons
+
 #### Reference links
 * https://www.cosc.brocku.ca/Offerings/3P98/course/lectures/2d/
 * https://magcius.github.io/xplain/article/rast1.html
@@ -212,12 +214,11 @@ TODO
 * good start - https://chsasank.github.io/lua-c-wrapping.html
 * official docs - http://lua-users.org/wiki/BindingCodeToLua
 * swig - http://www.swig.org/Doc4.0/Lua.html#Lua
-* Old manually created binding code somewhere
+* Include sample of old manually created binding code somewhere
 
 # TODOs
-* update all lua scripts to prefix the output image files with the script number
-* Update readme
-* vector graphics and basic shapes (line, square circle, triangle, polygon)
+* ~~update all lua scripts to prefix the output image files with the script number~~
+* ~~vector graphics and basic shapes (line, square, circle, triangle, polygon)~~
 * vector graphics - functions and curves
 * antialiasing
 * interpolation
@@ -227,12 +228,15 @@ TODO
 * clean up readme
 * clean up git history
 * sparse and "dense" images
+* shape based pixel selection (rect, circle)
+* magic wand like pixel selection (select all pixels similar to the origin pixel)
 * fill
 
 # Bugs/Issues
 * kernel processing is slightly bad (it just ignores the pixels on the edge)
 * For the affine transformations I want to try going from new location to old location. Right now I have old location to new location, so I need to invert the matrix.
 * finish hsv to rgb test
+* finish test cases for the circle drawing
 
 # Learnings
 * Using uint8_t for the base matrix/vector is not great. Spent a lot of time debugging issues with that. I'm really missing generics now...

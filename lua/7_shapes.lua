@@ -17,7 +17,7 @@ lib.rasterize_line_simple(line_image, line3, lib.PIXEL_WHITE);
 lib.rasterize_line_bresenham(line_image, line4, lib.PIXEL_BLACK);
 lib.rasterize_line_bresenham(line_image, line5, utils.create_pixel(255, 255, 0, 255)) -- hex for yellow
 
-lib.write_pam("../images/lines.pam", line_image);
+lib.write_pam("../images/7_lines.pam", line_image);
 
 circle_image = lib.make_filled_image(50, 50, lib.PIXEL_GREEN);
 circle_1 = utils.create_circle(25, 25, 10);
@@ -28,4 +28,4 @@ lib.rasterize_circle_simple(circle_image, circle_1, lib.PIXEL_RED, 0.001);
 lib.rasterize_circle_midpoint(circle_image, circle_2, lib.PIXEL_BLUE);
 lib.rasterize_circle_bresenham(circle_image, circle_3, lib.PIXEL_BLACK);
 
-lib.write_pam("../images/circles.pam", circle_image);
+lib.write_pam("../images/7_circles.pam", circle_image);

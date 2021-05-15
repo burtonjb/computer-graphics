@@ -6,13 +6,13 @@ utils = require('utils')
 image_size = 100
 
 i = lib.make_filled_image(image_size, image_size, utils.create_pixel(255, 0, 0, 255))
-lib.write_pam("../images/lua_red.pam", i)
+lib.write_pam("../images/1_lua_red.pam", i)
 
 j = lib.make_filled_image(image_size, image_size, utils.create_pixel(0, 255, 0, 255))
-lib.write_pam("../images/lua_green.pam", j)
+lib.write_pam("../images/1_lua_green.pam", j)
 
 k = lib.make_filled_image(image_size, image_size, utils.create_pixel(0, 0, 255, 255))
-lib.write_pam("../images/lua_blue.pam", k)
+lib.write_pam("../images/1_lua_blue.pam", k)
 
 x = lib.make_filled_image(image_size, image_size, utils.create_pixel(0, 0, 0, 255))
 p = utils.create_pixel(255, 255, 255, 255)
@@ -22,9 +22,9 @@ pp = lib.get_pixel_from_image(x, 0, 0)
 lib.print_pixel(pp)
 print("")
 
-lib.write_pam("../images/write_pixel.pam", x)
+lib.write_pam("../images/1_write_pixel.pam", x)
 
 -- demonstrate reading from a pam file
-read_after_write = lib.read_pam("../images/write_pixel.pam")
+read_after_write = lib.read_pam("../images/1_write_pixel.pam")
 
 print(lib.are_images_equal(x, read_after_write) == 1);

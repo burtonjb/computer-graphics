@@ -29,6 +29,13 @@ function utils.create_circle(x, y, r)
     return circle
 end
 
+function utils.create_point(x, y)
+    local point = lib.Point()
+    point.x = x
+    point.y = y
+    return point
+end
+
 function utils.matrix()
     local out = {}
     for i = 1, 3 do
