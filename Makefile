@@ -36,7 +36,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 bindings: all
 	# eventually fix this, move it to a dependency above'
 	# I'm using swig 4.0.2
-	swig -lua -o bin/swig_output/lua_bindings.c bindings/swig.i
+	swig -lua -o bin/swig_output/lua_bindings.c bindings/swig.i  
 	$(CC) -I /usr/include/lua5.2 $(CPPFLAGS) $(CFLAGS) -c bin/swig_output/lua_bindings.c -llua5.2 -o $(OBJ_DIR)/lua_bindings.o
 	$(CC) $(LDFLAGS) $(OBJ) bin/obj/lua_bindings.o $(LDLIBS) -shared -o $(OUTPUT_DIR)/$(BINDINGS)
 
@@ -73,4 +73,4 @@ test:
 	gcc -std=c11 tst/test_linear_algebra.c src/custom_math.c src/linear_algebra.c -o bin/tst/linear_algebra -lm && ./bin/tst/linear_algebra
 	gcc -std=c11 tst/test_image.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c -o bin/tst/image -lm && ./bin/tst/image
 	gcc -std=c11 tst/test_pixel.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c -o bin/tst/pixel -lm && ./bin/tst/pixel
-	gcc -std=c11 tst/test_shape.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c src/shape.c -o bin/tst/shape -lm && ./bin/tst/shape
+	gcc -std=c11 tst/test_shape.c src/file_util.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c src/shape.c -o bin/tst/shape -lm && ./bin/tst/shape

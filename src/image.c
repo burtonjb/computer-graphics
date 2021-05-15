@@ -22,9 +22,10 @@ Image *make_filled_image(const uint16_t width, const uint16_t height,
 
 void write_pixel_to_image(Image *image, const uint16_t x, const uint16_t y,
                           const Pixel *pixel) {
-  if (x > image->width || y > image->height)
+  if (x >= image->width || y >= image->height) {
     return; // no-op if the write is out of bounds. Ideally I would return an
             // error or something, but lazy
+  }
   image->pixels[x + y * image->width] = (*pixel);
 }
 
@@ -136,7 +137,7 @@ Image *copy_from_image(const Image *src, const uint16_t x_start,
   return out;
 }
 
-void transform_pixels_constant(Image *image, void (*op)(Pixel *, const uint8_t),
+void transform_pixels_constant(Image *image, int_op_on_pixel op,
                                const uint8_t k) {
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
@@ -146,8 +147,7 @@ void transform_pixels_constant(Image *image, void (*op)(Pixel *, const uint8_t),
   }
 }
 
-void transform_pixels_other(Image *image,
-                            void (*op)(Pixel *, const Pixel *pixel),
+void transform_pixels_other(Image *image, pixel_op_on_pixel op,
                             const Pixel *other) {
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
@@ -298,4 +298,14 @@ Image *alpha_blend(const Image *dest, const Image *src) {
   }
 
   return out;
+}
+
+void print_image(const Image *image) {
+  printf("%d %d\n", image->width, image->height);
+  for (int i = 0; i < image->width; i++) {
+    for (int j = 0; j < image->height; j++) {
+      print_pixel(get_pixel_from_image(image, i, j));
+    }
+    printf("\n");
+  }
 }

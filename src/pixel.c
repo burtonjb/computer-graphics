@@ -114,3 +114,5 @@ Pixel *from_hsv(double hue, double saturation, double value, uint8_t alpha) {
   out->alpha = alpha;
   return out;
 }
+
+#undef PIXEL_OP_FPTR_IMPL

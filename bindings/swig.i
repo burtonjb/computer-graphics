@@ -6,6 +6,7 @@
 #include "../../src/pixel.h"
 #include "../../src/image.h"
 #include "../../src/shape.h"
+#include "../../src/swig_wrappers.h"
 %}
 
 %include <typemaps.i>
@@ -16,3 +17,4 @@
 %include "../src/pixel.h"
 %include "../src/image.h"
 %include "../src/shape.h"
+%include "../src/swig_wrappers.h"

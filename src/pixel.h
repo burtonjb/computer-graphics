@@ -15,6 +15,14 @@ typedef struct pixel {
   uint8_t alpha;
 } Pixel;
 
+/*
+ * Typedefs for some pixel operations/function pointers
+ * These types are operations "on" a pixel, either with a constant or another
+ * pixel
+ */
+typedef void (*int_op_on_pixel)(Pixel *, const uint8_t);
+typedef void (*pixel_op_on_pixel)(Pixel *, const Pixel *);
+
 void print_pixel(const Pixel *pixel);
 
 /*
@@ -64,3 +72,5 @@ int are_pixels_equal(const Pixel *p1, const Pixel *p2);
  * for invalid input
  */
 Pixel *from_hsv(double hue, double saturation, double value, uint8_t alpha);
+
+#undef PIXEL_OP_FPTR_HANDLE

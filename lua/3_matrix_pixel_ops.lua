@@ -50,3 +50,10 @@ m = utils.to_matrix_int(swap)
 x = lib.copy_image(image)
 lib.transform_pixels_matrix(x, m, 1)
 lib.write_pam('../images/swapped_color_channels.pam', x)
+
+-- test that you can run a pixel operation on the image
+m = utils.to_matrix_int(swap)
+x = lib.copy_image(image)
+p_xform = utils.create_pixel(124, 0, 0, 255)
+lib.transform_pixels_other(x, lib.fptr_pixel_add(), p_xform)
+lib.write_pam('../images/image_pixel_add.pam', x)

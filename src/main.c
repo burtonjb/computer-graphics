@@ -29,6 +29,18 @@ int main(int argc, char *argv[]) {
 
   write_pam("images/line_simple.pam", image);
 
+  Image *image_2 = make_filled_image(50, 50, &PIXEL_GREEN);
+  Circle circle_1 = {25, 25, 10};
+  Circle circle_2 = {15, 15, 10};
+  Circle circle_3 = {35, 35, 10};
+
+  rasterize_circle_bresenham(image_2, &circle_1, &PIXEL_RED);
+  rasterize_circle_bresenham(image_2, &circle_2, &PIXEL_BLUE);
+  rasterize_circle_bresenham(image_2, &circle_3, &PIXEL_BLACK);
+
+  write_pam("images/circle.pam", image_2);
+
   free(image);
+  free(image_2);
   return EXIT_SUCCESS;
 }

@@ -200,11 +200,10 @@ The basic shapes that should be supported are:
 
 and there is a process - called `rasterization` that converts from the vector (shape) format to the raster (pixel-map) format in which I'll be looking into multiple methods to do this conversion.
 
-
-
 #### Reference links
 * https://www.cosc.brocku.ca/Offerings/3P98/course/lectures/2d/
 * https://magcius.github.io/xplain/article/rast1.html
+* http://members.chello.at/easyfilter/bresenham.html
 
 
 ## Lua bindings
@@ -212,18 +211,23 @@ TODO
 
 * good start - https://chsasank.github.io/lua-c-wrapping.html
 * official docs - http://lua-users.org/wiki/BindingCodeToLua
+* swig - http://www.swig.org/Doc4.0/Lua.html#Lua
+* Old manually created binding code somewhere
 
 # TODOs
+* update all lua scripts to prefix the output image files with the script number
 * Update readme
 * vector graphics and basic shapes (line, square circle, triangle, polygon)
 * vector graphics - functions and curves
 * antialiasing
 * interpolation
 * gradients (linear and radial)
-* lua bindings
-* store images as jpgs
+* ~~lua bindings~~
+* store images as jpgs or pngs, either with lib(jpg|png) or my own code, depending on the difficulty
 * clean up readme
 * clean up git history
+* sparse and "dense" images
+* fill
 
 # Bugs/Issues
 * kernel processing is slightly bad (it just ignores the pixels on the edge)

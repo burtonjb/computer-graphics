@@ -74,14 +74,14 @@ Image *copy_from_image(const Image *src, const uint16_t x_start,
  * Transforms an image (in place) by mutating all pixels by function that takes
  * in a constant
  */
-void transform_pixels_constant(Image *image, void (*op)(Pixel *, const uint8_t),
+void transform_pixels_constant(Image *image, int_op_on_pixel op,
                                const uint8_t k);
 
 /*
  * Transforms an image (in place) by mutation all pixels by a function that
  * takes in another pixel
  */
-void transform_pixels_other(Image *image, void (*op)(Pixel *, const Pixel *),
+void transform_pixels_other(Image *image, pixel_op_on_pixel op,
                             const Pixel *other);
 
 /*
@@ -116,3 +116,9 @@ Image *kernel_transform(const Image *image, const Matrix3_double *A);
  * everything to line up properly.
  */
 Image *alpha_blend(const Image *dest, const Image *src);
+
+/*
+ * Printfs an image. Only use for small images as this is going to output A LOT
+ * of text
+ */
+void print_image(const Image *image);
