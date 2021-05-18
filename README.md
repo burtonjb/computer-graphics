@@ -202,10 +202,15 @@ and there is a process - called `rasterization` that converts from the vector (s
 
 ## Polygons
 
-#### Reference links
+#### Reference links (Rasterization)
 * https://www.cosc.brocku.ca/Offerings/3P98/course/lectures/2d/
 * https://magcius.github.io/xplain/article/rast1.html
 * http://members.chello.at/easyfilter/bresenham.html
+
+## Rasterization - functions and curves. 
+Can be done with lua code, writing it in C would be not that extensible. 
+
+
 
 
 ## Lua bindings
@@ -220,6 +225,7 @@ TODO
 * ~~update all lua scripts to prefix the output image files with the script number~~
 * ~~vector graphics and basic shapes (line, square, circle, triangle, polygon)~~
 * vector graphics - functions and curves
+* vector graphics - drawing arcs
 * antialiasing
 * interpolation
 * gradients (linear and radial)
