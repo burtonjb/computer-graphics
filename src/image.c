@@ -95,11 +95,11 @@ int are_images_equal(const Image *i1, const Image *i2) {
       Pixel *p1 = get_pixel_from_image(i1, i, j);
       Pixel *p2 = get_pixel_from_image(i2, i, j);
       if (!are_pixels_equal(p1, p2)) {
-        return FALSE;
+        return false;
       }
     }
   }
-  return TRUE;
+  return true;
 }
 
 Image *copy_from_image(const Image *src, const uint16_t x_start,

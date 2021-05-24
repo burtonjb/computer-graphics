@@ -48,14 +48,14 @@ void pixel_transform(Pixel *pixel, const Matrix3_uint8_t *A,
 
 int are_pixels_equal(const Pixel *p1, const Pixel *p2) {
   if (p1->red != p2->red)
-    return FALSE;
+    return false;
   if (p1->green != p2->green)
-    return FALSE;
+    return false;
   if (p1->blue != p2->blue)
-    return FALSE;
+    return false;
   if (p1->alpha != p2->alpha)
-    return FALSE;
-  return TRUE;
+    return false;
+  return true;
 }
 
 // return pointer so I can return null in bad input cases.

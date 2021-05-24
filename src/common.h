@@ -1,4 +1,3 @@
 #pragma once
 
-#define TRUE 1
-#define FALSE 0
+// nothing here now that I use <stdbool.h>

@@ -1,8 +1,8 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stdint.h>
 
-#include "common.h"
 #include "linear_algebra.h"
 #include "pixel.h"
 

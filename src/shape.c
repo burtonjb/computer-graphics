@@ -88,7 +88,7 @@ void rasterize_line_bresenham(Image *image, const Line *line,
   int delta_error = dx + dy;
   int running_error = 0;
 
-  while (TRUE) {
+  while (true) {
     write_pixel_to_image(image, x0, y0, pixel);
 
     running_error = 2 * delta_error;
