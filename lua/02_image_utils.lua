@@ -18,8 +18,8 @@ clipboard_pasted = lib.copy_image(image)
 
 lib.paste_to_image(clipboard, clipboard_pasted, 0, 0)
 
-lib.write_pam("../images/2_blue_onto_red.pam", image)
-lib.write_pam("../images/2_original_red.pam", original_red)
-lib.write_pam("../images/2_clipboard_op.pam", clipboard_pasted)
+lib.write_pam("../images/02_blue_onto_red.pam", image)
+lib.write_pam("../images/02_original_red.pam", original_red)
+lib.write_pam("../images/02_clipboard_op.pam", clipboard_pasted)
 
 

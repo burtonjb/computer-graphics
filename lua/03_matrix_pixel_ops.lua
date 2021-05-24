@@ -4,7 +4,7 @@ utils = require('utils')
 -- file to demonstrate some of the pixel transformations options that you can do with a matrix
 
 image = utils.create_test_image(0.2)
-lib.write_pam("../images/3_pixels_start.pam", image)
+lib.write_pam("../images/03_pixels_start.pam", image)
 
 -- identity transform image (doing nothing)
 identity = utils.matrix()
@@ -14,7 +14,7 @@ identity[3][3] = 1
 m = utils.to_matrix_int(identity)
 x = lib.copy_image(image)
 lib.transform_pixels_matrix(x, m, 1)
-lib.write_pam("../images/3_pixels_identity_transform.pam", x)
+lib.write_pam("../images/03_pixels_identity_transform.pam", x)
 
 -- pass through only the red/green channels (filtering the blue channel)
 red_green_only = utils.matrix()
@@ -23,7 +23,7 @@ red_green_only[2][2] = 1
 m = utils.to_matrix_int(red_green_only)
 x = lib.copy_image(image)
 lib.transform_pixels_matrix(x, m, 1)
-lib.write_pam('../images/3_r_g_filtered_image.pam', x)
+lib.write_pam('../images/03_r_g_filtered_image.pam', x)
 
 -- convert image to grey scale by adding all channel values (due to how poorly I implemented it in the C code, you can't use fractional values)
 grey_scale = utils.matrix()
@@ -39,7 +39,7 @@ grey_scale[3][3] = 1
 m = utils.to_matrix_int(grey_scale)
 x = lib.copy_image(image)
 lib.transform_pixels_matrix(x, m, 1)
-lib.write_pam('../images/3_greyscale_image.pam', x)
+lib.write_pam('../images/03_greyscale_image.pam', x)
 
 -- swap the red and blue color channels (leaving green alone). Taking the red value and pasting it in blue, and the reverse. 
 swap = utils.matrix()
@@ -49,11 +49,11 @@ swap[3][1] = 1
 m = utils.to_matrix_int(swap)
 x = lib.copy_image(image)
 lib.transform_pixels_matrix(x, m, 1)
-lib.write_pam('../images/3_swapped_color_channels.pam', x)
+lib.write_pam('../images/03_swapped_color_channels.pam', x)
 
 -- test that you can run a pixel operation on the image
 m = utils.to_matrix_int(swap)
 x = lib.copy_image(image)
 p_xform = utils.create_pixel(124, 0, 0, 255)
 lib.transform_pixels_other(x, lib.fptr_pixel_add(), p_xform)
-lib.write_pam('../images/3_image_pixel_add.pam', x)
+lib.write_pam('../images/03_image_pixel_add.pam', x)

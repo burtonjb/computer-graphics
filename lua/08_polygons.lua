@@ -11,4 +11,4 @@ square = lib.create_rectangle(utils.create_point(5, 5), utils.create_point(25, 2
 lib.draw_polygon(image, triangle, lib.PIXEL_RED);
 lib.draw_polygon(image, square, lib.PIXEL_BLUE);
 
-lib.write_pam("../images/8_polygons.pam", image);
+lib.write_pam("../images/08_polygons.pam", image);

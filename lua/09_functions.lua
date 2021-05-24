@@ -34,5 +34,5 @@ plot(image, lib.PIXEL_GREEN, linear, 0, image_size, 1)
 plot(image, lib.PIXEL_RED, quadratic, 0, image_size, 1)
 plot(image, lib.PIXEL_BLUE, exponential, 0, image_size, 1)
 
-lib.write_pam("../images/9_plotting_functions.pam", image)
+lib.write_pam("../images/09_plotting_functions.pam", image)
 
