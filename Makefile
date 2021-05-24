@@ -21,7 +21,7 @@ HEADERS = $(wildcard $(SRC_DIR)/*.h)
 CPPFLAGS += -Iinclude -fPIC
 CFLAGS += -Wall -Wextra -std=c11 -g  # note that the g flag means that it compiles with debug symbols
 LDFLAGS += -Llib -fPIC
-LDLIBS += -lm
+LDLIBS += -lm -ljpeg
 
 .PHONY: all clean format fresh images run everything bindings
 

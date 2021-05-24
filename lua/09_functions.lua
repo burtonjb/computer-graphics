@@ -8,7 +8,9 @@ function plot(image, pixel, f, range_start, range_end, range_step)
 	x = range_start
 	while x < range_end do
 		y = f(x)
-		lib.write_pixel_to_image(image, x, y, pixel)
+		if (y < image.height) then
+			lib.write_pixel_to_image(image, x, image.height - y, pixel) -- use (y-image.height) to change origin to be bottom-left instead of top-left
+		end
 		x = x + range_step
 	end
 end

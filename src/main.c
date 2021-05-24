@@ -1,9 +1,11 @@
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "custom_math.h"
 #include "file_util.h"
 #include "image.h"
+#include "jpeg.h"
 #include "polygon.h"
 #include "shape.h"
 
@@ -14,19 +16,14 @@ int main(int argc, char *argv[]) {
   (void)argc;
   (void)argv; // remove "unused parameter" compiler warnings
 
-  Image *image = make_filled_image(50, 50, &PIXEL_GREEN);
-
-  Polygon *triangle =
-      create_triangle(&(Point){0, 0}, &(Point){10, 10}, &(Point){0, 10});
-  Polygon *square = create_rectangle(&(Point){5, 5}, &(Point){25, 25});
-
-  draw_polygon(image, triangle, &PIXEL_RED);
-  draw_polygon(image, square, &PIXEL_BLUE);
+  Image *image = make_filled_image(150, 100, &PIXEL_RED);
 
   write_pam("images/polygons.pam", image);
+  write_jpeg("images/test_jpeg.jpg", image, 100);
+  Image *read = read_jpeg("images/test_jpeg.jpg");
 
-  free(triangle);
-  free(square);
+  printf("Done!\n");
+
   free(image);
   return EXIT_SUCCESS;
 }

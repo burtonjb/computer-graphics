@@ -211,8 +211,6 @@ and there is a process - called `rasterization` that converts from the vector (s
 Can be done with lua code, writing it in C would be not that extensible. 
 
 
-
-
 ## Lua bindings
 TODO
 
@@ -224,19 +222,23 @@ TODO
 # TODOs
 * ~~update all lua scripts to prefix the output image files with the script number~~
 * ~~vector graphics and basic shapes (line, square, circle, triangle, polygon)~~
-* vector graphics - functions and curves
+* ~~vector graphics - functions and curves~~
 * vector graphics - drawing arcs
 * antialiasing
 * interpolation
 * gradients (linear and radial)
 * ~~lua bindings~~
 * store images as jpgs or pngs, either with lib(jpg|png) or my own code, depending on the difficulty
+  * add in flags for optional compilation of jpg or png
 * clean up readme
 * clean up git history
 * sparse and "dense" images
 * shape based pixel selection (rect, circle)
 * magic wand like pixel selection (select all pixels similar to the origin pixel)
 * fill
+* compile with clang 
+* update makefile to be "better"
+* support for alternative color spaces
 
 # Bugs/Issues
 * kernel processing is slightly bad (it just ignores the pixels on the edge)

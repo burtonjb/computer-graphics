@@ -23,6 +23,10 @@ const size_t BUFFER_SIZE = 1000;
 
 void write_pam(const char *path, const Image *image) {
   FILE *fp = fopen(path, "wb");
+  if (fp == NULL) {
+    printf("Error: failed to open %s\n", path);
+    return;
+  }
 
   // Write the header to the PAM file
   fprintf(fp,
