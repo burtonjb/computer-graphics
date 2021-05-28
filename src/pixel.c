@@ -35,6 +35,13 @@ void pixel_sub(Pixel *pixel, const Pixel *other) {
   pixel->blue = clamp_sub(pixel->blue, other->blue);
 }
 
+void pixel_set(Pixel *pixel, const Pixel *other) {
+  pixel->red = other->red;
+  pixel->green = other->green;
+  pixel->blue = other->blue;
+  pixel->alpha = other->alpha;
+}
+
 void pixel_transform(Pixel *pixel, const Matrix3_uint8_t *A,
                      const uint8_t divisor) {
   Vector3_uint8_t v = {pixel->red / divisor, pixel->green / divisor,
@@ -114,5 +121,3 @@ Pixel *from_hsv(double hue, double saturation, double value, uint8_t alpha) {
   out->alpha = alpha;
   return out;
 }
-
-#undef PIXEL_OP_FPTR_IMPL

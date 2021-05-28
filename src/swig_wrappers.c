@@ -7,5 +7,8 @@ PIXEL_OP_FPTR_IMPL(int_op_on_pixel, pixel_multi);
 PIXEL_OP_FPTR_IMPL(int_op_on_pixel, pixel_div);
 PIXEL_OP_FPTR_IMPL(pixel_op_on_pixel, pixel_add);
 PIXEL_OP_FPTR_IMPL(pixel_op_on_pixel, pixel_sub);
+PIXEL_OP_FPTR_IMPL(pixel_op_on_pixel, pixel_set);
+PIXEL_OP_FPTR_IMPL(pixel_filter, pixel_equals_filter);
+PIXEL_OP_FPTR_IMPL(pixel_filter, pixel_in_circle_filter);
 
 #undef PIXEL_OP_FPTR_IMPL

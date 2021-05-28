@@ -5,6 +5,7 @@
 #include "custom_math.h"
 #include "file_util.h"
 #include "image.h"
+#include "image_mask.h"
 #include "jpeg.h"
 #include "polygon.h"
 #include "shape.h"
@@ -16,14 +17,39 @@ int main(int argc, char *argv[]) {
   (void)argc;
   (void)argv; // remove "unused parameter" compiler warnings
 
-  Image *image = make_filled_image(150, 100, &PIXEL_RED);
+  Image *image = make_filled_image(10, 10, &PIXEL_RED);
 
-  write_pam("images/polygons.pam", image);
-  write_jpeg("images/test_jpeg.jpg", image, 100);
-  Image *read = read_jpeg("images/test_jpeg.jpg");
+  Point bottom_left = (Point){1, 1};
+  Point top_right = (Point){5, 5};
+
+  Polygon *poly = create_rectangle(&bottom_left, &top_right);
+
+  draw_polygon(image, poly, &PIXEL_BLACK);
+
+  ImageMask *mask = create_mask(image, pixel_equals_filter, (void *)&PIXEL_RED,
+                                (Point){4, 4});
+
+  print_mask(mask);
+
+  write_pam("images/before_mask_op.pam", image);
+
+  apply_to_mask(image, mask, pixel_set, &PIXEL_BLUE);
+
+  write_pam("images/post_mask_op.pam", image);
+
+  ImageMask *mask2 = create_mask(image, pixel_in_circle_filter,
+                                 (void *)&(Circle){6, 6, 2.5}, (Point){6, 6});
+
+  print_mask(mask2);
+
+  apply_to_mask(image, mask2, pixel_set, &PIXEL_WHITE);
+
+  write_pam("images/post_mask_op_2.pam", image);
 
   printf("Done!\n");
 
+  free(poly);
+  free(mask);
   free(image);
   return EXIT_SUCCESS;
 }

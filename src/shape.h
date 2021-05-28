@@ -5,6 +5,11 @@
 #include "image.h"
 #include "pixel.h"
 
+typedef struct point {
+  uint16_t x;
+  uint16_t y;
+} Point;
+
 typedef struct line {
   uint16_t x0;
   uint16_t y0;

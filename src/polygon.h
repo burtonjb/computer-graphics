@@ -1,11 +1,7 @@
 #pragma once
 
+#include "common.h"
 #include "shape.h"
-
-typedef struct point {
-  uint16_t x;
-  uint16_t y;
-} Point;
 
 /*
  * Opaque struct for a polygon

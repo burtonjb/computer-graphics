@@ -8,6 +8,7 @@
 #include "../../src/shape.h"
 #include "../../src/polygon.h"
 #include "../../src/jpeg.h"
+#include "../../src/image_mask.h"
 #include "../../src/swig_wrappers.h"
 %}
 
@@ -21,4 +22,5 @@
 %include "../src/shape.h"
 %include "../src/polygon.h"
 %include "../src/jpeg.h"
+%include "../src/image_mask.h"
 %include "../src/swig_wrappers.h"

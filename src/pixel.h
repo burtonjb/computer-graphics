@@ -56,6 +56,11 @@ void pixel_add(Pixel *pixel, const Pixel *other);
 void pixel_sub(Pixel *pixel, const Pixel *other);
 
 /*
+ * Sets the values of "pixel" to the values of "other" (including alpha).
+ */
+void pixel_set(Pixel *pixel, const Pixel *other);
+
+/*
  * Transforms a pixel pixel with the transformation matrix (in place)
  */
 void pixel_transform(Pixel *pixel, const Matrix3_uint8_t *A,
@@ -72,5 +77,3 @@ int are_pixels_equal(const Pixel *p1, const Pixel *p2);
  * for invalid input
  */
 Pixel *from_hsv(double hue, double saturation, double value, uint8_t alpha);
-
-#undef PIXEL_OP_FPTR_HANDLE

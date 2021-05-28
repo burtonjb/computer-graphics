@@ -224,7 +224,7 @@ TODO
 * ~~vector graphics and basic shapes (line, square, circle, triangle, polygon)~~
 * ~~vector graphics - functions and curves~~
 * vector graphics - drawing arcs
-* antialiasing
+* sampling - aliasing and antialiasing
 * interpolation
 * gradients (linear and radial)
 * ~~lua bindings~~
@@ -234,11 +234,14 @@ TODO
 * clean up git history
 * sparse and "dense" images
 * shape based pixel selection (rect, circle)
-* magic wand like pixel selection (select all pixels similar to the origin pixel)
-* fill
+* ~~magic wand like pixel selection (select all pixels similar to the origin pixel)~~
+    * select a rect or circle (though uses the same image_mask like function, just uses a different filter (though I need to change the filter inputs then))
+* ~~fill (from the "apply_to_mask" function in fill.h)~~
 * compile with clang 
 * update makefile to be "better"
 * support for alternative color spaces
+* rename fill.h/fill.c to mask.h/mask.c as they're image mask functions, not fill functions (fill is one of the functions that work on a mask)
+
 
 # Bugs/Issues
 * kernel processing is slightly bad (it just ignores the pixels on the edge)
