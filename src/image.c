@@ -1,10 +1,10 @@
-#include "image.h"
-#include "custom_math.h"
-
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "custom_math.h"
+#include "image.h"
 
 Image *make_filled_image(const uint16_t width, const uint16_t height,
                          const Pixel *fill_color) {

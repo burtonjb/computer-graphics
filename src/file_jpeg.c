@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "jpeg.h"
+#include "file_jpeg.h"
 
 void write_jpeg(const char *path, const Image *image, int quality) {
 

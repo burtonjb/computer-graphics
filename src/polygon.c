@@ -1,6 +1,6 @@
-#include "polygon.h"
-
 #include <stdlib.h>
+
+#include "polygon.h"
 
 struct polygon {
   uint16_t number_of_lines;

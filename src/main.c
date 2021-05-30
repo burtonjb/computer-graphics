@@ -3,10 +3,10 @@
 #include <stdlib.h>
 
 #include "custom_math.h"
-#include "file_util.h"
+#include "file_jpeg.h"
+#include "file_pam.h"
 #include "image.h"
 #include "image_mask.h"
-#include "jpeg.h"
 #include "polygon.h"
 #include "shape.h"
 

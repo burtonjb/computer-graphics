@@ -1,10 +1,10 @@
-#include "custom_math.h"
-#include "image.h"
-
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "custom_math.h"
+#include "image.h"
 
 void print_pixel(const Pixel *pixel) {
   printf("(r:%d,g:%d,b:%d,a:%d)", pixel->red, pixel->green, pixel->blue,

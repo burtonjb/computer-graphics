@@ -16,7 +16,7 @@ mask = lib.create_mask(image, lib.fptr_pixel_equals_filter(), lib.PIXEL_RED, uti
 
 lib.write_pam("../images/11_before_mask_op.pam", image)
 
-lib.apply_to_mask(image, mask, lib.fptr_pixel_set(), lib.PIXEL_BLUE);
+lib.apply_to_mask(image, mask, lib.fptr_pixel_set(), lib.PIXEL_BLUE)
 
 lib.write_pam("../images/11_post_mask_op.pam", image)
 
@@ -24,5 +24,15 @@ mask2 = lib.create_mask(image, lib.fptr_pixel_in_circle_filter(), utils.create_c
 
 lib.apply_to_mask(image, mask2, lib.fptr_pixel_set(), lib.PIXEL_WHITE)
 
-lib.write_pam("../images/post_mask_op_2.pam", image)
+lib.write_pam("../images/11_post_mask_op_2.pam", image)
 
+big_image = lib.make_filled_image(34, 34, lib.PIXEL_BLACK) -- my math for the stack size was correct-ish, 34x34 seems to be the biggest the stack can handle.
+
+big_mask = lib.create_mask(big_image, lib.fptr_pixel_equals_filter(), lib.PIXEL_BLACK, utils.create_point(4,4))
+
+if big_mask ~= NULL then 
+  print("applying mask")
+  lib.apply_to_mask(big_image, big_mask, lib.fptr_pixel_set(), lib.PIXEL_BLUE)
+end
+
+lib.write_pam("../images/11_big_image.pam", big_image)

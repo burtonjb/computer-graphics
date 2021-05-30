@@ -1,10 +1,10 @@
-#include "linear_algebra.h"
-#include "custom_math.h"
-
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "custom_math.h"
+#include "linear_algebra.h"
 
 #define CONST_UNIT_VECTOR(type)                                                \
   static const Vector3_##type UNIT_VECTOR_##type = {1, 1, 1};

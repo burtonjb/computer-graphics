@@ -1,12 +1,12 @@
-#include "shape.h"
-#include "custom_math.h"
-#include "file_util.h"
-
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "custom_math.h"
+#include "file_pam.h"
+#include "shape.h"
 
 // private
 static void swap(uint16_t *a, uint16_t *b) {

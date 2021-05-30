@@ -1,9 +1,9 @@
-#include "file_util.h"
-
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "file_pam.h"
 
 /*
  * These are values defined in the PAM file spec found here:
