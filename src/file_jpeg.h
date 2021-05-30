@@ -5,6 +5,7 @@
 
 #include <jpeglib.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "image.h"
 
