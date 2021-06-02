@@ -5,6 +5,7 @@
 #include "custom_math.h"
 #include "file_jpeg.h"
 #include "file_pam.h"
+#include "file_png.h"
 #include "image.h"
 #include "image_mask.h"
 #include "polygon.h"
@@ -32,6 +33,8 @@ int main(int argc, char *argv[]) {
   print_mask(mask);
 
   write_pam("images/before_mask_op.pam", image);
+
+  write_png("images/write_png_test.png", image);
 
   apply_to_mask(image, mask, pixel_set, &PIXEL_BLUE);
 

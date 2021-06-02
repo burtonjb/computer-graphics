@@ -3,13 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../src/file_jpeg.h"
+#include "../src/file_png.h"
 
-const char *FILE_PATH = "images/_test.jpg";
+const char *FILE_PATH = "images/_test.png";
 
 void test_write() {
-  Image *image = make_filled_image(10, 10, &PIXEL_RED);
-  write_jpeg(FILE_PATH, image, 100);
+  Image *image = make_filled_image(10, 10, &PIXEL_BLUE);
+  write_png(FILE_PATH, image);
 
   // check if file exists
   FILE *fp = fopen(FILE_PATH, "rb");
@@ -20,14 +20,12 @@ void test_write() {
 }
 
 void test_read() {
-  Image *image = read_jpeg(FILE_PATH);
+  Image *image = read_png(FILE_PATH);
 
   assert(image->width == 10);
   assert(image->height == 10);
 
-  Pixel expected = (Pixel){
-      254, 0, 0,
-      255}; // jpeg is lossy, so read-back RGB values will be slightly different
+  Pixel expected = PIXEL_BLUE;
   for (int i = 0; i < image->width; i++) {
     for (int j = 0; j < image->height; j++) {
       // print_pixel(get_pixel_from_image(image, i, j));
@@ -35,7 +33,7 @@ void test_read() {
     }
   }
 
-  assert(remove(FILE_PATH) == 0);
+  // assert(remove(FILE_PATH) == 0);
 
   free(image);
 }

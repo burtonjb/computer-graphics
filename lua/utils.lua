@@ -21,7 +21,7 @@ function utils.create_line(x0, y0, x1, y1)
     return line
 end
 
-function utils.create_circle(x, y, r) 
+function utils.create_circle(x, y, r)
     local circle = lib.Circle()
     circle.x = x
     circle.y = y

@@ -3,6 +3,7 @@
 
 rm images/*.pam
 rm images/*.png
+rm images/*.jpg
 
 cp './lua/utils.lua' 'bin/'
 

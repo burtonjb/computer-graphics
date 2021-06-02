@@ -21,7 +21,7 @@ HEADERS = $(wildcard $(SRC_DIR)/*.h)
 CPPFLAGS += -Iinclude -fPIC
 CFLAGS += -Wall -Wextra -std=c11 -g  # note that the g flag means that it compiles with debug symbols
 LDFLAGS += -Llib -fPIC
-LDLIBS += -lm -ljpeg
+LDLIBS += -lm -ljpeg -lz -lpng
 
 .PHONY: all clean format fresh images run everything bindings
 
@@ -69,9 +69,10 @@ run:
 
 # TODO: clean up this target eventually
 test:
-	gcc -std=c11 tst/test_math.c src/custom_math.c -o bin/tst/custom_math -lm && ./bin/tst/custom_math
-	gcc -std=c11 tst/test_linear_algebra.c src/custom_math.c src/linear_algebra.c -o bin/tst/linear_algebra -lm && ./bin/tst/linear_algebra
-	gcc -std=c11 tst/test_image.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c -o bin/tst/image -lm && ./bin/tst/image
-	gcc -std=c11 tst/test_pixel.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c -o bin/tst/pixel -lm && ./bin/tst/pixel
-	gcc -std=c11 tst/test_shape.c src/file_pam.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c src/shape.c -o bin/tst/shape -lm && ./bin/tst/shape
-	gcc -std=c11 -g tst/test_jpeg.c src/file_jpeg.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c src/shape.c -o bin/tst/shape -lm -ljpeg && valgrind ./bin/tst/shape  # run with valgrind because the libjpeg wrapping code could leak memory if I did it wrong.
+	gcc -w -std=c11 tst/test_math.c src/custom_math.c -o bin/tst/custom_math -lm && ./bin/tst/custom_math
+	gcc -w -std=c11 tst/test_linear_algebra.c src/custom_math.c src/linear_algebra.c -o bin/tst/linear_algebra -lm && ./bin/tst/linear_algebra
+	gcc -w -std=c11 tst/test_image.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c -o bin/tst/image -lm && ./bin/tst/image
+	gcc -w -std=c11 tst/test_pixel.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c -o bin/tst/pixel -lm && ./bin/tst/pixel
+	gcc -w -std=c11 tst/test_shape.c src/file_pam.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c src/shape.c -o bin/tst/shape -lm && ./bin/tst/shape
+	gcc -w -std=c11 -g tst/test_jpeg.c src/file_jpeg.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c src/shape.c -o bin/tst/jpg -lm -ljpeg && valgrind ./bin/tst/jpg  # run with valgrind because the libjpeg wrapping code could leak memory if I did it wrong.
+	gcc -w -std=c11 -g tst/test_png.c src/file_png.c src/custom_math.c src/image.c src/linear_algebra.c src/pixel.c src/shape.c -o bin/tst/png -lm -lpng && valgrind ./bin/tst/png  # run with valgrind because the libpng wrapping code could leak memory if I did it wrong.
