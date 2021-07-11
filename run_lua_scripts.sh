@@ -13,6 +13,7 @@ for s in ../lua/*.lua ; do \
   lua $s; \
 done
 
-cd ..
+# generate pngs for all the pam files
+for p in ../images/*.pam; do echo $p; lua ../lua/pamtopng.lua  $p $p.png; done
 
-make images
+cd ..

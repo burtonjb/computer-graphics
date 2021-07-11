@@ -4,6 +4,16 @@ This is a project/documentation about my findings for 2d graphics.
 
 I'm doing this because I think C is cool, and I think 2d graphics is interesting - there's a lot of linear algebra.
 
+## Dependencies (all optional, but you won't be able to create, see, or save the images
+* lua
+* libjpg
+* libpng
+
+`sudo apt install libjpeg-dev`
+`sudo apt install libpng-dev`
+`swig - install version 4.0.2`
+`sudo apt install lua 5.2 lua5.2-dev`
+
 ## Color and pixels
 
 The color model that most computers work with (sort-of, I'm actually not super knowledgable in this) is an additive color model, with the base colors being red, green, and blue. 
@@ -213,6 +223,8 @@ Can be done with lua code, writing it in C would be not that extensible.
 
 ## Lua bindings
 TODO
+
+I just used swig - but I can include the manually created bindings here too if people want to do that.
 
 * good start - https://chsasank.github.io/lua-c-wrapping.html
 * official docs - http://lua-users.org/wiki/BindingCodeToLua
