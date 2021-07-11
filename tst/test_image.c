@@ -23,7 +23,7 @@ void test_filled_image() {
 
 void test_copy_image() {
   Image *orig = make_filled_image(10, 10, &PIXEL_RED);
-  Image *to_test = copy_image(to_test);
+  Image *to_test = copy_image(orig);
   assert(to_test->width == 10);
   assert(to_test->height == 10);
 
