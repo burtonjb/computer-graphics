@@ -8,6 +8,7 @@ I'm doing this because I think C is cool, and I think 2d graphics is interesting
 * lua
 * libjpg
 * libpng
+* clang-format (only for formatting)
 
 `sudo apt install libjpeg-dev`
 `sudo apt install libpng-dev`
@@ -240,19 +241,18 @@ I just used swig - but I can include the manually created bindings here too if p
 * interpolation
 * gradients (linear and radial)
 * ~~lua bindings~~
-* store images as jpgs or pngs, either with lib(jpg|png) or my own code, depending on the difficulty
+* ~~store images as jpgs or pngs, either with lib(jpg|png) or my own code, depending on the difficulty~~
   * add in flags for optional compilation of jpg or png
 * clean up readme
 * clean up git history
 * sparse and "dense" images
-* shape based pixel selection (rect, circle)
+* ~~shape based pixel selection (rect, circle)~~ PENDING rect code
 * ~~magic wand like pixel selection (select all pixels similar to the origin pixel)~~
     * select a rect or circle (though uses the same image_mask like function, just uses a different filter (though I need to change the filter inputs then))
 * ~~fill (from the "apply_to_mask" function in fill.h)~~
 * compile with clang 
 * update makefile to be "better"
 * support for alternative color spaces
-* rename fill.h/fill.c to mask.h/mask.c as they're image mask functions, not fill functions (fill is one of the functions that work on a mask)
 
 
 # Bugs/Issues
