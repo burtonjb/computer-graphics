@@ -114,11 +114,13 @@ bool pixel_equals_filter(Pixel *pixel, void *other, uint16_t x,
   return out;
 }
 
-// bool pixel_in_rect_filter(Pixel *pixel, void *other, uint16_t x,
-//                           uint16_t y) { // other is a rectangle
-
-//   return false;
-// }
+bool pixel_in_rect_filter(Pixel *pixel,
+                          void *other, // other is a rectangle
+                          uint16_t x, uint16_t y) {
+  Rectangle *rect = (Rectangle *)other;
+  return (x > rect->x_top_left && x < rect->x_top_left + rect->width &&
+          y > rect->y_top_left && y < rect->y_top_left + rect->height);
+}
 
 bool pixel_in_circle_filter(Pixel *pixel, void *other, uint16_t x,
                             uint16_t y) { // other is a circle

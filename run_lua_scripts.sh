@@ -3,7 +3,7 @@
 
 rm images/*.pam
 rm images/*.png
-rm images/*.jpg
+rm images/*.jpeg
 
 cp './lua/utils.lua' 'bin/'
 
@@ -14,6 +14,9 @@ for s in ../lua/*.lua ; do \
 done
 
 # generate pngs for all the pam files
-for p in ../images/*.pam; do echo $p; lua ../lua/pamtopng.lua  $p $p.png; done
+for p in ../images/*.pam; do 
+  echo $p; 
+  lua ../lua/pamtopng.lua $p $p.png;
+done
 
 cd ..

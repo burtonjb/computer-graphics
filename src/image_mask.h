@@ -63,16 +63,23 @@ void print_mask(const ImageMask *mask);
 // -- ASSORTED TEST PIXEL FILTER FUNCTIONS. These can actually be extended in
 // other files too if the function signature matches -- Returns true if pixels
 // are equal (by value), false otherwise
+
+// returns true if the pixel values (rgba) are equal. Used in the pixel filter
+// function
 bool pixel_equals_filter(
     Pixel *pixel,
     void *other, // other is of type pixel for this function
     uint16_t x, uint16_t y);
 
-/* FIXME: finish this
+// The shape based masks are implemented in a dumb way.
+// The initial point passed to the "create_mask" function has to be inside the
+// shape, otherwise the DFS/BFS search that I do to find additional pixels won't
+// work
+
+// returns true if the pixels are contained in the rectangle, otherwise false
 bool pixel_in_rect_filter(Pixel *pixel,
                           void *other, // other is a rectangle for this function
                           uint16_t x, uint16_t y);
-*/
 
 // returns true if the pixels are contained in a circle, false otherwise
 bool pixel_in_circle_filter(Pixel *pixel,

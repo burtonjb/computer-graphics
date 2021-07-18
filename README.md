@@ -232,28 +232,20 @@ I just used swig - but I can include the manually created bindings here too if p
 * swig - http://www.swig.org/Doc4.0/Lua.html#Lua
 * Include sample of old manually created binding code somewhere
 
-# TODOs
-* ~~update all lua scripts to prefix the output image files with the script number~~
-* ~~vector graphics and basic shapes (line, square, circle, triangle, polygon)~~
-* ~~vector graphics - functions and curves~~
+# TODOs (coding related)
 * vector graphics - drawing arcs
 * sampling - aliasing and antialiasing
-* interpolation
+* interpolation - for affine transforms - nearest neighbor, linear, bilinear, etc.
 * gradients (linear and radial)
-* ~~lua bindings~~
-* ~~store images as jpgs or pngs, either with lib(jpg|png) or my own code, depending on the difficulty~~
-  * add in flags for optional compilation of jpg or png
-* clean up readme
-* clean up git history
-* sparse and "dense" images
-* ~~shape based pixel selection (rect, circle)~~ PENDING rect code
-* ~~magic wand like pixel selection (select all pixels similar to the origin pixel)~~
-    * select a rect or circle (though uses the same image_mask like function, just uses a different filter (though I need to change the filter inputs then))
-* ~~fill (from the "apply_to_mask" function in fill.h)~~
-* compile with clang 
-* update makefile to be "better"
+* sparse and "dense" images 
 * support for alternative color spaces
 
+# TODOs (polishing/productionalizing)
+* update makefile to be "better"
+* compile with clang 
+* clean up readme
+* clean up git history
+* add in flags for optional compilation of jpg or png
 
 # Bugs/Issues
 * kernel processing is slightly bad (it just ignores the pixels on the edge)

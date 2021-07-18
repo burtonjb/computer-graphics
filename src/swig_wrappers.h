@@ -25,5 +25,6 @@ PIXEL_OP_FPTR_HANDLE(pixel_op_on_pixel, pixel_sub);
 PIXEL_OP_FPTR_HANDLE(pixel_op_on_pixel, pixel_set);
 PIXEL_OP_FPTR_HANDLE(pixel_filter, pixel_equals_filter);
 PIXEL_OP_FPTR_HANDLE(pixel_filter, pixel_in_circle_filter);
+PIXEL_OP_FPTR_HANDLE(pixel_filter, pixel_in_rect_filter);
 
 #undef PIXEL_OP_FPTR_HANDL

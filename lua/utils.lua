@@ -29,6 +29,15 @@ function utils.create_circle(x, y, r)
     return circle
 end
 
+function utils.create_rectangle(x, y, width, height) -- x, y denote the top-left corner
+    local rect = lib.Rectangle()
+    rect.x_top_left = x
+    rect.y_top_left = y
+    rect.width = width
+    rect.height = height
+    return rect
+end
+
 function utils.create_point(x, y)
     local point = lib.Point()
     point.x = x

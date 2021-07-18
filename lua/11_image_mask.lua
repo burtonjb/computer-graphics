@@ -36,3 +36,13 @@ if big_mask ~= NULL then
 end
 
 lib.write_pam("../images/11_big_image.pam", big_image)
+
+
+-- code to tes the rectangle mask
+rect_test_image = lib.make_filled_image(20, 20, lib.PIXEL_BLACK)
+lib.write_pam("../images/11_rect_test_image_orig.pam", rect_test_image)
+rect =  utils.create_rectangle(4, 4, 10, 10)
+rect_mask = lib.create_mask(rect_test_image, lib.fptr_pixel_in_rect_filter(), rect, utils.create_point(5, 5))
+-- lib.print_mask(rect_mask)
+lib.apply_to_mask(rect_test_image, rect_mask, lib.fptr_pixel_set(), lib.PIXEL_RED)
+lib.write_pam("../images/11_rect_test_image_post_mask.pam", rect_test_image)
