@@ -29,3 +29,16 @@ lib.rasterize_circle_midpoint(circle_image, circle_2, lib.PIXEL_BLUE);
 lib.rasterize_circle_bresenham(circle_image, circle_3, lib.PIXEL_BLACK);
 
 lib.write_pam("../images/07_circles.pam", circle_image);
+
+arc_image = lib.make_filled_image(50, 50, lib.PIXEL_WHITE);
+
+arc1 = utils.create_arc(0, 0, 25, 0, 3.14/2)
+arc2 = utils.create_arc(20, 20, 15, 3.14/2, 3.14) 
+arc3 = utils.create_arc(30, 30, 10, 0, 3.14) -- should be half a circle
+arc4 = utils.create_arc(25, 25, 10, 0, 6.28) -- should be a circle
+lib.rasterize_arc_simple(arc_image, arc1, lib.PIXEL_RED, 0.001);
+lib.rasterize_arc_simple(arc_image, arc2, lib.PIXEL_BLUE, 0.001);
+lib.rasterize_arc_simple(arc_image, arc3, lib.PIXEL_GREEN, 0.001);
+lib.rasterize_arc_simple(arc_image, arc4, lib.PIXEL_BLACK, 0.001);
+
+lib.write_pam("../images/07_arcs.pam", arc_image);

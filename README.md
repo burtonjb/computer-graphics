@@ -234,6 +234,7 @@ I just used swig - but I can include the manually created bindings here too if p
 
 # TODOs (coding related)
 * vector graphics - drawing arcs
+* draw filled images - shape.h methods
 * sampling - aliasing and antialiasing
 * interpolation - for affine transforms - nearest neighbor, linear, bilinear, etc.
 * gradients (linear and radial)

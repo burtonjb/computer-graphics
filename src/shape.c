@@ -169,3 +169,20 @@ void rasterize_circle_bresenham(Image *image, const Circle *circle,
       err += ++x * 2 + 1;
   } while (x < 0);
 }
+
+void rasterize_arc_simple(
+    Image *image, const Arc *arc, const Pixel *pixel,
+    const radians step_size // FIXME: automatically compute the step size, don't
+                            // get it from the caller
+) {
+
+  if (step_size <= 0) {
+    return;
+  }
+
+  for (double i = arc->start_rads; i < arc->end_rads; i += step_size) {
+    uint16_t x_pos = round(arc->x + cos(i) * arc->radius);
+    uint16_t y_pos = round(arc->y + sin(i) * arc->radius);
+    write_pixel_to_image(image, x_pos, y_pos, pixel);
+  }
+}

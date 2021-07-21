@@ -29,6 +29,16 @@ function utils.create_circle(x, y, r)
     return circle
 end
 
+function utils.create_arc(x, y, r, start_angle_rads, end_angle_rads) 
+	local arc = lib.Arc()
+	arc.x = x
+	arc.y = y
+	arc.radius = r
+	arc.start_rads = start_angle_rads
+	arc.end_rads = end_angle_rads
+	return arc
+end
+
 function utils.create_rectangle(x, y, width, height) -- x, y denote the top-left corner
     local rect = lib.Rectangle()
     rect.x_top_left = x

@@ -30,6 +30,16 @@ typedef struct circle {
   double radius;
 } Circle;
 
+typedef double radians;
+
+typedef struct arc {
+  uint16_t x;
+  uint16_t y;
+  double radius;
+  radians start_rads;
+  radians end_rads;
+} Arc;
+
 /*
  * Simple algorithm to draw the line onto the image.
  *
@@ -80,6 +90,10 @@ void rasterize_circle_midpoint(Image *image, const Circle *circle,
  */
 void rasterize_circle_bresenham(Image *image, const Circle *circle,
                                 const Pixel *pixel);
+
+// Method to draw an arc. Uses a lot of floating point math
+void rasterize_arc_simple(Image *image, const Arc *arc, const Pixel *pixel,
+                          const radians step_size);
 
 void print_line(const Line *line);
 void print_circle(const Circle *circle);
