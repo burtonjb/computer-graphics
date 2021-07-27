@@ -233,7 +233,8 @@ I just used swig - but I can include the manually created bindings here too if p
 * Include sample of old manually created binding code somewhere
 
 # TODOs (coding related)
-* vector graphics - drawing arcs
+* ~~vector graphics - drawing arcs~~
+** optimized (midpoint) algorithm required
 * draw filled images - shape.h methods
 * sampling - aliasing and antialiasing
 * interpolation - for affine transforms - nearest neighbor, linear, bilinear, etc.
