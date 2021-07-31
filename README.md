@@ -238,6 +238,7 @@ I just used swig - but I can include the manually created bindings here too if p
 * draw filled images - shape.h methods
 * sampling - aliasing and antialiasing
 * interpolation - for affine transforms - nearest neighbor, linear, bilinear, etc.
+** I think the steps are: invert the affine xform matrix, use interpolation method + inverted matrix to map new pixel back to old image location.
 * gradients (linear and radial)
 * sparse and "dense" images 
 * support for alternative color spaces

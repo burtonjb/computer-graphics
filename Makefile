@@ -53,6 +53,9 @@ format:
 	clang-format -i $(SRC_DIR)/*.c $(SRC_DIR)/*.h
 	clang-format -i $(TST_DIR)/*.c
 
+lint:
+	clang-tidy src/* -checks=-*,clang-analyzer-* --	
+
 fresh: clean format all test
 
 # does a clean build, runs the tests, makes the executable, runs it and then generates the png files
