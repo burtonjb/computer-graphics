@@ -23,7 +23,7 @@ CFLAGS += -Wall -Wextra -std=c11 -g  # note that the g flag means that it compil
 LDFLAGS += -Llib -fPIC
 LDLIBS += -lm -ljpeg -lz -lpng
 
-.PHONY: all clean format fresh images run everything bindings
+.PHONY: all clean format fresh images run everything bindings lint
 
 all: $(EXE)
 
@@ -56,22 +56,13 @@ format:
 lint:
 	clang-tidy src/* -checks=-*,clang-analyzer-* --	
 
-fresh: clean format all test
+fresh: clean test all 
 
-# does a clean build, runs the tests, makes the executable, runs it and then generates the png files
-everything: clean format all test run bindings images
+everything: clean all test bindings
 
-## FIXME: This should use the capabilities of make to track if the file has been modified
-## FIXME: this is broken unless the user install pamtopng (which is somewhat annoying to build). Eventually replace it with the lua script that I have
-images:
-	for pam in images/*.pam ; do \
-		pamtopng "$$pam" > "$$pam.png" ; \
-	done
+target: clean format lint test all bindings
 
-run: 
-	./bin/graphics
-
-# TODO: clean up this target eventually
+# TODO: clean up this target eventually. It should probably just build+link everything.
 test:
 	gcc -w -g -std=c11 tst/test_math.c src/custom_math.c -o bin/tst/custom_math -lm && ./bin/tst/custom_math
 	gcc -w -g -std=c11 tst/test_linear_algebra.c src/custom_math.c src/linear_algebra.c -o bin/tst/linear_algebra -lm && ./bin/tst/linear_algebra

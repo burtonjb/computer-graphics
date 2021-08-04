@@ -71,6 +71,20 @@ void matrix_multiply_d(const Matrix3_double *A, const Matrix3_double *B,
                        Matrix3_double *out);
 
 /*
+ * Computes the determinant of the matrix
+ */
+double determinant_matrix_d(const Matrix3_double *A);
+
+/*
+ * Inverts the matrix A and returns it in the out position.
+ * The returned int is an error flag value and will be 0 if the matrix is
+ * invertable (no error) and 1 if the matrix is not invertable.
+ *
+ * out will be null if A is not invertable
+ */
+int invert_matrix_d(const Matrix3_double *in, Matrix3_double *out);
+
+/*
  * Prints a vector to the console
  */
 void print_vector(const Vector3_double *A);

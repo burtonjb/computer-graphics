@@ -86,6 +86,56 @@ void matrix_multiply_d(const Matrix3_double *A, const Matrix3_double *B,
   }
 }
 
+double determinant_matrix_d(const Matrix3_double *A) {
+  double d1 = (*A)[0][0] * ((*A)[1][1] * (*A)[2][2] - (*A)[2][1] * (*A)[1][2]);
+  double d2 = (*A)[1][0] * ((*A)[0][1] * (*A)[2][2] - (*A)[0][2] * (*A)[2][1]);
+  double d3 = (*A)[2][0] * ((*A)[0][1] * (*A)[1][2] - (*A)[1][1] * (*A)[0][2]);
+  return d1 - d2 + d3;
+}
+
+int invert_matrix_d(const Matrix3_double *in, Matrix3_double *out) {
+  // stolen from
+  // https://en.wikipedia.org/wiki/Invertible_matrix#Inversion_of_3_%C3%97_3_matrices
+
+  double det = determinant_matrix_d(*in);
+
+  if (det == 0) {
+    return 1;
+  }
+
+  double a = (*in)[0][0];
+  double b = (*in)[1][0];
+  double c = (*in)[2][0];
+  double d = (*in)[0][1];
+  double e = (*in)[1][1];
+  double f = (*in)[2][1];
+  double g = (*in)[0][2];
+  double h = (*in)[1][2];
+  double i = (*in)[2][2];
+
+  double A = e * i - f * h;
+  double B = -1 * (d * i - f * g);
+  double C = (d * h - e * g);
+  double D = -1 * (b * i - h * c);
+  double E = (a * i - c * g);
+  double F = -1 * (a * h - g * b);
+  double G = (b * f - e * c);
+  double H = -1 * (a * f - c * d);
+  double I = (a * e - b * d);
+
+  (*out)[0][0] = A / det;
+  (*out)[1][0] = D / det;
+  (*out)[2][0] = G / det;
+  (*out)[0][1] = B / det;
+  (*out)[1][1] = E / det;
+  (*out)[2][1] = H / det;
+  (*out)[0][2] = C / det;
+  (*out)[1][2] = F / det;
+  (*out)[2][2] = I / det;
+
+  return 0;
+}
+
 void print_vector(const Vector3_double *A) {
   printf("[%f\n, %f\n, %f\n]", (*A)[0], (*A)[1], (*A)[2]);
 }

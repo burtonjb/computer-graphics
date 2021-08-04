@@ -80,6 +80,12 @@ function utils.matrix_multiply(m1, m2)
     return out
 end
 
+function utils.print_matrix(m)
+    for i = 1, 3 do
+        print(m[i][1], m[i][2], m[i][3])
+    end
+end
+
 -- pass this a 3x3 grid to make a 3x3 c matrix
 function utils.to_matrix_int(m)
     local out = lib.identity_matrix_uint8_t()

@@ -1,7 +1,7 @@
 lib = require('image_lib')
 utils = require('utils')
 
--- file to demonstrate reading and writing jpeg files
+-- file to demonstrate reading and writing pngs files
 
 image = utils.create_test_image(50);
 
