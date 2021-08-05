@@ -134,7 +134,22 @@ The matrix pixel operations can also be combined. In Linear Algebra terms whats 
 |Greyscale then filter|(128, 128, 128)| ![](./docs/pixel_matrix_filter_then_greyscale_orig.png)| 0 0 0<br/>1/3 1/3 1/3<br/>1/3 1/3 1/3<br/>| (0, 128, 128) | ![](./docs/pixel_matrix_filter_then_greyscale_post.png)|
 
 
-TODO: invertable operations
+The matrix operations can also be inverted. There are some conditions for inverting a matrix but if these hold then you can reverse a pixel matrix transformation. 
+
+Mathematically the inverse of matrix A is A^-1, with the property that A * A^-1 = I (the identity matrix) and A * A^-1 * v = v. 
+
+As a rule of thumb as long as there's no information loss, the matrix is invertable. The matrixes to rebalance color and swap color channels are invertable but the matrixes to filter out a channel and convert to greyscale are not invertable.
+
+* filtering a color is not invertable because all the information about the original value in that channel is erased. After filtering out red (multiplying by 0), you have no idea what the original red value was.
+* converting to greyscale is not invertable if the weights are the same (like in my example where I used 1/3 for all values in the matrix). This is because you can't tell what the original value was.
+
+Below is the matrices and images for the swapping R&G channels and the inverse.
+|Original image|Transformation matrix |Transformed image|Inverse transformation matrix|Inverse image|
+|--|--|--|--|--|
+|![](./docs/pixel_matrix_product_orig.png)|0 1 0<br/>1 0 0<br/>0 0 1<br/>|![](./docs/pixel_matrix_product_forward.png)|0 1 0<br/>1 0 0<br/>0 0 1|![](./docs/pixel_matrix_product_inverse.png)|
+
+And if you double check, multiplying the Transformation matrix by the inverse transformation matrix will produce the identity matrix. 
+
 
 ### Implementation - signed, unsigned, overflow and underflow
 

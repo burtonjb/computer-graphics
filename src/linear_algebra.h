@@ -94,6 +94,10 @@ void print_vector(const Vector3_double *A);
  */
 void print_matrix(const Matrix3_double *A);
 
+void to_matrix_d(const Matrix3_uint8_t *in, Matrix3_double *out);
+
+void to_matrix_uint8_t(const Matrix3_double *in, Matrix3_uint8_t *out);
+
 #undef VECTOR3
 #undef MATRIX3
 #undef UNIT_VECTOR

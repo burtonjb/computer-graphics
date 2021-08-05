@@ -86,6 +86,22 @@ void matrix_multiply_d(const Matrix3_double *A, const Matrix3_double *B,
   }
 }
 
+void to_matrix_d(const Matrix3_uint8_t *in, Matrix3_double *out) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      (*out)[i][j] = (*in)[i][j];
+    }
+  }
+}
+
+void to_matrix_uint8_t(const Matrix3_double *in, Matrix3_uint8_t *out) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      (*out)[i][j] = d_to_uint8_t((*in)[i][j]);
+    }
+  }
+}
+
 double determinant_matrix_d(const Matrix3_double *A) {
   double d1 = (*A)[0][0] * ((*A)[1][1] * (*A)[2][2] - (*A)[2][1] * (*A)[1][2]);
   double d2 = (*A)[1][0] * ((*A)[0][1] * (*A)[2][2] - (*A)[0][2] * (*A)[2][1]);
@@ -97,7 +113,10 @@ int invert_matrix_d(const Matrix3_double *in, Matrix3_double *out) {
   // stolen from
   // https://en.wikipedia.org/wiki/Invertible_matrix#Inversion_of_3_%C3%97_3_matrices
 
-  double det = determinant_matrix_d(*in);
+  // I don't really like this implementation, but it works and the project is
+  // about 2d computer graphics, not optimized matrix inversion techniques.
+
+  double det = determinant_matrix_d(in);
 
   if (det == 0) {
     return 1;

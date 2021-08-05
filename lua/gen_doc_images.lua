@@ -104,3 +104,33 @@ i = lib.make_filled_image(image_size, image_size, utils.create_pixel(128, 128, 1
 lib.write_png('../docs/pixel_matrix_greyscale_then_filter_orig.png', i)
 lib.transform_pixels_matrix(i, m, 3)
 lib.write_png('../docs/pixel_matrix_greyscale_then_filter_post.png', i)
+
+greyscale_then_filter = utils.matrix_multiply(filter_g_b, greyscale)
+utils.print_matrix(greyscale_then_filter)
+m = utils.to_matrix_int(greyscale_then_filter)
+i = lib.make_filled_image(image_size, image_size, utils.create_pixel(128, 128, 128, 255))
+lib.write_png('../docs/pixel_matrix_greyscale_then_filter_orig.png', i)
+lib.transform_pixels_matrix(i, m, 3)
+lib.write_png('../docs/pixel_matrix_greyscale_then_filter_post.png', i)
+
+
+-- generate inverse matrices and images
+m = utils.to_matrix_d(swap_r_g)
+inv_m = utils.to_matrix_d(utils.matrix())
+lib.invert_matrix_d(m, inv_m)
+product = utils.to_matrix_d(utils.matrix())
+lib.matrix_multiply_d(m, inv_m, product)
+lib.print_matrix(m); lib.print_matrix(inv_m); lib.print_matrix(product);
+
+m_int = utils.to_matrix_int(utils.matrix())
+inv_m_int = utils.to_matrix_int(utils.matrix())
+
+lib.to_matrix_uint8_t(m, m_int)
+lib.to_matrix_uint8_t(inv_m, inv_m_int)
+
+i = lib.make_filled_image(image_size, image_size, utils.create_pixel(0, 255, 255, 255))
+lib.write_png('../docs/pixel_matrix_product_orig.png', i)
+lib.transform_pixels_matrix(i, m_int, 1)
+lib.write_png('../docs/pixel_matrix_product_forward.png', i)
+lib.transform_pixels_matrix(i, inv_m_int, 1)
+lib.write_png('../docs/pixel_matrix_product_inverse.png', i)
