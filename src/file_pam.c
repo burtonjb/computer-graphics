@@ -59,6 +59,7 @@ void write_pam(const char *path, const Image *image) {
     return NULL;                                                               \
   }
 
+// See the header for very important documentation on this function.
 Image *read_pam(const char *path) {
   FILE *fp = fopen(path, "rb");
 

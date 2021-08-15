@@ -5,28 +5,22 @@ This is a project about 2D graphics, with a library of functions written in C an
 The primary purpose of this was to learn about graphical methods and learn about modern C, though I'm professionally a java programmer, so a lot of the code probably looks like java. 
 
 # TODOs (coding related)
-## Part 1 (Images/pixels)
-* support for alternative color spaces
-
 ## Part 2 (Linear algebra)
 * interpolation - for affine transforms - nearest neighbor, linear, bilinear, etc.
-** I think the steps are: invert the affine xform matrix, use interpolation method + inverted matrix to map new pixel back to old image location.
+  * I think the steps are: invert the affine xform matrix, use interpolation method + inverted matrix to map new pixel back to old image location.
+* method to "add/subtract" two images from eachother, applying a pixel operation across the two images. 
 
 ## Part 3 (shapes)
 * ~~vector graphics - drawing arcs~~
-** optimized (midpoint) algorithm required
+  * optimized (midpoint) algorithm required
 * draw filled images - shape.h methods
-** solid and gradient fill
+  * solid and gradient fill
 * sampling - aliasing and antialiasing
 * gradients (linear and radial)
 
 # TODOs (polishing/productionalizing)
-* update makefile to be "better"
-* compile with clang 
 * clean up readme
 * clean up git history
-* add in flags for optional compilation of jpg or png
-* clean up/add missing unit tests
 
 # Setup 
 You need to install the basic C build tools. 
@@ -70,8 +64,6 @@ This means that a pixel will take up to 4 bytes (32 bits) which is a little big.
 
 And as a side note, an alpha of 255 is not transparent and an alpha of 0 is fully transparent.
 
-TODO: images for pixel colors. RGB, mixed, and half-alpha
-
 | Description | Pixel Values | Example image |
 |--|--|--|
 |Red|(255, 0, 0, 255)|![](./docs/pixel_red.png)|
@@ -109,6 +101,8 @@ Multiplying a pixel by a matrix is used in simple white balance algorithms. This
 
 to correct for it
 
+Below are simple pixel operations
+
 | Description | Operation (all use 255 as alpha) | Image |
 |--|--|--|
 |Adding red and green | (255, 0, 0) + (0, 255, 0) | ![](./docs/pixel_add_yellow.png) |
@@ -116,7 +110,7 @@ to correct for it
 |Subtracting green from white|(255, 255, 255) - (0, 255, 0) | ![](./docs/pixel_sub_purple.png) |
 |Dividing bright purple by 2| (255, 255, 0) / 2| ![](./docs/pixel_div_muted_purple.png) |
 
-TODO: multiply by matrices -> identity, sum colors (proj. to greyscale), swap colors, rebalance colors (increase one, decrease others), only get 1 colors (i.e. G&B multiply by 0)
+Below are matrix pixel operations
 
 |Description|Original Pixel Value (all alpha = 255)|Original image|Transformation Matrix|Transformed Pixel Value| Transformed Image|
 |--|--|--|--|--|--|
@@ -185,10 +179,9 @@ Finally the value part of the model is a percentage and represents the brightnes
 
 There's other color models, with other pros/cons (e.g. CMY (cyan, magenta, yellow) which is used in printers) but I'm not going to implement those. 
 
-TODO: Example HSV colors
-|Description| HSV Value | Pixel (RGB) Value | Image |
-|--|--|--|--|
-||||
+| HSV Value | Pixel (RGB) Value | Image |
+|--|--|--|
+|360, 1, 1|255, 0, 0| ![](./docs/pixel_from_hsv.png)|
 
 ## Images, coordinates and raster graphics 
 
@@ -206,70 +199,112 @@ p20 p21 p22
 
 I've defined an image struct, which has a width, height and then an array of pixels to store the actual image definition.
 
-Images can have the following functions:
-* TODO
-* 
+Images have these basic crud operations:
+* make_filled_image - creates an image filled with pixels of a certain color
+* write_pixel_to_image / get_pixel_from_image - reads or writes a specific pixel to/from an image
+* paste_to_image / copy_from_image - reads or writes an image from or onto an image.
+* transform_pixels - applies a pixel transformation (as in the Pixel section) to all pixels in an image
 
 ### Image struct
 
-## Alpha Blending (To move to the image section or color section)
+The Image struct is straightforward - its just a max_width, max_height and an array of pixels. See [image.h](./src/image.h#13) for the implementation. Its recommended to create images through the `make_filled_image` as its a little fiddly to set up the object correctly. 
+
+## Graphics file format
+
+A little bit out of place, but next up is graphics file formats. We've got to be able to store the image someplace so that it can be seen. There are libraries to do live previews, but they're slightly heavy-weight (libsdl2 is an example).
+
+### PAM 
+The pam format is a relatively easy format to write. It has a simple header and then a blob of data - the image as bits stored directly in a file. 
+
+An example header can be seen below:
+
+```
+P7
+WIDTH 100
+HEIGHT 100
+DEPTH 4
+MAXVAL 255
+TUPLTYPE RGB_ALPHA
+ENDHDR
+```
+
+The code to write pam files can be found in [file_pam.c](./src/file_pam.c#24)
+
+There are two main downsides for this image format: 
+1. Almost no image tools support this format (not even GIMP!). You can set up the [netpbm package](http://netpbm.sourceforge.net/) to install the conversion tools. There's a converter util to convert these files to png files called pamtopng which can be found as part of the netpbm package - see [pamtopng](https://manpages.debian.org/experimental/netpbm/pamtopng.1.en.html). Alternatively you can use my [script](./lua/pamtopng.lua) to convert the pam files to pngs.  
+1. Additionally there's no compression so the file sizes are giant! A 10x10 image is ~500 bytes, compared to a png which is ~100 bytes. Because the image sizes are small, the lack of compression is not that bad, but it gets worse at 100x100 images. At 100x100 the png is still a reasonable 314 bytes, but the PAM file is 40KBytes.
+
+More information about the format can be found here: http://manpages.ubuntu.com/manpages/bionic/man5/pam.5.html
+
+### BMPs (not supported)
+
+I haven't added support for BMPs because the header is pretty complicated. They're actually pretty similar to PAM files, but they have a much more complicated header format, and depending on some of the flags in the header, the data can be compressed. 
+
+The header consists of:
+```
+BITMAPFILEHEADER - 14 bytes
+DIBMAPV5HEADER - there's 5 versions 
+(Optional) COLORTABLE - Stores color mappings (if they're used)
+PIXELARRAY - the actual data for the image
+ICCCOLORPROFILE
+```
+
+Anyways, due to the headers they're pretty complicated to implement, and since I'm only using 24bit RGBA pixels, its not really worth the time. 
+
+### JPEGs
+
+The JPG (or jpeg) file format is a lossy-compressed image format meaning that some data will be lossed on save. It follows a complicated algorithm that uses the Discrete Cosine Transform (similar to a fourier transform, but only uses cosines), quantization, and compression.
+
+Its super fiddly to implement, so I just pulled in `libjpg` to do the heavy lifting. 
+
+### PNGs
+
+PNGs are different from JPGs since the have lossless-compression instead of lossy, but they're even more complicated. 
+
+Its also really hard to implement, so I pulled in `libpng` to do the file writing/reading. 
+
+## Alpha Blending
 
 Alpha blending is the process of combining translucent foreground and background images which produces a new image. 
 
 This is done by taking the foreground images transparency "alpha value" and combining it with its RGB values and then combining those values with the background images RGB & alpha values. 
 
-The formula for this computation is in the alpha_blend method in [image.c](./src/image.c).
+The formula for this computation is in the alpha_blend method in [image.c](./src/image.c#246).
 
 |Description|Image|
 |--|--|
-|Unblended red image| ![unblended red](./docs/preblend_red.pam.png)|
-|Unblended green image| ![unblended green](./docs/preblend_green.pam.png)|
-|blended green onto red | ![alpha green onto red](./docs/blend_green_onto_red.pam.png) |
-|blended red onto green | ![alpha red onto green](./docs/blend_red_onto_green.pam.png) |
+|Unblended red image| ![unblended red](./docs/preblend_red.png)|
+|Unblended green image| ![unblended green](./docs/preblend_green.png)|
+|blended green onto red | ![alpha green onto red](./docs/blend_green_onto_red.png) |
+|blended red onto green | ![alpha red onto green](./docs/blend_red_onto_green.png) |
 
-## Graphics file format
-
-The final topic for the initial commit is picking a graphics file format. I want to be able to write out to a file to generate an image (I'm developing remotely over SSH, so I can't just see the image on the screen). I did a very small amount of research, found an open standard which seems really easy to write (the PAM format).  
-
-### BMPs (not supported)
-
-### PAM 
-The pam format is a relatively easy format to write. It has a simple header and then a blob of data to represent the image. More information about the header can be found here: http://manpages.ubuntu.com/manpages/bionic/man5/pam.5.html
-
-The downsides of the PAM format is almost no image tools support this format (not even GIMP!). You'll need to fiddle around with the [netpbm package](http://netpbm.sourceforge.net/) to install the conversion tools.
-
-There's a converter util to convert these files to png files called pamtopng which can be found as part of the netpbm package. See [pamtopng](https://manpages.debian.org/experimental/netpbm/pamtopng.1.en.html).
-
-I didn't go with some of the more standard file formats (bmp, png) as the header is kind of complicated and they're kind of tricky to write.
-
-### JPEGs
-
-### PNGs
 
 ## Image masking
 
+For some reason I decided to implement image masking.  Its a simple algorithm, it just DFSes the image, checking if the pixel_filter condition is still true. 
+
+The comments in the header are actually pretty good, so I'd recommend checking it out. Example usage can be found in the `11_image_mask.lua` file.
+
+[image_mask.h](./src/image_mask.h)
+
+[11_image_mask.lua](./lua/11_image_mask.lua)
+
+## Image pixel operations
+
+Images support the pixel operations. The operation will be applied to all pixels in that image. 
+
+They are the `transform_pixels_other` and the `transform_pixels_matrix` methods. 
+
+```
+-- example matrix operation (in lua)
+lib.transform_pixels_matrix(image, matrix, scaling_const)
+
+-- example pixel operation (in lua)
+lib.transform_pixels_other(image, lib.fptr_pixel_add(), new_pixel)
+```
+
 # Linear algebra
 
-## Matrix operations on pixels
-
-Pixels can be thought of as 3 or 4 vectors (depending on whether you want to keep the alpha value). This means that you can use linear algebra and matrix multiplication to do various operations.
-
-Some of them are as follows:
-
-|Use case | Matrix | Description |
-|--|--|--|
-|Do nothing | [1 0 0]</br>[0 1 0]</br>[0 0 1] | Use the identity matrix to do nothing |
-|Get the value of a specific channel| [1 0 0]</br>[0 0 0]</br>[0 0 0] | Just gets the red channel |
-|Greyscale conversion | [1 1 1]</br>[1 1 1]</br>[1 1 1] | Sums up the RGB channels and then distributes the values to each channel (you also need to divide by 3) |
-|Reverse colors | [0 0 1]</br>[0 1 0]</br>[1 0 0] | Reverses the R and B color values |
-
-Output colors can be found below:
-
-![original color](./docs/original_color.pam.png) ![grey scaled](./docs/grey_scale.pam.png) ![red and green extracted](./docs/extracted_red_green.pam.png)
-
-## Matrix operations on images
-
-I also want to be able to support pixel operations on images. This can be done pretty easily in C by passing a function pointer.
 
 ## Linear Transformations
 
@@ -293,7 +328,7 @@ If you want to apply multiple transforms, then you can multiply the matrixes tog
 There seems to be one issue - mapping from the original location to the destination location seems to create a lot of empty space when scaling up (or rotating by a non-90 degree increment or sometimes by shearing). I want to try inverting the matrix and then converting from dest to source location. 
 
 ## Better image scaling functions
-Nearest neighbors, linear, bilinear, bicubic traformations
+Nearest neighbors, linear, bilinear, bicubic transformations
 
 ### Kernels in Image Processing
 
@@ -342,7 +377,9 @@ Can be done with lua code, writing it in C would be not that extensible.
 
 # Comments on programming and languages
 
-## Lua bindings
+## C 
+
+## Lua
 TODO
 
 I just used swig - but I can include the manually created bindings here too if people want to do that.

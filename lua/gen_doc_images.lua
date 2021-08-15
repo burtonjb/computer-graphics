@@ -113,7 +113,6 @@ lib.write_png('../docs/pixel_matrix_greyscale_then_filter_orig.png', i)
 lib.transform_pixels_matrix(i, m, 3)
 lib.write_png('../docs/pixel_matrix_greyscale_then_filter_post.png', i)
 
-
 -- generate inverse matrices and images
 m = utils.to_matrix_d(swap_r_g)
 inv_m = utils.to_matrix_d(utils.matrix())
@@ -134,3 +133,49 @@ lib.transform_pixels_matrix(i, m_int, 1)
 lib.write_png('../docs/pixel_matrix_product_forward.png', i)
 lib.transform_pixels_matrix(i, inv_m_int, 1)
 lib.write_png('../docs/pixel_matrix_product_inverse.png', i)
+
+-- generate image from hsv
+--[[ --skipping this, takes too long and too much space (and I think its buggy)
+for hue = 0, 360, 30 do
+    for sat = 0, 1, 0.5 do
+        for value = 0, 1, 0.5 do
+            p = lib.from_hsv(hue, sat, value, 255)
+            i = lib.make_filled_image(image_size, image_size, p)
+            f_name = string.format("./docs/pixel_from_hsv_%d_%.2f_%.2f.png", hue, sat, value)
+            lib.write_png("." .. f_name, i)
+            -- auto generate the image markdown table
+            s = string.format("|(%d, %.2f, %.2f)|(%d, %d, %d)|![](%s)|", hue, sat, value, p.red, p.green, p.blue, f_name)
+            print(s)
+        end
+    end
+end
+--]]
+p = lib.from_hsv(360, 1, 1, 255)
+i = lib.make_filled_image(image_size, image_size, p)
+lib.write_png('../docs/pixel_from_hsv.png', i)
+
+-- create example pam file
+i = lib.make_filled_image(10, 10, utils.create_pixel(128, 128, 128, 255))
+lib.write_pam('../docs/example_pam_file.pam', i)
+i = lib.make_filled_image(100, 100, utils.create_pixel(128, 128, 128, 255))
+lib.write_pam('../docs/example_large_pam_file.pam', i)
+lib.write_png('../docs/example_large_png.png', i)
+
+-- generate alpha blended images
+function create_image(pixel, x, y)
+    local image = lib.make_filled_image(100, 100, utils.create_pixel(0, 0, 0, 0))
+    local to_paste = lib.make_filled_image(50, 50, pixel)
+    lib.paste_to_image(to_paste, image, x, y)
+    return image
+  end
+  
+  i_1 = create_image(utils.create_pixel(128, 0, 0, 128), 10, 10)
+  i_2 = create_image(utils.create_pixel(0, 128, 0, 128), 40, 40)
+  lib.write_png("../docs/preblend_red.png", i_1)
+  lib.write_png("../docs/preblend_green.png", i_2) 
+  
+  out_1 = lib.alpha_blend(i_1, i_2)
+  out_2 = lib.alpha_blend(i_2, i_1)
+  
+  lib.write_png("../docs/blend_green_onto_red.png", out_1)
+  lib.write_png("../docs/blend_red_onto_green.png", out_2) 

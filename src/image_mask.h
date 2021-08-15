@@ -16,7 +16,7 @@
  * An image mask is a 2d array of booleans. A boolean will be set to true if the
  * corresponding pixel in the image should be selected.
  *
- * This was of representing an image mask is a bit ineffecient and also slightly
+ * This way of representing an image mask is a bit ineffecient and also slightly
  * dangerous, but its pretty simple. One alternative is to have the mask have a
  * pointer to the source image, which makes sense to me (it seems slightly
  * suspect to share a mask across multiple images) but its not necessary and

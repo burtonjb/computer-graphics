@@ -258,9 +258,10 @@ Image *alpha_blend(const Image *dest, const Image *src) {
   const int SCALING_FACTOR = 255;
 
   /* formula is:
-   * out_alpha = src_alpha + dest_alpha (1 - src_alpha)
-   * out_RGB = (src_RGB * src_alpha + dest_RGB*dest_alpha * (1 - src_alpha)) /
-   * out_alpha where alpha, RGB values are in [0, 1]
+   * out_alpha = src_alpha + dest_alpha * (1 - src_alpha)
+   * out_RGB =
+   *  (src_RGB * src_alpha + dest_RGB*dest_alpha * (1 - src_alpha)) / out_alpha
+   * where alpha, RGB values are in [0, 1]
    */
   for (int i = 0; i < dest->width; i++) {
     for (int j = 0; j < dest->height; j++) {
