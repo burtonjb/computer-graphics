@@ -21,6 +21,7 @@ The primary purpose of this was to learn about graphical methods and learn about
 # TODOs (polishing/productionalizing)
 * clean up readme
 * clean up git history
+* remove unused lua scripts
 
 # Setup 
 You need to install the basic C build tools. 
@@ -66,13 +67,13 @@ And as a side note, an alpha of 255 is not transparent and an alpha of 0 is full
 
 | Description | Pixel Values | Example image |
 |--|--|--|
-|Red|(255, 0, 0, 255)|![](./docs/pixel_red.png)|
-|Blue|(0, 255, 0, 255)|![](./docs/pixel_blue.png)|
-|Green|(0, 0, 255, 255)|![](./docs/pixel_green.png)|
-|Grey|(128, 128, 128, 255)|![](./docs/pixel_grey.png)|
-|Half transparent grey|(128, 128, 128, 128)|![](./docs/pixel_transparent_grey.png)|
-|Black|(0, 0, 0, 255)|![](./docs/pixel_black.png)|
-|White|(255, 255, 255, 0)|![](./docs/pixel_white.png)|
+|Red|(255, 0, 0, 255)|![red](./docs/pixel_red.png)|
+|Blue|(0, 255, 0, 255)|![blue](./docs/pixel_blue.png)|
+|Green|(0, 0, 255, 255)|![green](./docs/pixel_green.png)|
+|Grey|(128, 128, 128, 255)|![grey](./docs/pixel_grey.png)|
+|Half transparent grey|(128, 128, 128, 128)|![transparent grey](./docs/pixel_transparent_grey.png)|
+|Black|(0, 0, 0, 255)|![black](./docs/pixel_black.png)|
+|White|(255, 255, 255, 0)|![white](./docs/pixel_white.png)|
 
 ### Implementation - Pixel struct
 
@@ -105,10 +106,10 @@ Below are simple pixel operations
 
 | Description | Operation (all use 255 as alpha) | Image |
 |--|--|--|
-|Adding red and green | (255, 0, 0) + (0, 255, 0) | ![](./docs/pixel_add_yellow.png) |
-|Adding red, green and blue | (255, 255, 0) + (0, 0, 255) | ![](./docs/pixel_add_white.png) |
-|Subtracting green from white|(255, 255, 255) - (0, 255, 0) | ![](./docs/pixel_sub_purple.png) |
-|Dividing bright purple by 2| (255, 255, 0) / 2| ![](./docs/pixel_div_muted_purple.png) |
+|Adding red and green | (255, 0, 0) + (0, 255, 0) | ![add pixel values](./docs/pixel_add_yellow.png) |
+|Adding red, green and blue | (255, 255, 0) + (0, 0, 255) | ![add more pixel values](./docs/pixel_add_white.png) |
+|Subtracting green from white|(255, 255, 255) - (0, 255, 0) | ![subtract pixel values](./docs/pixel_sub_purple.png) |
+|Dividing bright purple by 2| (255, 255, 0) / 2| ![divide pixel values](./docs/pixel_div_muted_purple.png) |
 
 Below are matrix pixel operations
 
@@ -303,32 +304,87 @@ lib.transform_pixels_matrix(image, matrix, scaling_const)
 lib.transform_pixels_other(image, lib.fptr_pixel_add(), new_pixel)
 ```
 
-# Linear algebra
+# Geometric operations on pixel locations
 
+A geometric operation on an image moves the pixels on an image to a different location. 
+
+There are 5 base operations:
+* scale - change the size of the image
+* rotate - rotate the image 
+* reflect - flip the image contents
+* shear - displace each point proportional to how far its from the origin
+* translate - move the image contents
+
+These base operations can be performed using linear algebra.
 
 ## Linear Transformations
 
+Linear transformations are matrix operations that can cover the first 4 geometric operations. They are implemented by multiplying each pixel location by a 2x2 matrix - so **p_new_position** = A * **p_old_position**:
+```
+|p_x_new| = |A B| * |p_x_old| 
+|p_y_new|   |C D|   |p_y_old|
+```
+
+Scale, rotate, reflect, and shear operations can be implemented with linear transformations but you can't implement translation operations using linear transforms - for that you need to use affine transformations. 
+
 ## Affine Transforms
 
-Affine transformations are matrix operations on an image, but they act on the pixel locations instead of the pixel color values. 
+Affine transformations are similar to linear transformations, but they use 3x3 matrices instead of 2x2 matrices. Additionally, there is a 3rd component added to the pixel location - almost like a 'z' component, but its just the constant '1'.
 
-Below are the following main types of affine transforms
+So the pixel location vector goes from `(p_x, p_y)` to `(p_x, p_y, 1)`. 
 
-| Type | Matrix | Description | Image |
-|--|--|--|--|
-|Identity | [1 0 0]<br/>[0 1 0]<br/>[0 0 1]<br/> | Returns the same | ![untransformed](./docs/untransformed.pam.png) |
-| Translation | [1 0 Vx]<br/>[1 0 Vy]</br>[0 0 1] | Translates each pixels over by (Vx, Vy) | ![original](./docs/translated.pam.png)|
-| Reflection | [-1 0 0]<br/>[0 1 0]<br/>[0 0 1] | Reflects the image over the X axis | ![flipped](./docs/flipped.pam.png) |
-| Scale | [2 0 0]<br/>[0 1 0]<br/>[0 0 1] | Doubles the image on the X axis | ![scaled up](./docs/scaled_up.pam.png) ![scaled down](./docs/scaled_down.pam.png)|
-| Rotate | [cos(x) -sin(x) 0]<br/>[sin(x) cos(x) 0]<br/>[0 0 1]<br/> x=PI/4| rotates the image by x | ![rotated](./docs/rotated.pam.png)|
-| Shear | [1 x 0]<br/>[0 1 0]<br/>[0 0 1] OR <br/> [1 0 0]<br/>[y 1 0]<br/>[0 0 1] | Shears each point. You need to use matrix multiplication to shear on two axis with one matrix  | ![shear](./docs/sheared.pam.png)|
+Below are the generic matrices used for affine transformations: 
+
+| Type | Matrix | Description |
+|--|--|--|
+| Identity | 1 0 0<br/>0 1 0<br/>0 0 1<br/> | Does nothing, returns the same image |
+| Translation | 1 0 Vx<br/>0 1 0 Vy</br>0 0 1 | Translates each pixels over by (Vx, Vy) | 
+| Reflection | X 0 0<br/>0 Y 0<br/>0 0 1 | X, Y values can be +1 or -1. It will flip over the axis of the negative values |
+| Reflection over angle | cos(2x) sin(2x) 0<br/>sin(2x) -cos(2x) 0<br/>0 0 1 | reflect over line with degrees x from origin |
+| Scale | X 0 0<br/>0 Y 0<br/>0 0 1 | X, Y are positive constants. Values less than 1 will shrink the image and values greater than 1 will stretch the image |
+| Rotate | cos(x) -sin(x) 0<br/>sin(x) cos(x) 0<br/>0 0 1<br/>| rotates the image by x degrees counterclockwise | ![rotated](./docs/rotated.pam.png)|
+| Shear | [1 x 0]<br/>[0 1 0]<br/>[0 0 1] OR <br/> [1 0 0]<br/>[y 1 0]<br/>[0 0 1] | Shears each point - . You need to multiply the matrices to get both X and Y shear, changing both of the constants will make a weird transformation matrix |
+
+Below are some example images:
+|Description|Matrix|Image|
+|--|--|--|
+|Identity|1 0 0<br/>0 1 0<br/>0 0 1<br/>|![affine identity](./docs/affine_identity.png)|
+|Translate left 20 and down 30| 1 0 20<br/>0 1 30<br/>0 0 1|![affine translate](./docs/affine_translation.png)|
+|Reflection over y (also requires some translation to get the image to be in frame)|1 0 0<br/>0 -1 0<br/>0 0 1| ![affine reflect](./docs/affine_reflect.png)|
+|Rotate 90 degrees|0 -1 0<br/>1 0 0<br/>0 0 1<br/>|![](./docs/affine_rotate_90.png)|
+|Rotate 45 degrees|cos(45) -sin(45) 0<br/>sin(45) cos(45) 0<br/> 0 0 1<br/>|![](./docs/affine_rotate_45.png)|
+|Shear x|1 1.2 0<br/>0 1 0<br/> 0 0 1<br/>|![](./docs/affine_shear_x.png)|
+|Shear y|1 0 0<br/>1.2 1 0<br/>0 0 1|![](./docs/affine_shear_y.png)|
+|Shear x and y|2.44 1.2 0<br/>1.2 1 0<br/>0 0 1|![](./docs/affine_shear_x_y.png)|
+|Scale - shrink y|1 0 0<br/>0 0.5 0<br/>0 0 1|![](./docs/affine_scale_0.5y.png)|
+|Scale - stretch x and y (see below)|1.5 0 0<br/>0 1.5 0<br/>0 0 1|![](./docs/affine_scale_1.5x_1.5y.png)|
+
 
 If you want to apply multiple transforms, then you can multiply the matrixes together. The operation is `T1 * T2 * v`, which can be performed as both `(T1 * (T2 * v))` or `((T1 * T2) * v)`.
 
-There seems to be one issue - mapping from the original location to the destination location seems to create a lot of empty space when scaling up (or rotating by a non-90 degree increment or sometimes by shearing). I want to try inverting the matrix and then converting from dest to source location. 
+One thing to note is that I named the functions `affine_transformation` in image.h/image.c. These methods actually take in any matrix, not just affine matrices, so they're slightly misnamed. 
 
+There seems to be one issue - mapping from the original location to the destination location seems to create a lot of empty space when scaling up. This issue is caused because we're taking the old pixel location, modifying it and then putting it on the image in a new location. The problem is sometimes there is no pixel being mapped in the new location (like in the case of rotation where multiple old locations can get rounded to the same new location or with scaling when you double the size, then there is no old location for all odd coordinations in the new image).
+  
 ## Better image scaling functions
-Nearest neighbors, linear, bilinear, bicubic transformations
+
+To fix the mapping issue mentioned in the above affine transformation section, instead of having `A * p_old = p_new`, the new locations can be determined by inverting the matrix and then looking up the location in the old image - so `A^-1 * p_new = p_old`. It would end up having the same issue if there's no clear mapping back but there's a couple strategies if there's no clear mapping. 
+
+Below are some example images:
+|Description|Matrix|Image|
+|--|--|--|
+|Identity|1 0 0<br/>0 1 0<br/>0 0 1<br/>|![affine identity](./docs/invert_affine_identity.png)|
+|Translate left 20 and down 30| 1 0 20<br/>0 1 30<br/>0 0 1|![affine translate](./docs/invert_affine_translation.png)|
+|Reflection over y (also requires some translation to get the image to be in frame)|1 0 0<br/>0 -1 0<br/>0 0 1| ![affine reflect](./docs/invert_affine_reflect.png)|
+|Rotate 90 degrees|0 -1 0<br/>1 0 0<br/>0 0 1<br/>|![](./docs/invert_affine_rotate_90.png)|
+|Rotate 45 degrees|cos(45) -sin(45) 0<br/>sin(45) cos(45) 0<br/> 0 0 1<br/>|![](./docs/invert_affine_rotate_45.png)|
+|Shear x|1 1.2 0<br/>0 1 0<br/> 0 0 1<br/>|![](./docs/invert_affine_shear_x.png)|
+|Shear y|1 0 0<br/>1.2 1 0<br/>0 0 1|![](./docs/invert_affine_shear_y.png)|
+|Shear x and y|2.44 1.2 0<br/>1.2 1 0<br/>0 0 1|![](./docs/invert_affine_shear_x_y.png)|
+|Scale - shrink y|1 0 0<br/>0 0.5 0<br/>0 0 1|![](./docs/invert_affine_scale_0.5y.png)|
+|Scale - stretch x and y (see below)|1.5 0 0<br/>0 1.5 0<br/>0 0 1|![](./docs/invert_affine_scale_1.5x_1.5y.png)|
+
+Only Nearest neighbor is currently implemented though there are other interpolation methods when there is no clean 1:1 mapping between the old pixel location and the new pixel location - some are linear, bilinear, and bicubic (I believe that bicubic is the most commonly used right now)
 
 ### Kernels in Image Processing
 

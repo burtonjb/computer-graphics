@@ -9,6 +9,7 @@
 
 // I actually do want the build fail if this is also defined elsewhere
 #define d_to_uint8_t(arg) (uint8_t)(round(clamp_d(0, 255, arg)))
+#define d_to_uint16_t(arg) (uint16_t)(round(arg))
 
 // clamps a value between min, max
 double clamp_d(double min, double max, double d);

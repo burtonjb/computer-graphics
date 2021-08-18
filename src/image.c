@@ -185,15 +185,12 @@ Image *affine_transform(const Image *image, const Matrix3_double *A) {
       matrix_vector_multiply_d(A, &untransformed_position_d,
                                &transformed_position_d);
 
-// Hacky macro to convert from double to position (uint16_t)
-#define d_to_uint16_t(arg) (uint16_t)(round(arg))
       uint16_t transformed_position[2] = {
           d_to_uint16_t(transformed_position_d[0]),
           d_to_uint16_t(transformed_position_d[1])};
       uint16_t untransformed_position[2] = {
           d_to_uint16_t(untransformed_position_d[0]),
           d_to_uint16_t(untransformed_position_d[1])};
-#undef d_to_uint16_t
 
       // clip transformed pixels that would not end up in the picture
       if (transformed_position[0] >= out->width ||
@@ -206,6 +203,53 @@ Image *affine_transform(const Image *image, const Matrix3_double *A) {
                            (transformed_position[1] * out->width)]),
              &(image->pixels[untransformed_position[0] +
                              (untransformed_position[1] * image->width)]),
+             sizeof(Pixel));
+    }
+  }
+  return out;
+}
+
+Image *inverting_affine_transform(const Image *image, const Matrix3_double *A,
+                                  const INTERPOLATION_MODE mode) {
+
+  // make an output image of all 0s (including alpha)
+  Image *out = make_filled_image(image->width, image->height, &((Pixel){0, 0, 0, 0})); 
+
+  Matrix3_double inv_A = {{0,0,0}, {0,0,0}, {0,0,0}};
+  if (determinant_matrix_d(A) == 0) {
+    return NULL; // non-invertable matrix, return NULL though this is not great practice in C
+  }
+
+  invert_matrix_d(A, &inv_A);
+
+  for (int i = 0; i < out->width; i++) {
+    for (int j = 0; j < out->height; j++) {
+
+      // affine transforms require the position to be (x, y, 1)
+      Vector3_double untransformed_position_d = {i, j, 1}; 
+
+      Vector3_double transformed_position_d = {0, 0, 1};
+
+      matrix_vector_multiply_d(&inv_A, &untransformed_position_d,
+                               &transformed_position_d);
+
+      uint16_t transformed_position[2] = {
+          d_to_uint16_t(transformed_position_d[0]),
+          d_to_uint16_t(transformed_position_d[1])};
+      uint16_t untransformed_position[2] = {
+          d_to_uint16_t(untransformed_position_d[0]),
+          d_to_uint16_t(untransformed_position_d[1])};
+
+      // clip transformed pixels that would not end up in the picture
+      if (transformed_position[0] >= image->width ||
+          transformed_position[1] >= image->height) {
+        continue;
+      }
+
+      memcpy(&(out->pixels[untransformed_position[0] +
+                           (untransformed_position[1] * out->width)]),
+             &(image->pixels[transformed_position[0] +
+                             (transformed_position[1] * image->width)]),
              sizeof(Pixel));
     }
   }

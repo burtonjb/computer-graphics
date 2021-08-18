@@ -167,15 +167,141 @@ function create_image(pixel, x, y)
     local to_paste = lib.make_filled_image(50, 50, pixel)
     lib.paste_to_image(to_paste, image, x, y)
     return image
-  end
+end
   
-  i_1 = create_image(utils.create_pixel(128, 0, 0, 128), 10, 10)
-  i_2 = create_image(utils.create_pixel(0, 128, 0, 128), 40, 40)
-  lib.write_png("../docs/preblend_red.png", i_1)
-  lib.write_png("../docs/preblend_green.png", i_2) 
-  
-  out_1 = lib.alpha_blend(i_1, i_2)
-  out_2 = lib.alpha_blend(i_2, i_1)
-  
-  lib.write_png("../docs/blend_green_onto_red.png", out_1)
-  lib.write_png("../docs/blend_red_onto_green.png", out_2) 
+i_1 = create_image(utils.create_pixel(128, 0, 0, 128), 10, 10)
+i_2 = create_image(utils.create_pixel(0, 128, 0, 128), 40, 40)
+lib.write_png("../docs/preblend_red.png", i_1)
+lib.write_png("../docs/preblend_green.png", i_2) 
+
+out_1 = lib.alpha_blend(i_1, i_2)
+out_2 = lib.alpha_blend(i_2, i_1)
+
+lib.write_png("../docs/blend_green_onto_red.png", out_1)
+lib.write_png("../docs/blend_red_onto_green.png", out_2) 
+
+-- generate affine transformation images
+identity = utils.matrix()
+identity[1][1] = 1
+identity[2][2] = 1
+identity[3][3] = 1
+m = utils.to_matrix_d(identity)
+image = utils.create_another_test_image(1)
+x = lib.affine_transform(image, m)
+lib.write_png("../docs/affine_identity.png", x)
+
+translate = utils.matrix()
+translate[1][1] = 1; translate[1][3] = 20;
+translate[2][2] = 1; translate[2][3] = 30;
+translate[3][3] = 1;
+m = utils.to_matrix_d(translate)
+image = utils.create_another_test_image(1)
+x = lib.affine_transform(image, m)
+lib.write_png("../docs/affine_translation.png", x)
+
+reflect = utils.matrix()
+reflect[1][1] = 1 
+reflect[2][2] = -1 -- flip the y-axis values
+reflect[3][3] = 1
+shift = utils.matrix()
+shift[1][1] = 1; shift[1][2] = 0; shift[1][3] = 0;
+shift[2][1] = 0; shift[2][2] = 1; shift[2][3] = -50;
+shift[3][1] = 0; shift[3][2] = 0; shift[3][3] = 1;
+multi_xform = utils.matrix_multiply(reflect, shift) -- the shift is required to move all the pixels to -50 before flipping them, otherwise the end up off the image
+m = utils.to_matrix_d(multi_xform)
+x = lib.affine_transform(image, m)
+lib.write_png("../docs/affine_reflect.png", x)
+
+rotate_90 = utils.matrix() -- some additional translation is required because the origin is weird (0, 0 is the top left corner). If its not included, pixels on the image are rotated off the image, causing nothing to be outputted
+rotate_90[1][1] = 0; rotate_90[1][2] = 1; rotate_90[1][3] = 50;
+rotate_90[2][1] = -1; rotate_90[2][2] = 0; rotate_90[2][3] = 50;
+rotate_90[3][3] = 1
+m = utils.to_matrix_d(rotate_90)
+x = lib.affine_transform(image, m)
+lib.write_png("../docs/affine_rotate_90.png", x)
+
+rotate_45 = utils.matrix() -- some additional translation is required because the origin is weird (0, 0 is the top left corner). If its not included, pixels on the image are rotated off the image, causing nothing to be outputted
+rotate_45[1][1] = math.cos(math.pi/4); rotate_45[1][2] = -math.sin(math.pi/4); rotate_45[1][3] = 25;
+rotate_45[2][1] = math.sin(math.pi/4); rotate_45[2][2] = math.cos(math.pi/4); rotate_45[2][3] = 25;
+rotate_45[3][3] = 1
+m = utils.to_matrix_d(rotate_45)
+x = lib.affine_transform(image, m)
+lib.write_png("../docs/affine_rotate_45.png", x)
+
+shear_x = utils.matrix()
+shear_x[1][1] = 1; shear_x[1][2] = 1.2;
+shear_x[2][2] = 1;
+shear_x[3][3] = 1
+m = utils.to_matrix_d(shear_x)
+x = lib.affine_transform(image, m)
+lib.write_png("../docs/affine_shear_x.png", x)
+
+shear_y = utils.matrix()
+shear_y[1][1] = 1; shear_y[1][2] = 0;
+shear_y[2][1] = 1.2; shear_y[2][2] = 1;
+shear_y[3][3] = 1
+m = utils.to_matrix_d(shear_y)
+x = lib.affine_transform(image, m)
+lib.write_png("../docs/affine_shear_y.png", x)
+
+m = utils.to_matrix_d(utils.matrix_multiply(shear_x, shear_y))
+lib.print_matrix(m)
+x = lib.affine_transform(image, m)
+lib.write_png("../docs/affine_shear_x_y.png", x)
+
+scale_half = utils.matrix()
+scale_half[1][1] = 1; scale_half[2][2] = 0.5; 
+scale_half[3][3] = 1
+m = utils.to_matrix_d(scale_half)
+x = lib.affine_transform(image, m)
+lib.write_png("../docs/affine_scale_0.5y.png", x)
+
+scale_one_point_five = utils.matrix()
+scale_one_point_five[1][1] = 1.5; scale_one_point_five[2][2] = 1.5; 
+scale_one_point_five[3][3] = 1
+m = utils.to_matrix_d(scale_one_point_five)
+x = lib.affine_transform(image, m)
+lib.write_png("../docs/affine_scale_1.5x_1.5y.png", x)
+
+-- generate transformations using the inverting affine transforms
+image = utils.create_another_test_image(1)
+
+m = utils.to_matrix_d(identity)
+x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
+lib.write_png("../docs/invert_affine_identity.png", x)
+
+m = utils.to_matrix_d(translate)
+x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
+lib.write_png("../docs/invert_affine_translation.png", x)
+
+m = utils.to_matrix_d(multi_xform)
+x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
+lib.write_png("../docs/invert_affine_reflect.png", x)
+
+m = utils.to_matrix_d(rotate_90)
+x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
+lib.write_png("../docs/invert_affine_rotate_90.png", x)
+
+m = utils.to_matrix_d(rotate_45)
+x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
+lib.write_png("../docs/invert_affine_rotate_45.png", x)
+
+m = utils.to_matrix_d(shear_x)
+x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
+lib.write_png("../docs/invert_affine_shear_x.png", x)
+
+m = utils.to_matrix_d(shear_y)
+x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
+lib.write_png("../docs/invert_affine_shear_y.png", x)
+
+m = utils.to_matrix_d(utils.matrix_multiply(shear_x, shear_y))
+x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
+lib.write_png("../docs/invert_affine_shear_x_y.png", x)
+
+m = utils.to_matrix_d(scale_half)
+x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
+lib.write_png("../docs/invert_affine_scale_0.5y.png", x)
+
+m = utils.to_matrix_d(scale_one_point_five)
+x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
+lib.write_png("../docs/invert_affine_scale_1.5x_1.5y.png", x)

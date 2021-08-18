@@ -101,6 +101,25 @@ void transform_pixels_matrix(Image *image, const Matrix3_uint8_t *A,
  */
 Image *affine_transform(const Image *image, const Matrix3_double *A);
 
+typedef enum InterpolationMode {
+  NEAREST_NEIGHBOR,
+  LINEAR,
+  BILINEAR,
+  BICUBIC
+} INTERPOLATION_MODE;
+
+/*
+ * Transforms an image with an affine transform, returning the transformed image
+ * as a copy.
+ *
+ * The difference between this and the regular affine_transform function is that
+ * this function will use an interpolation mode, which will fix issues with
+ * scaling (see the README for the problem with regular affine transformations
+ * and scaling)
+ */
+Image *inverting_affine_transform(const Image *image, const Matrix3_double *A,
+                                  const INTERPOLATION_MODE mode);
+
 /*
  * Does a kernel transform to an image
  *
