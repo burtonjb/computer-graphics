@@ -410,7 +410,10 @@ Arbritrary polygons can also be drawn. My implementation treats polygons as a co
 
 |Description|Image|
 |--|--|
-|||
+|Random lines|![](./docs/rasterize_line.png)|
+|Circles|![](./docs/rasterize_circle.png)|
+|Arcs|![](./docs/rasterize_arc.png)|
+|Polygons|![](./docs/rasterize_polygons.png)|
 
 # Programming languages and tools used
 
