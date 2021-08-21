@@ -393,42 +393,38 @@ Vector graphics are a different way of representing images. I've currently been 
 Another way of representing images is with a collection of shapes, called vector graphics. These primarily have the advantage of being scalable to any size with no aliasing. They may also take less storage space if the image is made out of simple shapes. The downside of vector graphics is that most digital image capture technology does not capture vector images (i.e. a digital camera captures an array of 2D pixels).
 
 The basic shapes that should be supported are:
-* lines
-* circles
+* lines and squares
+* circles and arcs
 
 and there is a process - called `rasterization` that converts from the vector (shape) format to the raster (pixel-map) format in which I'll be looking into multiple methods to do this conversion.
 
+## Algorithms
+
+Description of the algorithms can be found in the [shape.h](./src/shape.h) file. 
+
 ## Polygons
 
-#### Reference links (Rasterization)
-* https://www.cosc.brocku.ca/Offerings/3P98/course/lectures/2d/
-* https://magcius.github.io/xplain/article/rast1.html
-* http://members.chello.at/easyfilter/bresenham.html
+Arbritrary polygons can also be drawn. My implementation treats polygons as a collection of line segments and they're drawn such that the end of the previous segment is the start of the next segment. Additionally, since they're pretty finicky to set up I actually followed ok C practice and hid the implementation of the polygon type (though this is actually also not good, since it doesn't allow end-users to extend polygons beyond the simple triangle and rectangle polygons I supports)
 
-## Rasterization - functions and curves. 
-Can be done with lua code, writing it in C would be not that extensible. 
+## Images
 
-## Color fills
+|Description|Image|
+|--|--|
+|||
 
-# Comments on programming and languages
+# Programming languages and tools used
 
 ## C 
 
 ## Lua
-TODO
 
-## swig
-
-* good start - https://chsasank.github.io/lua-c-wrapping.html
-* official docs - http://lua-users.org/wiki/BindingCodeToLua
-* swig - http://www.swig.org/Doc4.0/Lua.html#Lua
-* Include sample of old manually created binding code somewhere
+## Swig
 
 # TODOs
 ## Linear algebra
-* interpolation - for affine transforms - nearest neighbor, linear, bilinear, etc.
-* method to "add/subtract" two images from eachother, applying a pixel operation across the two images. 
-* the geometric transformation API is hard to use, it would be nice to wrap the matrix operations in easier-to-use methods.
+* interpolation - for affine transforms - nearest neighbor, linear, bilinear, bicubic.
+* method to "add/subtract" two images from each other, applying a pixel operation across the two images. 
+* the geometric transformation API is hard to use, it would be nice to wrap the matrix operations in easier-to-use methods. (so rotate, translate, scale, shear, reflect methods)
 
 ## Vector graphics
 * midpoint based optimized algorithm for drawing arcs
@@ -442,4 +438,4 @@ TODO
 * finish unit tests
   * Its much easier to see if a function generates the right image than it is to read the tests, so it might be easier to have image comparison test cases
 * the uint_8 matrix operations are kind of limited and should eventually be replaced with double matrix operations
-* check this blog for how to clean up my writing https://jvns.ca/blog/confusing-explanations/
+

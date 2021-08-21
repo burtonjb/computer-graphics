@@ -1,0 +1,3 @@
+These are the old lua scripts I originally had. 
+
+I've ported over most of the logic to newer scripts, but I'll leave these around for a while. 

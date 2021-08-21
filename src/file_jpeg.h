@@ -1,14 +1,13 @@
 #pragma once
 
-// TODO: include compiler flags to optionally compile this file / link with
-// libjpeg
-
 #include <jpeglib.h>
 #include <stdbool.h>
 #include <stdint.h>
 
 #include "image.h"
 
+// write an image to a file using jpeg encoding
 void write_jpeg(const char *path, const Image *image, int quality);
 
+// read a jpeg from a file into memory
 Image *read_jpeg(const char *path);

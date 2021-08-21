@@ -17,13 +17,6 @@ typedef struct line {
   uint16_t y1;
 } Line;
 
-typedef struct rectangle {
-  uint16_t x_top_left;
-  uint16_t y_top_left;
-  uint16_t width;
-  uint16_t height;
-} Rectangle;
-
 typedef struct circle {
   uint16_t x; // center of the circle - x position
   uint16_t y; // center of the circle - y position

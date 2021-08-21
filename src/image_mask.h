@@ -6,10 +6,11 @@
 #include "image.h"
 #include "shape.h"
 
-// Constant defined for the max stack size/recusion depth for the create_mask
-// function. This might need to be tuned/adjusted, because I think the value is
-// a bit low (this value is only going to work for images which are less than
-// 1000 pixels, so like ~31x31 px max.
+/* Constant defined for the max stack size/recusion depth for the create_mask
+ * function. This might need to be tuned/adjusted, because I think the value is
+ * a bit low (this value is only going to work for images which are less than
+ * 1000 pixels, so like ~31x31 px max.
+ */
 #define MAX_STACK_SIZE 1000
 
 /*
@@ -33,12 +34,13 @@ typedef struct image_mask {
   bool is_pixel_masked[];
 } ImageMask;
 
-// function signature for a "pixel filter" used to create an image mask
-// The (void *) type on the second argument isn't great, but based on assorted
-// research/some testing its better doing this and having all the functions that
-// match this signature all use (void *) because changing the type signature
-// makes GCC emit a lot of warnings and its probably UB. Normally I'd remove the
-// second arg and use a closure, but C doesn't support closures out-of-the-box.
+/* function signature for a "pixel filter" used to create an image mask
+ * The (void *) type on the second argument isn't great, but based on assorted
+ * research/some testing its better doing this and having all the functions that
+ * match this signature all use (void *) because changing the type signature
+ * makes GCC emit a lot of warnings and its probably UB. Normally I'd remove the
+ * second arg and use a closure, but C doesn't support closures out-of-the-box.
+ */
 typedef bool (*pixel_filter)(Pixel *, void *, uint16_t x, uint16_t y);
 
 /*
@@ -75,6 +77,14 @@ bool pixel_equals_filter(
 // The initial point passed to the "create_mask" function has to be inside the
 // shape, otherwise the DFS/BFS search that I do to find additional pixels won't
 // work
+
+// type definition for a rectangle, used for one of the image mask functions
+typedef struct rectangle {
+  uint16_t x_top_left;
+  uint16_t y_top_left;
+  uint16_t width;
+  uint16_t height;
+} Rectangle;
 
 // returns true if the pixels are contained in the rectangle, otherwise false
 bool pixel_in_rect_filter(Pixel *pixel,
