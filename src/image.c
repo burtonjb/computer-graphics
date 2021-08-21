@@ -213,11 +213,13 @@ Image *inverting_affine_transform(const Image *image, const Matrix3_double *A,
                                   const INTERPOLATION_MODE mode) {
 
   // make an output image of all 0s (including alpha)
-  Image *out = make_filled_image(image->width, image->height, &((Pixel){0, 0, 0, 0})); 
+  Image *out =
+      make_filled_image(image->width, image->height, &((Pixel){0, 0, 0, 0}));
 
-  Matrix3_double inv_A = {{0,0,0}, {0,0,0}, {0,0,0}};
+  Matrix3_double inv_A = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
   if (determinant_matrix_d(A) == 0) {
-    return NULL; // non-invertable matrix, return NULL though this is not great practice in C
+    return NULL; // non-invertable matrix, return NULL though this is not great
+                 // practice in C
   }
 
   invert_matrix_d(A, &inv_A);
@@ -226,7 +228,7 @@ Image *inverting_affine_transform(const Image *image, const Matrix3_double *A,
     for (int j = 0; j < out->height; j++) {
 
       // affine transforms require the position to be (x, y, 1)
-      Vector3_double untransformed_position_d = {i, j, 1}; 
+      Vector3_double untransformed_position_d = {i, j, 1};
 
       Vector3_double transformed_position_d = {0, 0, 1};
 

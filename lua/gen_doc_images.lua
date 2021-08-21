@@ -305,3 +305,51 @@ lib.write_png("../docs/invert_affine_scale_0.5y.png", x)
 m = utils.to_matrix_d(scale_one_point_five)
 x = lib.inverting_affine_transform(image, m, lib.NEAREST_NEIGHBOR)
 lib.write_png("../docs/invert_affine_scale_1.5x_1.5y.png", x)
+
+
+-- generate kernal transformation images
+image = utils.create_kernel_test_image(1)
+
+identity = utils.matrix()
+identity[2][2] = 1
+x = lib.kernel_transform(image, utils.to_matrix_d(identity))
+lib.write_png("../docs/kernel_identity.png", lib.copy_from_image(x, 1, 1, 99, 99))
+
+box_blur = utils.matrix()
+box_blur[1][1] = 1/9; box_blur[1][2] = 1/9; box_blur[1][3] = 1/9; 
+box_blur[2][1] = 1/9; box_blur[2][2] = 1/9; box_blur[2][3] = 1/9; 
+box_blur[3][1] = 1/9; box_blur[3][2] = 1/9; box_blur[3][3] = 1/9; 
+x = lib.kernel_transform(image, utils.to_matrix_d(box_blur))
+box_blur_image = x
+lib.write_png("../docs/kernel_box_blur.png", lib.copy_from_image(x, 1, 1, 99, 99))
+
+box_blur_not_normalized = utils.matrix()
+box_blur_not_normalized[1][1] = 1; box_blur_not_normalized[1][2] = 1; box_blur_not_normalized[1][3] = 1; 
+box_blur_not_normalized[2][1] = 1; box_blur_not_normalized[2][2] = 1; box_blur_not_normalized[2][3] = 1; 
+box_blur_not_normalized[3][1] = 1; box_blur_not_normalized[3][2] = 1; box_blur_not_normalized[3][3] = 1; 
+x = lib.kernel_transform(image, utils.to_matrix_d(box_blur_not_normalized))
+lib.write_png("../docs/kernel_box_blur_not_normalized.png", lib.copy_from_image(x, 1, 1, 99, 99))
+
+gaussian_blur = utils.matrix()
+gaussian_blur[1][1] = 1/16; gaussian_blur[1][2] = 2/16; gaussian_blur[1][3] = 1/16; 
+gaussian_blur[2][1] = 2/16; gaussian_blur[2][2] = 4/16; gaussian_blur[2][3] = 2/16; 
+gaussian_blur[3][1] = 1/16; gaussian_blur[3][2] = 2/16; gaussian_blur[3][3] = 1/16; 
+x = lib.kernel_transform(image, utils.to_matrix_d(gaussian_blur))
+lib.write_png("../docs/kernel_gaussian_blur.png",lib.copy_from_image(x, 1, 1, 99, 99))
+
+sharpen = utils.matrix()
+sharpen[1][1] = 0; sharpen[1][2] = -1; sharpen[1][3] = 0; 
+sharpen[2][1] = -1; sharpen[2][2] = 5; sharpen[2][3] = -1; 
+sharpen[3][1] = 0; sharpen[3][2] = -1; sharpen[3][3] = 0; 
+x = lib.kernel_transform(box_blur_image, utils.to_matrix_d(sharpen))
+lib.write_png("../docs/kernel_sharpen.png", lib.copy_from_image(x, 1, 1, 99, 99))
+
+image = utils.create_edge_detection_image()
+edge_detection = utils.matrix()
+edge_detection[1][1] = -1; edge_detection[1][2] = -1; edge_detection[1][3] = -1; 
+edge_detection[2][1] = -1; edge_detection[2][2] = 8; edge_detection[2][3] = -1; 
+edge_detection[3][1] = -1; edge_detection[3][2] = -1; edge_detection[3][3] = -1; 
+lib.transform_pixels_matrix(image, utils.to_matrix_int(greyscale), 3)
+lib.write_png("../docs/kernel_before_edge_detection.png", image)
+x = lib.kernel_transform(image, utils.to_matrix_d(edge_detection))
+lib.write_png("../docs/kernel_after_edge_detection.png", lib.copy_from_image(x, 1, 1, 99, 99)) -- remove the edge pixels as I don't handle those yet

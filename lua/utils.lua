@@ -29,14 +29,14 @@ function utils.create_circle(x, y, r)
     return circle
 end
 
-function utils.create_arc(x, y, r, start_angle_rads, end_angle_rads) 
-	local arc = lib.Arc()
-	arc.x = x
-	arc.y = y
-	arc.radius = r
-	arc.start_rads = start_angle_rads
-	arc.end_rads = end_angle_rads
-	return arc
+function utils.create_arc(x, y, r, start_angle_rads, end_angle_rads)
+    local arc = lib.Arc()
+    arc.x = x
+    arc.y = y
+    arc.radius = r
+    arc.start_rads = start_angle_rads
+    arc.end_rads = end_angle_rads
+    return arc
 end
 
 function utils.create_rectangle(x, y, width, height) -- x, y denote the top-left corner
@@ -107,16 +107,17 @@ function utils.to_matrix_d(m)
     return out
 end
 
-function utils.create_test_image(scale)
+function utils.create_kernel_test_image(scale)
     local image = lib.make_filled_image(100, 100, utils.create_pixel(255 * scale, 255 * scale, 255 * scale, 255))
-    local red = lib.make_filled_image(50, 50, utils.create_pixel(255 * scale, 0, 0, 255))
-    local green = lib.make_filled_image(50, 50, utils.create_pixel(0, 255 * scale, 0, 255))
-    local blue = lib.make_filled_image(50, 50, utils.create_pixel(0, 0, 255 * scale, 255))
-
-    lib.paste_to_image(red, image, 50, 0)
-    lib.paste_to_image(green, image, 0, 50)
-    lib.paste_to_image(blue, image, 50, 50)
-
+    for x = 1, 100, 10 do
+        for y = 1, 100, 10 do
+            local div = y / 10 + 1
+            local p = utils.create_pixel(255 / div * scale * ((x + y / 10) % 3),
+                255 / div * scale * ((x + y / 10 + 1) % 3), 255 / div * scale * ((x + y / 10 + 2) % 3), 255)
+            local slice = lib.make_filled_image(10, 10, p)
+            lib.paste_to_image(slice, image, x, y)
+        end
+    end
     return image
 end
 
@@ -128,6 +129,18 @@ function utils.create_another_test_image(scale)
     lib.paste_to_image(red, image, 10, 10)
     lib.paste_to_image(green, image, 10, 30)
 
+    return image
+end
+
+function utils.create_edge_detection_image()
+    local image = lib.make_filled_image(100, 100, utils.create_pixel(0, 0, 0, 255))
+    local current_color = 0
+    for i = 0, 100, 10 do
+        current_color = current_color + 25
+        local slice = lib.make_filled_image(100, 10,
+            utils.create_pixel(current_color, current_color, current_color, 255))
+        lib.paste_to_image(slice, image, 0, i)
+    end
     return image
 end
 

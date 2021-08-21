@@ -4,29 +4,10 @@ This is a project about 2D graphics, with a library of functions written in C an
 
 The primary purpose of this was to learn about graphical methods and learn about modern C, though I'm professionally a java programmer, so a lot of the code probably looks like java. 
 
-# TODOs (coding related)
-## Part 2 (Linear algebra)
-* interpolation - for affine transforms - nearest neighbor, linear, bilinear, etc.
-  * I think the steps are: invert the affine xform matrix, use interpolation method + inverted matrix to map new pixel back to old image location.
-* method to "add/subtract" two images from eachother, applying a pixel operation across the two images. 
-
-## Part 3 (shapes)
-* ~~vector graphics - drawing arcs~~
-  * optimized (midpoint) algorithm required
-* draw filled images - shape.h methods
-  * solid and gradient fill
-* sampling - aliasing and antialiasing
-* gradients (linear and radial)
-
-# TODOs (polishing/productionalizing)
-* clean up readme
-* clean up git history
-* remove unused lua scripts
-
 # Setup 
-You need to install the basic C build tools. 
+Basic C build tools are required. 
 
-On Ubuntu the command to run is `sudo apt-get install build-essentials` to download gcc (the C compiler I tested against).
+On Ubuntu the command to run is `sudo apt-get install build-essentials` to download gcc (the C compiler tested against).
 
 ## Dependencies
 The other dependencies for the project are: 
@@ -37,7 +18,7 @@ The other dependencies for the project are:
 * clang-format (only for formatting) and clang-lint (for linting)
 * swig 4.0.2 - for generating the lua bindings for running the lua scripts
 
-In theory you can get this to run without these dependencies, but some stuff will need to be cleaned up/removed. 
+In theory its possible for this to run without these dependencies, but some stuff will need to be cleaned up/removed.
 
 ## IDE 
 
@@ -46,7 +27,7 @@ I recommend installing `VS Code` since its both pretty light-weight, but also ha
 
 ## Setup commands
 
-The simplest command to build everything is `make all` which will compile and link all files. Then you can run the main application with `./bin/graphics`. 
+The simplest command to build everything is `make all` which will compile and link all files. The outputted binary can be run with `./bin/graphics`. 
 
 `make everything` will also build the lua bindings and `make target` will also run the formatter and linter. You can run all the sample lua scripts by running `./run_lua_scripts.sh`. 
 
@@ -279,7 +260,6 @@ The formula for this computation is in the alpha_blend method in [image.c](./src
 |blended green onto red | ![alpha green onto red](./docs/blend_green_onto_red.png) |
 |blended red onto green | ![alpha red onto green](./docs/blend_red_onto_green.png) |
 
-
 ## Image masking
 
 For some reason I decided to implement image masking.  Its a simple algorithm, it just DFSes the image, checking if the pixel_filter condition is still true. 
@@ -343,7 +323,7 @@ Below are the generic matrices used for affine transformations:
 | Reflection over angle | cos(2x) sin(2x) 0<br/>sin(2x) -cos(2x) 0<br/>0 0 1 | reflect over line with degrees x from origin |
 | Scale | X 0 0<br/>0 Y 0<br/>0 0 1 | X, Y are positive constants. Values less than 1 will shrink the image and values greater than 1 will stretch the image |
 | Rotate | cos(x) -sin(x) 0<br/>sin(x) cos(x) 0<br/>0 0 1<br/>| rotates the image by x degrees counterclockwise | ![rotated](./docs/rotated.pam.png)|
-| Shear | [1 x 0]<br/>[0 1 0]<br/>[0 0 1] OR <br/> [1 0 0]<br/>[y 1 0]<br/>[0 0 1] | Shears each point - . You need to multiply the matrices to get both X and Y shear, changing both of the constants will make a weird transformation matrix |
+| Shear | 1 x 0<br/>0 1 0<br/>0 0 1 OR <br/> 1 0 0<br/>y 1 0<br/>0 0 1 | Shears each point - . You need to multiply the matrices to get both X and Y shear, changing both of the constants will make a weird transformation matrix |
 
 Below are some example images:
 |Description|Matrix|Image|
@@ -388,24 +368,23 @@ Only Nearest neighbor is currently implemented though there are other interpolat
 
 ### Kernels in Image Processing
 
-Kernels can be used in image processing to do blurring, sharpening, embossing, and edge detection. This is accomplished by doing a convolution between an image and a kernel.
+One more way to use linear algebra in image processing is with kernel transforms. A kernel transform will take a pixel and combine it with its neighbors. Kernels can be used in image processing to do blurring, sharpening, embossing, and edge detection. 
+
+If you have an image with the pixels indexed by p(x, y) and a 3x3 matrix with components A(x,y), then a kernel transformation would have:
+
+`p_new(x,y) = A(0, 0) * p(x-1, y-1) + A(1, 0) * p(x, y-1) + A(2, 0) * + A(1, 0) * p(x-1, y) + A(1, 1) * p(x,y) + ... `
 
 Below are the following kernel transforms I've tested
 
-|Operation|Kernel|Image|
-|--|--|--|
-|Identity|[0 0 0]<br/>[0 1 0]<br/>[0 0 0]| ![Identity](./docs/identity.pam.png) |
-|Box blur | [1 1 1]<br/>1/9 * [1 1 1]<br/>[1 1 1] | ![box blue](./docs/box_blur.pam.png) |
-|Gauss blur | [1 2 1]<br/>1/16 * [2 4 2]<br/>[1 2 1] | ![gauss blur](./docs/box_blur.pam.png) |
-|Sharpen | [0 -1 0]<br/>[-1 5 -1]<br/>[0 -1 0]<br/> | ![Sharpen box blur](./docs/sharpen.pam.png) |
+|Operation|Kernel|Image before|Image after|Description|
+|--|--|--|--|--|
+|Identity|0 0 0<br/>0 1 0<br/>0 0 0| ![Identity](./docs/kernel_identity.png) | ![Identity](./docs/kernel_identity.png) |The identity transformation does not modify the image (its just included for demonstration)
+|Box blur | 1/9 1/9 1/9<br/>1/9 1/9 1/9<br/>1/9 1/9 1/9| ![Identity](./docs/kernel_identity.png) | ![box blue](./docs/kernel_box_blur.png) |Box blur will blur together adjacent pixels|
+|Gauss blur | 1/16 2/16 1/16<br/>2/16 4/16 2/16<br/>1/16 2/16 1/16<br/> | ![Identity](./docs/kernel_identity.png) | ![gauss blur](./docs/kernel_gaussian_blur.png) | Gaussian blur will blur together adjacent pixels, but they will be weighted by a gaussian distribution |
+|Sharpen | 0 -1 0<br/>-1 5 -1<br/>0 -1 0<br/> | ![box blue](./docs/kernel_box_blur.png) | ![Sharpen box blur](./docs/kernel_sharpen.png) | Sharpening an image will undo a blurring effect, making the edges appear more distinct |
+|Edge detection | -1 -1 -1<br/>-1 8 -1<br/>-1 -1 -1<br/> | ![before](./docs/kernel_before_edge_detection.png) | ![before](./docs/kernel_after_edge_detection.png) | Edge detection is like extreme image sharpening. The kernel performs a derivative, subtracting the pixel value from its neighbors, so only pixels that are different from their neighbors will end up post-transform | 
 
-Edge detection can also be performed, though I used a greyscale image for this:
-
-![before](./docs/before_edge_detection.pam.png) ![after](./docs/after_edge_detection.pam.png)
-
-The edge detection algorithm highlights only sections where there is a transition from one color to the next.
-
-There is a slight implementation defect in the kernel transforms where I didn't account for the edges, but they can be removed after the fact, by selecting (1,1) to (width-1, height-1). Other ways to fix it would be to either mirror or wrap the pixels in the image.
+There is a slight implementation defect in the kernel transforms where I didn't account for the edges, but they can be removed after the transformation by selecting (1,1) to (width-1, height-1). Other ways to fix it would be to either mirror or wrap the pixels in the image.
 
 # Vector graphics and rasterization
 
@@ -438,10 +417,29 @@ Can be done with lua code, writing it in C would be not that extensible.
 ## Lua
 TODO
 
-I just used swig - but I can include the manually created bindings here too if people want to do that.
+## swig
 
 * good start - https://chsasank.github.io/lua-c-wrapping.html
 * official docs - http://lua-users.org/wiki/BindingCodeToLua
 * swig - http://www.swig.org/Doc4.0/Lua.html#Lua
 * Include sample of old manually created binding code somewhere
 
+# TODOs
+## Linear algebra
+* interpolation - for affine transforms - nearest neighbor, linear, bilinear, etc.
+* method to "add/subtract" two images from eachother, applying a pixel operation across the two images. 
+* the geometric transformation API is hard to use, it would be nice to wrap the matrix operations in easier-to-use methods.
+
+## Vector graphics
+* midpoint based optimized algorithm for drawing arcs
+* draw filled images - shape.h methods
+  * solid and gradients (linear and radial) fill
+* aliasing and antialiasing for shapes
+
+## Polishing and productionization
+* clean up git history
+* clean up lua scripts
+* finish unit tests
+  * Its much easier to see if a function generates the right image than it is to read the tests, so it might be easier to have image comparison test cases
+* the uint_8 matrix operations are kind of limited and should eventually be replaced with double matrix operations
+* check this blog for how to clean up my writing https://jvns.ca/blog/confusing-explanations/
