@@ -2,15 +2,23 @@ lib = require('image_lib')
 utils = require('utils')
 
 -- file to demonstrate reading and writing jpeg files
+-- also test to see if reading/writing the same jpeg repeatedly will cause "jpeging" of the image 
 
-image = utils.create_test_image(50);
+quality = 100
 
-lib.write_jpeg("../images/10_initial.jpeg", image, 100) -- save as a jpeg
-lib.write_pam("../images/10_initial.pam", image) -- save as a pam (to compare)
+image = utils.create_kernel_test_image(1);
 
-image2 = lib.read_jpeg("../images/10_initial.jpeg"); -- load the jpeg back into memory
+lib.write_png("./images/10_jpg_test_start.png", image)
+lib.write_jpeg("./images/10_jpg_test_start.jpg", image, quality)
 
-lib.write_pixel_to_image(image2, 10, 10, lib.PIXEL_BLACK); -- change the image a bit
-
-lib.write_jpeg("../images/10_post_read_and_modifications.jpeg", image2, 100); -- save it back
-
+for i = 1,10 do
+    if i == 1 then
+        x = image
+    else 
+        temp = lib.read_jpeg("./images/10_jpg_test_num_" .. i-1 .. ".jpg")
+        print(lib.are_images_equal(x, temp))
+        x = temp
+        lib.print_pixel(lib.get_pixel_from_image(x, 0, 0))
+    end
+    lib.write_jpeg("./images/10_jpg_test_num_" .. i .. ".jpg", x, quality)
+end
