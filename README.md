@@ -4,6 +4,8 @@ This is a project about 2D graphics, with a library of functions written in C an
 
 The primary purpose of this was to learn about mathematical graphics methods and secondarily to learn about modern C. Note that this is probably weird modern C though, since I primarily write code that targets the JVM.
 
+This project is not complete, but this is a pretty good stopping point and I'll probably pick up more stuff much much later.
+
 # Setup 
 Basic C build tools are required. 
 
