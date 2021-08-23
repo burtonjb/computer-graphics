@@ -2,12 +2,12 @@
 
 This is a project about 2D graphics, with a library of functions written in C and with some demo-scripts written in lua, though there is a possiblity of generating the C/native bindings in different languages.
 
-The primary purpose of this was to learn about graphical methods and learn about modern C, though I'm professionally a java programmer, so a lot of the code probably looks like java. 
+The primary purpose of this was to learn about mathematical graphics methods and secondarily to learn about modern C. Note that this is probably weird modern C though, since I primarily write code that targets the JVM.
 
 # Setup 
 Basic C build tools are required. 
 
-On Ubuntu the command to run is `sudo apt-get install build-essentials` to download gcc (the C compiler tested against).
+On Ubuntu the command to run is `sudo apt-get install build-essentials` to download gcc.
 
 ## Dependencies
 The other dependencies for the project are: 
@@ -22,7 +22,7 @@ In theory its possible for this to run without these dependencies, but some stuf
 
 ## IDE 
 
-I recommend installing `VS Code` since its both pretty light-weight, but also has plugins for C. 
+`VS Code` since its both pretty light-weight, but also has plugins for C. 
 `vim` is another alternative. 
 
 ## Setup commands
@@ -117,7 +117,7 @@ Mathematically the inverse of matrix A is A^-1, with the property that A * A^-1 
 As a rule of thumb as long as there's no information loss, the matrix is invertable. The matrixes to rebalance color and swap color channels are invertable but the matrixes to filter out a channel and convert to greyscale are not invertable.
 
 * filtering a color is not invertable because all the information about the original value in that channel is erased. After filtering out red (multiplying by 0), you have no idea what the original red value was.
-* converting to greyscale is not invertable if the weights are the same (like in my example where I used 1/3 for all values in the matrix). This is because you can't tell what the original value was.
+* converting to greyscale is not invertable if the weights are the same (like in the example where 1/3 is used for all values in the matrix). This is because you can't tell what the original value was.
 
 Below is the matrices and images for the swapping R&G channels and the inverse.
 |Original image|Transformation matrix |Transformed image|Inverse transformation matrix|Inverse image|
@@ -125,7 +125,6 @@ Below is the matrices and images for the swapping R&G channels and the inverse.
 |![](./docs/pixel_matrix_product_orig.png)|0 1 0<br/>1 0 0<br/>0 0 1<br/>|![](./docs/pixel_matrix_product_forward.png)|0 1 0<br/>1 0 0<br/>0 0 1|![](./docs/pixel_matrix_product_inverse.png)|
 
 And if you double check, multiplying the Transformation matrix by the inverse transformation matrix will produce the identity matrix. 
-
 
 ### Implementation - signed, unsigned, overflow and underflow
 
@@ -159,7 +158,7 @@ Saturation is a percentage value (between 0 and 100, or 0 and 1) which is the am
 
 Finally the value part of the model is a percentage and represents the brightness of the pixel. 0 is completely black and 1 is completely white. 
 
-There's other color models, with other pros/cons (e.g. CMY (cyan, magenta, yellow) which is used in printers) but I'm not going to implement those. 
+There's other color models, with other pros/cons (e.g. CMY (cyan, magenta, yellow) which is used in printers) but they aren't implemented.
 
 | HSV Value | Pixel (RGB) Value | Image |
 |--|--|--|
@@ -181,7 +180,7 @@ p20 p21 p22
 
 I've defined an image struct, which has a width, height and then an array of pixels to store the actual image definition.
 
-Images have these basic crud operations:
+Images have these basic operations:
 * make_filled_image - creates an image filled with pixels of a certain color
 * write_pixel_to_image / get_pixel_from_image - reads or writes a specific pixel to/from an image
 * paste_to_image / copy_from_image - reads or writes an image from or onto an image.
@@ -208,13 +207,11 @@ The formula for this computation is in the alpha_blend method in [image.c](./src
 
 ## Image masking
 
-For some reason I decided to implement image masking.  Its a simple algorithm, it just DFSes the image, checking if the pixel_filter condition is still true. 
+Its a simple algorithm, it just DFSes the image, checking if the pixel_filter condition is still true. 
 
-The comments in the header are actually pretty good, so I'd recommend checking it out. Example usage can be found in the `11_image_mask.lua` file.
+The comments in the header are actually pretty good, so I'd recommend checking it out. Example usage can be found in the [11_image_mask.lua](./lua/old/11_image_mask.lua) file.
 
 [image_mask.h](./src/image_mask.h)
-
-[11_image_mask.lua](./lua/11_image_mask.lua)
 
 ## Image pixel operations
 
@@ -408,12 +405,13 @@ DIBMAPV5HEADER - there's 5 versions
 PIXELARRAY - the actual data for the image
 ICCCOLORPROFILE
 ```
+After the header is the byte-array of pixels.
 
 Anyways, due to the headers they're pretty complicated to implement, and since I'm only using 24bit RGBA pixels, its not really worth the time. 
 
 ## JPEGs
 
-The JPG (or jpeg) file format is a lossy-compressed image format meaning that some data will be lossed on save. It follows a complicated algorithm that uses the Discrete Cosine Transform (similar to a fourier transform, but only uses cosines), quantization, and compression.
+The JPG (or jpeg) file format is a lossy-compressed image format meaning that some data will be lossed on save. It follows a complicated algorithm that transforms the image into a different color space, uses the Discrete Cosine Transform (similar to a fourier transform, but only uses cosines), quantization (limiting the possible values of the frequencies after the cosine transform), and then compression (using run-length encoding and then huffman encoding).
 
 Its super fiddly to implement, so I just pulled in `libjpg` to do the heavy lifting. 
 
