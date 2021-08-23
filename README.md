@@ -191,60 +191,6 @@ Images have these basic crud operations:
 
 The Image struct is straightforward - its just a max_width, max_height and an array of pixels. See [image.h](./src/image.h#13) for the implementation. Its recommended to create images through the `make_filled_image` as its a little fiddly to set up the object correctly. 
 
-## Graphics file format
-
-A little bit out of place, but next up is graphics file formats. We've got to be able to store the image someplace so that it can be seen. There are libraries to do live previews, but they're slightly heavy-weight (libsdl2 is an example).
-
-### PAM 
-The pam format is a relatively easy format to write. It has a simple header and then a blob of data - the image as bits stored directly in a file. 
-
-An example header can be seen below:
-
-```
-P7
-WIDTH 100
-HEIGHT 100
-DEPTH 4
-MAXVAL 255
-TUPLTYPE RGB_ALPHA
-ENDHDR
-```
-
-The code to write pam files can be found in [file_pam.c](./src/file_pam.c#24)
-
-There are two main downsides for this image format: 
-1. Almost no image tools support this format (not even GIMP!). You can set up the [netpbm package](http://netpbm.sourceforge.net/) to install the conversion tools. There's a converter util to convert these files to png files called pamtopng which can be found as part of the netpbm package - see [pamtopng](https://manpages.debian.org/experimental/netpbm/pamtopng.1.en.html). Alternatively you can use my [script](./lua/pamtopng.lua) to convert the pam files to pngs.  
-1. Additionally there's no compression so the file sizes are giant! A 10x10 image is ~500 bytes, compared to a png which is ~100 bytes. Because the image sizes are small, the lack of compression is not that bad, but it gets worse at 100x100 images. At 100x100 the png is still a reasonable 314 bytes, but the PAM file is 40KBytes.
-
-More information about the format can be found here: http://manpages.ubuntu.com/manpages/bionic/man5/pam.5.html
-
-### BMPs (not supported)
-
-I haven't added support for BMPs because the header is pretty complicated. They're actually pretty similar to PAM files, but they have a much more complicated header format, and depending on some of the flags in the header, the data can be compressed. 
-
-The header consists of:
-```
-BITMAPFILEHEADER - 14 bytes
-DIBMAPV5HEADER - there's 5 versions 
-(Optional) COLORTABLE - Stores color mappings (if they're used)
-PIXELARRAY - the actual data for the image
-ICCCOLORPROFILE
-```
-
-Anyways, due to the headers they're pretty complicated to implement, and since I'm only using 24bit RGBA pixels, its not really worth the time. 
-
-### JPEGs
-
-The JPG (or jpeg) file format is a lossy-compressed image format meaning that some data will be lossed on save. It follows a complicated algorithm that uses the Discrete Cosine Transform (similar to a fourier transform, but only uses cosines), quantization, and compression.
-
-Its super fiddly to implement, so I just pulled in `libjpg` to do the heavy lifting. 
-
-### PNGs
-
-PNGs are different from JPGs since the have lossless-compression instead of lossy, but they're even more complicated. 
-
-Its also really hard to implement, so I pulled in `libpng` to do the file writing/reading. 
-
 ## Alpha Blending
 
 Alpha blending is the process of combining translucent foreground and background images which produces a new image. 
@@ -422,6 +368,60 @@ Arbritrary polygons can also be drawn. My implementation treats polygons as a co
 ## Lua
 
 ## Swig
+
+# Graphics file format
+
+A little bit out of place, but next up is graphics file formats. We've got to be able to store the image someplace so that it can be seen. There are libraries to do live previews, but they're slightly heavy-weight (libsdl2 is an example).
+
+## PAM 
+The pam format is a relatively easy format to write. It has a simple header and then a blob of data - the image as bits stored directly in a file. 
+
+An example header can be seen below:
+
+```
+P7
+WIDTH 100
+HEIGHT 100
+DEPTH 4
+MAXVAL 255
+TUPLTYPE RGB_ALPHA
+ENDHDR
+```
+
+The code to write pam files can be found in [file_pam.c](./src/file_pam.c#24)
+
+There are two main downsides for this image format: 
+1. Almost no image tools support this format (not even GIMP!). You can set up the [netpbm package](http://netpbm.sourceforge.net/) to install the conversion tools. There's a converter util to convert these files to png files called pamtopng which can be found as part of the netpbm package - see [pamtopng](https://manpages.debian.org/experimental/netpbm/pamtopng.1.en.html). Alternatively you can use my [script](./lua/pamtopng.lua) to convert the pam files to pngs.  
+1. Additionally there's no compression so the file sizes are giant! A 10x10 image is ~500 bytes, compared to a png which is ~100 bytes. Because the image sizes are small, the lack of compression is not that bad, but it gets worse at 100x100 images. At 100x100 the png is still a reasonable 314 bytes, but the PAM file is 40KBytes.
+
+More information about the format can be found here: http://manpages.ubuntu.com/manpages/bionic/man5/pam.5.html
+
+## BMPs (not supported)
+
+I haven't added support for BMPs because the header is pretty complicated. They're actually pretty similar to PAM files, but they have a much more complicated header format, and depending on some of the flags in the header, the data can be compressed. 
+
+The header consists of:
+```
+BITMAPFILEHEADER - 14 bytes
+DIBMAPV5HEADER - there's 5 versions 
+(Optional) COLORTABLE - Stores color mappings (if they're used)
+PIXELARRAY - the actual data for the image
+ICCCOLORPROFILE
+```
+
+Anyways, due to the headers they're pretty complicated to implement, and since I'm only using 24bit RGBA pixels, its not really worth the time. 
+
+## JPEGs
+
+The JPG (or jpeg) file format is a lossy-compressed image format meaning that some data will be lossed on save. It follows a complicated algorithm that uses the Discrete Cosine Transform (similar to a fourier transform, but only uses cosines), quantization, and compression.
+
+Its super fiddly to implement, so I just pulled in `libjpg` to do the heavy lifting. 
+
+## PNGs
+
+PNGs are different from JPGs since the have lossless-compression instead of lossy, but they're even more complicated. 
+
+Its also really hard to implement, so I pulled in `libpng` to do the file writing/reading. 
 
 # TODOs
 ## Linear algebra
